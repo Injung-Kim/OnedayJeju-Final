@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jeju.controller.MainController;
 import jeju.dao.face.LoginDao;
 import jeju.dto.JejuUser;
 import jeju.service.face.LoginService;
@@ -39,6 +38,27 @@ public class LoginServiceImpl implements LoginService{
 	public String getGradeData(JejuUser login) {
 		return loginDao.selectUserGrade(login);
 	}
+
+
+	@Override
+	public String getSearchId(String name, String phone) {
+		
+		JejuUser userData = new JejuUser();
+		userData.setUserName(name);
+		userData.setUserPhone(phone);
+		
+		return loginDao.selectSearchId(userData);
+	}
+
+
+//	@Override
+//	public String getSearchId(String name, String phone) {
+//		
+//		JejuUser jejuUser = new JejuUser();
+//		jejuUser.setUserName(name);
+//		jejuUser.setUserPhone(phone);
+//		return loginDao.selectSearchId(jejuUser);
+//	}
 
 
 }
