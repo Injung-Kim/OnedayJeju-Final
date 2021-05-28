@@ -49,6 +49,17 @@
 		SELECT user_id FROM JejuUser
 		WHERE user_name = #{userName} AND user_phone = #{userPhone}
 	</select>
+	
+	
+	<select id="selectCntMem" resultType="boolean" parameterType="jeju.dto.JejuUser">
+		SELECT count(*) FROM JejuUser
+		WHERE user_id = #{userId} AND user_email = #{userEmail}
+	</select>
+	
+	<update id="updatePw" parameterType="jeju.dto.JejuUser">
+		UPDATE JejuUser SET user_pw = #{userPw}
+		WHERE user_id = #{userId} AND user_email = #{userEmail} 
+	</update>
 
 	
 

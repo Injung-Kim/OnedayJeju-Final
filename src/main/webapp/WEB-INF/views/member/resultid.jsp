@@ -11,3 +11,4 @@
 <c:if test="${empty findId }">
 	<h2 id="id_value">존재하지 않는 회원 정보입니다.</h2>
 </c:if>
+

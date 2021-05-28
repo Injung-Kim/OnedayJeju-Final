@@ -92,7 +92,6 @@ public class LoginController {
 	public String findIdView(Model model) {
 		logger.info("/member/findid [GET]");
 		
-		
 		return "member/findid";
 	}
 	
@@ -105,11 +104,15 @@ public class LoginController {
 			, Model model
 			) {
 		
-		String result = loginService.getSearchId(name, phone);
-		logger.info(result);
+		logger.info("/member/findid [POST]");
 		
-		model.addAttribute("findId", result);
+		//아이디 찾기
+		String resultid = loginService.getSearchId(name, phone);
+		logger.info(resultid);
+		
+		model.addAttribute("findId", resultid);
 //		model.addAttribute("findId", "TEST");
+		
 		
 		return "member/resultid";
 	}
@@ -117,8 +120,8 @@ public class LoginController {
 	
 	//비밀번호 찾기
 	@RequestMapping(value = "/findpw", method = RequestMethod.GET)
-	public String findPwView() {
-		logger.info("/member/findid [GET]");
+	public String findPwView(Model model) {
+		logger.info("/member/findpw [GET]");
 		
 		return "member/findpw";
 	}
@@ -126,8 +129,26 @@ public class LoginController {
 	
 	//비밀번호 찾기 처리
 	@RequestMapping(value = "/findpw", method = RequestMethod.POST)
-	public String findPw() {
-		return "member/findpw";
+	public String findPw(
+			@RequestParam("inputId_2") String id
+			, @RequestParam("inputEmail_2") String email
+			, Model model
+			) {
+		
+		logger.info("/member/findpw [POST]");
+		
+		//비밀번호 찾기
+		String resultpw = loginService.getSearchPw(id, email);
+		logger.info("findPw controller - 비밀번호 찾기: {}", resultpw);
+		
+		model.addAttribute("findPw", resultpw);
+		
+		
+		return "member/resultpw";
 	}
+	
+
+	
+
 
 }
