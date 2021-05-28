@@ -40,4 +40,14 @@ public interface LoginService {
 	 */
 	public String getSearchId(String name, String phone);
 	
+	
+	/**
+	 * id와 이메일을 이용한 회원 찾기
+	 * 
+	 * @param id - 입력된 id
+	 * @param mail - 입력된 mail
+	 * @return id, mail이 일치하는 회원 객체
+	 */
+	public String getSearchPw(String id, String email);
+	
 }
