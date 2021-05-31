@@ -60,7 +60,20 @@
 	<artifactId>log4jdbc-remix</artifactId>
 	<version>0.2.7</version>
 </dependency>
-	
+
+<!-- 메일 api -->
+<dependency>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-email</artifactId>
+	<version>1.5</version>
+</dependency>
+
+<!--  Commons Fileupload 1.4  -->
+<dependency>
+	<groupId>commons-fileupload</groupId>
+	<artifactId>commons-fileupload</artifactId>
+	<version>1.4</version>
+</dependency>
 	
 	
 		<!-- Spring -->

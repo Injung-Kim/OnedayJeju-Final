@@ -10,12 +10,17 @@
 $(document).ready(function() {
 	
 	//취소 버튼 클릭 시
-	$("#cancelBtn").click(function() {
-		history.go(-1);
+	$("#cancelIdBtn").click(function() {
+		$(location).attr("href", "/member/login");
 	});
 	
+	//비밀번호 찾기 버튼 클릭 시
+	$("#searchPwBtn").click(function() {
+		$(location).attr("href", "/member/findpw");
+	})
 	
-	//확인 버튼 클릭 시
+	
+	//아이디 찾기 페이지 확인 버튼 클릭 시
 	$("#searchIdBtn").click(function() {
 		console.log("#searchIdBtn clicked")
 		$(".modal-body").html("")
@@ -26,10 +31,9 @@ $(document).ready(function() {
 			,data: {inputName_1: $("#inputName_1").val(), inputPhone_1: $("#inputPhone_1").val()}
 			,dataType: "html"
 			,success: function(res){
-				$(".modal-body").html(res)
+				$(".id-modal-body").html(res)
 			}
 			,error: function(){
-				
 			}
 		})
 		$("#findIdModal").modal("show");
@@ -39,33 +43,25 @@ $(document).ready(function() {
 	//모달 내 '비밀번호 찾기' 버튼 클릭 시
 	$("#findPwPage").click(function() {
 
-		$("#search_2").prop("checked", true);
+		$("#search_2").prop("checked", true); //checked 속성(property) 추가
 		$("#search_2").click();
 		$("#inputId").val( $("#resultid").text() ); //존재하는 회원일 경우 비밀번호 찾기로 텍스트 복사
 		
-		
-// 		document.getElementById("searchId").style.display = "none";
-// 		document.getElementById("searchPw").style.display = "";
-
 		$("#findIdModal").modal("hide");
 	});
 	
-});
-
-
-//라디오 설정값
-function search_check(num) {
-	
-	if (num == 1) {
-		document.getElementById("searchPw").style.display = "none";
-		document.getElementById("searchId").style.display = "";
+	//모달 내 닫기 버튼 클릭 시 input 내용 지우기
+	$("#closeModal").click(function() {
 		
-	} else {
-		document.getElementById("searchId").style.display = "none";
-		document.getElementById("searchPw").style.display = "";
-	}
+		console.log("#closeModal clicked")
+		$("#findIdModal").modal("hide");
+		
+		$("#inputName_1").val('');
+		$("#inputPhone_1").val('');
+		
+	})
 	
-}
+});
 
 
 
@@ -76,19 +72,13 @@ function search_check(num) {
 
 
 
-<div class="sub_title">아이디 / 비밀번호 찾기
-	<p style="font-size: 0.5em; color: #616161;">인증된 이메일만 정보 찾기가 가능합니다</p>
+<div class="sub_title">아이디 찾기
+	<p style="font-size: 0.5em; color: #616161;">이메일 인증이 완료된 회원만 정보 찾기가 가능합니다</p>
 </div>
 
-<div class="searchRadio">
-	<input type="radio" id="search_1" name="search_total" onclick="search_check(1)" checked="checked">
-	<label for="serarch_1">아이디 찾기</label>
-</div>
-<div class="searchRadio">
-	<input type="radio" id="search_2" name="search_total" onclick="search_check(2)">
-	<label for="serarch_2">비밀번호 찾기</label>
-</div>
 
+
+<!-- 아이디 찾기 -->
 <div id="searchId">
 	<div class="form-group">
 		<label for="inputName_1">이름</label>
@@ -100,24 +90,9 @@ function search_check(num) {
 	</div>
 	<div class="form-group">
 		<button id="searchIdBtn" type="button" class="btn btn-info">확인</button>
-		<button id="cancelBtn" type="button" class="btn btn-default">취소</button>
+		<button id="cancelIdBtn" type="button" class="btn btn-default">취소</button><br><br>
+		<button id="searchPwBtn" type="button" class="btn btn-default">비밀번호 찾기</button>
 	</div>
-</div>
-
-<div id="searchPw" style="display: none;">
-	<div class="form-group">
-		<label for="inputId">아이디</label>
-		<input type="text" id="inputId" name="inputId_2" placeholder="ex) user123">
-	</div>
-	<div class="form-group">
-		<label for="inputEmail_2">이메일</label>
-		<input type="email" id="inputEmail_2" name="inputEmail_2" placeholder="ex) email@gmail.com">
-	</div>
-	<div class="form-group">
-		<button id="searchPwBtn" type="button" class="btn btn-info">확인</button>
-		<button id="cancelBtn" type="button" class="btn btn-default">취소</button>
-	</div>
-	
 </div>
 
 
@@ -136,38 +111,17 @@ function search_check(num) {
         			</button>
 		    </div>
 		    
-			<div class="modal-body">
+			<div class="id-modal-body">
 		    </div>
 
 			<div class="modal-footer">			
 		        <button type="button" class="btn btn-info" id="findPwPage">비밀번호 찾기</button>
-		        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+		        <button type="button" id="closeModal" class="btn btn-default">닫기</button>
 		    </div>
 		    
 		</div>
 	</div>
-	
 </div>
-
-
-
-
-
-<c:if test="${!empty findId }">
-	<div id="resultId" style="display: none;">
-		<label>회원님의 아이디는 <strong style="color: blue; font-size: 15px;">${findId }</strong> 입니다.</label>
-	</div>
-</c:if>
-<c:if test="${empty findId }">
-	<div id="resultId" style="display: none;">
-		<label>일치하는 회원정보가 없습니다.</label>
-	</div>
-</c:if>
-
-</div><!-- .container -->
-
-
-
 
 
 

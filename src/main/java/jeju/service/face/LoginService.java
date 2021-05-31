@@ -32,6 +32,15 @@ public interface LoginService {
 	
 	
 	/**
+	 * 로그인한 회원의 회원번호 정보 가져오기
+	 * 
+	 * @param login - 로그인한 회원 정보 객체
+	 * @return 로그인한 회원의 회원번호
+	 */
+	public int getUsernoData(JejuUser login);
+	
+	
+	/**
 	 * 이름과 휴대폰 번호를 이용한 회원 id 찾기
 	 * 
 	 * @param name - 입력된 회원 이름
@@ -39,5 +48,15 @@ public interface LoginService {
 	 * @return 이름, 휴대폰 번호가 일치하는 아이디 객체
 	 */
 	public String getSearchId(String name, String phone);
+	
+	
+	/**
+	 * id와 이메일을 이용한 회원 찾기
+	 * 
+	 * @param id - 입력된 id
+	 * @param mail - 입력된 mail
+	 * @return id, mail이 일치하는 회원 객체
+	 */
+	public String getSearchPw(String id, String email);
 	
 }
