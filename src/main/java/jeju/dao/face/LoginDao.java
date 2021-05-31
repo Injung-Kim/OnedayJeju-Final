@@ -22,7 +22,6 @@ public interface LoginDao {
 	 */
 	public String selectUserNick(JejuUser login);
 	
-	
 	/**
 	 * 로그인한 회원의 등급 정보 가져오기
 	 * 
@@ -30,6 +29,14 @@ public interface LoginDao {
 	 * @return 로그인한 회원의 등급 정보
 	 */
 	public String selectUserGrade(JejuUser login);
+	
+	/**
+	 * 로그인한 회원의 회원번호 가져오기
+	 * 
+	 * @param login - 로그인한 회원 정보 객체
+	 * @return 로그인한 회원의 회원번호
+	 */
+	public int selectUserNo(JejuUser login);
 	
 	
 	/**

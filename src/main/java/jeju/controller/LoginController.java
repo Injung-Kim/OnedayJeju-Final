@@ -1,5 +1,7 @@
 package jeju.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -7,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,51 +29,57 @@ public class LoginController {
 	
 	//로그인 폼
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public void login() {
+	public void login( Model model, @CookieValue(value = "cId", required = false) Cookie idCookie) {
 		logger.info("/member/login [GET]");
+		
+//		JejuUser loginInfo = new JejuUser();
+//		
+//		if(idCookie != null) {
+//			loginInfo.setUserId(idCookie.getValue());
+//		}
+//		model.addAttribute("loginInfo", loginInfo);
+		
 	}
 	
 	
 	//로그인 처리
-//	@RequestMapping(value = "/login", method = RequestMethod.POST)
-//	public String loginProc(JejuUser login, HttpSession session) {
-//		logger.info("/member/login [POST]");
-//		
-//		boolean isLogin = loginService.login(login);
-//		
-//		if (isLogin) { //로그인 성공
-//			session.setAttribute("login", true);
-//			session.setAttribute("id", login.getUserId());
-//			session.setAttribute("nick", loginService.getNickData(login));
-//			session.setAttribute("grade", loginService.getGradeData(login));
-//		
-//		} 
-//		
-//		return "redirect:/main";
-//	}
-	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView loginProc(JejuUser login, HttpSession session) {
+	public ModelAndView loginProc(JejuUser login, HttpSession session, HttpServletResponse response) {
+		
 		logger.info("/member/login [POST]");
 		
 		boolean isLogin = loginService.login(login);
 		ModelAndView mav = new ModelAndView();
 		
+		
+
+		//쿠키 생성 및 설정
+		Cookie idCookie = new Cookie("userInputId", login.getUserId()); //쿠키이름을 cId로 생성
+		idCookie.setPath("/");
+		
+		
+		//세션 설정
 		if (isLogin == true) { //로그인 성공
 			
-			mav.setViewName("main");
-			mav.addObject("msg", "success");
+			mav.setViewName("redirect:/");
 			
 			session.setAttribute("login", true);
 			session.setAttribute("id", login.getUserId());
 			session.setAttribute("nick", loginService.getNickData(login));
 			session.setAttribute("grade", loginService.getGradeData(login));
+			session.setAttribute("uno", loginService.getUsernoData(login));
+			
+			idCookie.setMaxAge(60*60*24*7); //쿠키 유지 기간을 7일로 지정
 			
 			
 		} else {
 			mav.setViewName("member/login");
 			mav.addObject("msg", "failure");
+			
+			idCookie.setMaxAge(0);
+			
 		}
+		response.addCookie(idCookie); //response에 Cookie 추가
 		
 		return mav;
 	}

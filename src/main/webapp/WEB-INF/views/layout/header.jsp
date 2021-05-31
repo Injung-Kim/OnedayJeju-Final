@@ -57,18 +57,20 @@ $(document).ready(function(){
 		<span class="welcome"><strong>${nick} </strong>님 환영합니다!</span>
 		<div class="login" style="margin-right: 20px;">
 			<img src="/resources/image/user.png" style="width : 70px; height : 70px;" id="mypage">
+			
 			<c:if test="${grade eq '2' }">		
-			<div class="balloon hidden">	
-			<p><a href="#">마이페이지</a></p>
-			<p><a href="/member/logout">로그아웃</a></p>
-			</div>
+				<div class="balloon hidden">	
+				<p><a href="#">마이페이지</a></p>
+				<p><a href="/member/logout">로그아웃</a></p>
+				</div>
 			</c:if>
 			<c:if test="${grade ne '2' }">
-			<div class="balloon hidden">	
-			<p><a href="/admin">관리자 페이지</a></p>
-			<p><a href="/member/logout">로그아웃</a></p>
+				<div class="balloon hidden">	
+				<p><a href="/admin">관리자 페이지</a></p>
+				<p><a href="/member/logout">로그아웃</a></p>
+				</div>
 			</c:if>
-			</div>
+			
 		</div>
 	</c:if>
 <nav>
