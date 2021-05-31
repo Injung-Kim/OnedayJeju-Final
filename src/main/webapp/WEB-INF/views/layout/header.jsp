@@ -88,7 +88,7 @@ $(document).ready(function(){
 			<li class="devide">|</li>
 			<li><a href="#">여행 후기</a></li>
 			<li class="devide">|</li>
-			<li><a href="/notice/list">공지사항</a></li>
+			<li><a href="#">공지사항</a></li>
 			<li class="devide">|</li>
 			<li><a href="#">Q & A</a></li>
 		</ul>

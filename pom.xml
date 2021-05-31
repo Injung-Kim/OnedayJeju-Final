@@ -67,13 +67,6 @@
 	<artifactId>commons-email</artifactId>
 	<version>1.5</version>
 </dependency>
-
-<!--  Commons Fileupload 1.4  -->
-<dependency>
-	<groupId>commons-fileupload</groupId>
-	<artifactId>commons-fileupload</artifactId>
-	<version>1.4</version>
-</dependency>
 	
 	
 		<!-- Spring -->
