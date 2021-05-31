@@ -39,6 +39,12 @@ public class LoginServiceImpl implements LoginService{
 	public String getGradeData(JejuUser login) {
 		return loginDao.selectUserGrade(login);
 	}
+	
+	
+	@Override
+	public int getUsernoData(JejuUser login) {
+		return loginDao.selectUserNo(login);
+	}
 
 
 	@Override
@@ -102,6 +108,9 @@ public class LoginServiceImpl implements LoginService{
 		
 		return result;
 	}
+
+
+
 
 
 
