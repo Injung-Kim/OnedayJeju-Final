@@ -5,6 +5,9 @@
 
 <c:import url="/WEB-INF/views/layout/header.jsp" />
 
+<!--로그인 css/js -->
+<link rel="stylesheet" href="/resources/css/login.css" type="text/css">
+
 <script type="text/javascript">
 $(document).ready(function() {
 	
@@ -110,16 +113,18 @@ function getCookie(cookieName) {
 
 <div class="sub_title">로그인</div>
 
-<form action="/member/login" method="post">
+<form action="/member/login" method="post" class="form-signin">
 	
-	<div>
-		<label>아이디 </label>
-		<input type="text" id="userId" name="userId" placeholder="id" />
+	<div class="input-container">
+		<input type="text" id="userId" name="userId"/>
+		<label for="userId">Userid </label>
+		<div class="bar"></div>
 	</div>
 	
-	<div>
-		<label>비밀번호 </label>
-		<input type="password" id="userPw" name="userPw" placeholder="password" />
+	<div class="input-container">
+		<input type="password" id="userPw" name="userPw"/>
+		<label for="userPw">Password </label>
+		<div class="bar"></div>
 	</div>
 	
 	<c:if test="${msg eq 'failure'}">
@@ -128,19 +133,21 @@ function getCookie(cookieName) {
 		</div>
 	</c:if>
 	
-	<label><input type="checkbox" id="idcheck" >아이디 기억하기</label>
+	<div class="idcheck-container">
+		<input type="checkbox" id="idcheck" >
+		<label><span>아이디 기억하기</span></label>
+	</div>	
 	
+	<div class="button-container">
+		<button type="button" id="joinBtn" ><span>회원가입 하기</span></button><br>
+		<button id="loginBtn" ><span>로그인 <i class="fa fa-sign-in"></i></span></button>
+	</div>
 	
-	<div>
+	<div class="footer">
 		<label>아이디를 잊으셨나요? <a href="/member/findid">아이디 찾기</a></label><br>
 		<label>비밀번호를 잊으셨나요? <a href="/member/findpw">비밀번호 찾기</a></label>
 	</div>
-	
-	<div>
-		<button type="button" id="joinBtn">회원가입 하기</button><br>
-		<button id="loginBtn" >로그인</button>
-	</div>
-	
+
 </form>
 
 
