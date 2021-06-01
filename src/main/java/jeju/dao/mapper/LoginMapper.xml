@@ -24,6 +24,8 @@
 		<result column="user_mail_authkey" property="userMailAuthkey" />
 		<result column="user_mail_auth" property="userMailAuth" />
 		<result column="user_grade" property="userGrade" />
+		<result column="user_origin" property="userOrigin" />
+		<result column="user_stored" property="userStored" />
 	</resultMap>
 
 
@@ -41,6 +43,29 @@
 		SELECT user_grade FROM JejuUser
 		WHERE user_id = #{userId}
 	</select>
+	
+	<select id="selectUserNo" resultType="int" parameterType="jeju.dto.JejuUser">
+		SELECT user_no FROM JejuUser
+		WHERE user_id = #{userId}
+	</select>
+	
+	
+	<select id="selectSearchId" resultType="String" parameterType="jeju.dto.JejuUser">
+		SELECT user_id FROM JejuUser
+		WHERE user_name = #{userName} AND user_phone = #{userPhone}
+	</select>
+	
+	
+	<select id="selectCntMem" resultType="boolean" parameterType="jeju.dto.JejuUser">
+		SELECT count(*) FROM JejuUser
+		WHERE user_id = #{userId} AND user_email = #{userEmail}
+	</select>
+	
+	<update id="updatePw" parameterType="jeju.dto.JejuUser">
+		UPDATE JejuUser SET user_pw = #{userPw}
+		WHERE user_id = #{userId} AND user_email = #{userEmail} 
+	</update>
+
 	
 
 </mapper>
