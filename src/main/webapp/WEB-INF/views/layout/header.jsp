@@ -50,7 +50,7 @@ $(document).ready(function(){
 		<div class="nologin" style="right: 40px; position : absolute">
 			<a href="/member/login">로그인</a>
 			| 
-			<a href="#">회원가입</a>
+			<a href="/user/joinAgree">회원가입</a>
 		</div>
 	</c:if>
 	<c:if test="${login}">
