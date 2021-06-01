@@ -5,12 +5,25 @@
 
 <c:import url="/WEB-INF/views/layout/header.jsp" />
 
+<!-- findPage css -->
+<link rel="stylesheet" href="/resources/css/find.css" type="text/css">
+
 <script type="text/javascript">
 
 $(document).ready(function() {
 	
+	//취소 버튼 hover 시
+	$("#cancelPwBtn").hover(function() {
+		$("#cancelPwBtn").text("로그인페이지로");
+		$("#cancelPwBtn").css("color", "#8BD7D2");
+	}, function() {
+		$("#cancelPwBtn").text("취소");
+		$("#cancelPwBtn").css("color", "#ddd");
+	});
+	
 	//취소 버튼 클릭 시
 	$("#cancelPwBtn").click(function() {
+		$("#cancelPwBtn").css("color", "#ffffff");
 		$(location).attr("href", "/member/login");
 	});
 	
@@ -67,24 +80,26 @@ $(document).ready(function() {
 
 
 <div class="sub_title">비밀번호 찾기
-	<p style="font-size: 0.5em; color: #616161;">이메일 인증이 완료된 회원만 정보 찾기가 가능합니다</p>
+	<p style="font-size:0.4em; color:#d6d6d6">이메일 인증이 완료된 회원만 정보 찾기가 가능합니다</p>
 </div>
 
 
 <!-- 비밀번호 찾기 -->
 <div id="searchPw">
-	<div class="form-group">
+	<div class="input-container">
+		<input type="text" id="inputId_2" name="inputId_2" autocomplete="off">
 		<label for="inputId">아이디</label>
-		<input type="text" id="inputId_2" name="inputId_2" placeholder="ex) user123">
+		<div class="bar"></div>
 	</div>
-	<div class="form-group">
+	<div class="input-container">
+		<input type="email" id="inputEmail_2" name="inputEmail_2" autocomplete="off">
 		<label for="inputEmail_2">이메일</label>
-		<input type="email" id="inputEmail_2" name="inputEmail_2" placeholder="ex) email@gmail.com">
+		<div class="bar"></div>
 	</div>
-	<div class="form-group">
-		<button id="searchPwBtn" type="button" class="btn btn-info">확인</button>
-		<button id="cancelPwBtn" type="button" class="btn btn-default">취소</button><br><br>
-		<button id="searchIdBtn" type="button" class="btn btn-default">아이디 찾기</button>
+	<div class="button-container">
+		<button type="button" id="searchPwBtn"><span>확인</span></button>
+		<button type="button" id="cancelPwBtn"><span>취소</span></button><br><br>
+		<button type="button" id="searchIdBtn"><span>아이디 찾기</span></button>
 	</div>
 	
 </div>
@@ -117,6 +132,7 @@ $(document).ready(function() {
 	</div>
 </div>
 
+</div> <!-- .container end -->
 
 
 <c:import url="/WEB-INF/views/layout/footer.jsp" />
