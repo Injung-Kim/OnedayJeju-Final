@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import jeju.dao.face.NoticeDao;
 import jeju.dto.Notice;
 import jeju.service.face.NoticeService;
-import jeju.util.NoticePaging;
+import jeju.util.Paging;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
@@ -16,19 +16,19 @@ public class NoticeServiceImpl implements NoticeService {
 	@Autowired NoticeDao noticeDao;
 	
 	@Override
-	public NoticePaging getPaging(NoticePaging inData) {
+	public Paging getPaging(Paging inData) {
 		
 		//총 게시글 수 조회
 		int totalCount = noticeDao.selectCntAll();
 		
 		//페이징 계산
-		NoticePaging paging = new NoticePaging( totalCount, inData.getCurPage() );
+		Paging paging = new Paging( totalCount, inData.getCurPage() );
 		
 		return paging;
 	}
 
 	@Override
-	public List<Notice> getNoticeList(NoticePaging paging) {
+	public List<Notice> getNoticeList(Paging paging) {
 		return noticeDao.noticePageSelect(paging);
 	}
 

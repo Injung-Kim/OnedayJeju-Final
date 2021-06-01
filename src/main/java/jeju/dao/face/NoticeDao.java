@@ -3,7 +3,7 @@ package jeju.dao.face;
 import java.util.List;
 
 import jeju.dto.Notice;
-import jeju.util.NoticePaging;
+import jeju.util.Paging;
 
 public interface NoticeDao {
 
@@ -22,7 +22,7 @@ public interface NoticeDao {
 	 * @param paging - 페이징 정보 객체
 	 * @return 페이징이 적용된 게시글 목록
 	 */
-	public List<Notice> noticePageSelect(NoticePaging paging);
+	public List<Notice> noticePageSelect(Paging paging);
 
 	/**
 	 * 조회하려는 공지글의 조회수를 1 증가
