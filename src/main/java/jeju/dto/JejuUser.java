@@ -19,6 +19,8 @@ public class JejuUser {
 	private String userMailAuthkey;
 	private String userMailAuth;
 	private String userGrade;
+	private String userOrigin;
+	private String userStored;
 	
 	
 	@Override
@@ -28,7 +30,7 @@ public class JejuUser {
 				+ ", userPhone=" + userPhone + ", userZipcode=" + userZipcode + ", userAddress=" + userAddress
 				+ ", userAddressDetail=" + userAddressDetail + ", userAgree=" + userAgree + ", userJoinDate="
 				+ userJoinDate + ", userMailAuthkey=" + userMailAuthkey + ", userMailAuth=" + userMailAuth
-				+ ", userGrade=" + userGrade + "]";
+				+ ", userGrade=" + userGrade + ", userOrigin=" + userOrigin + ", userStored=" + userStored + "]";
 	}
 
 
@@ -190,6 +192,25 @@ public class JejuUser {
 	public void setUserGrade(String userGrade) {
 		this.userGrade = userGrade;
 	}
-	
+
+
+	public String getUserOrigin() {
+		return userOrigin;
+	}
+
+
+	public void setUserOrigin(String userOrigin) {
+		this.userOrigin = userOrigin;
+	}
+
+
+	public String getUserStored() {
+		return userStored;
+	}
+
+
+	public void setUserStored(String userStored) {
+		this.userStored = userStored;
+	}
 	
 }

@@ -47,6 +47,13 @@
 				<!-- *: 모든 문자 허용, **: 모든 문자 또는 모든 경로 허용 -->
 			</array>
 		</property>
+		
+		<!--snakeCase to camelCase 자동변환-->
+		<property name="configuration">
+			<bean class="org.apache.ibatis.session.Configuration">
+				<property name="mapUnderscoreToCamelCase" value="true"/>
+			</bean>
+		</property>
 	</bean>
 
 

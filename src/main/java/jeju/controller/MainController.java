@@ -18,4 +18,8 @@ public class MainController {
 	public String admin() {
 		return "admin";
 	}
+	@RequestMapping(value="/admin/fail")
+	public String adminFail() {
+		return "admin/fail";
+	}
 }

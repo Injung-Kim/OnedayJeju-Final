@@ -25,6 +25,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+	//프로필 마이페이지 말풍선 설정
 	 $('#mypage').click(function(){
 		if($('.balloon').hasClass("hidden")){
 			$('.balloon').toggleClass("hidden show")
@@ -44,7 +45,7 @@ $(document).ready(function(){
 
 <header>
 	<a href="/" class="logo"><img src="/resources/image/logo.png" ></a>
-	<!-- <a href="/" class="logo">어느 날, 제주<i class="fas fa-paper-plane"></i></a> -->
+	
 	
 	<c:if test="${empty login }">
 		<div class="nologin" style="right: 40px; position : absolute">
@@ -57,18 +58,20 @@ $(document).ready(function(){
 		<span class="welcome"><strong>${nick} </strong>님 환영합니다!</span>
 		<div class="login" style="margin-right: 20px;">
 			<img src="/resources/image/user.png" style="width : 70px; height : 70px;" id="mypage">
+			
 			<c:if test="${grade eq '2' }">		
-			<div class="balloon hidden">	
-			<p><a href="#">마이페이지</a></p>
-			<p><a href="/member/logout">로그아웃</a></p>
-			</div>
+				<div class="balloon hidden">	
+				<p><a href="#">마이페이지</a></p>
+				<p><a href="/member/logout">로그아웃</a></p>
+				</div>
 			</c:if>
 			<c:if test="${grade ne '2' }">
-			<div class="balloon hidden">	
-			<p><a href="/admin">관리자 페이지</a></p>
-			<p><a href="/member/logout">로그아웃</a></p>
+				<div class="balloon hidden">	
+				<p><a href="/admin">관리자 페이지</a></p>
+				<p><a href="/member/logout">로그아웃</a></p>
+				</div>
 			</c:if>
-			</div>
+			
 		</div>
 	</c:if>
 <nav>
@@ -86,9 +89,9 @@ $(document).ready(function(){
 			<li class="devide">|</li>
 			<li><a href="#">여행 후기</a></li>
 			<li class="devide">|</li>
-			<li><a href="#">공지사항</a></li>
+			<li><a href="/notice/list">공지사항</a></li>
 			<li class="devide">|</li>
-			<li><a href="#">Q & A</a></li>
+			<li><a href="/qna/list">Q & A</a></li>
 		</ul>
 	</li>
 	</ul>
