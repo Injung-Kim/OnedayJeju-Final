@@ -10,7 +10,6 @@
 <div class="container">
 본문영역
 
-
 <p style="font-size: 20px;">메인페이지</p>
 
 

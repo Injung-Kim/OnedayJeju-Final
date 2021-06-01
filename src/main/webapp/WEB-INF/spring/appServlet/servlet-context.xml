@@ -74,7 +74,7 @@
 	</beans:bean>
 	
 	
-	<context:component-scan base-package="a.b.c, jeju.controller, jeju.service" />
+	<context:component-scan base-package="jeju.controller, jeju.service" />
 	
 	
 	
