@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="jeju.dao.face.PlanDao">
+	<resultMap type="jeju.dto.Plan" id="Plan">
+		<id column="p_no" property="pNo"/>
+		<result column="p_title" property="pTitle"/>
+		<result column="p_departure_date" property="pDepartureDate"/>
+		<result column="p_num_days" property="pNumDays"/>
+		<result column="p_num_people" property="pNumPeople"/>
+		<result column="p_c_date" property="pCDate"/>
+		<result column="user_no" property="userNo"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="jeju.dto.Plan">
+		<selectKey order="BEFORE" keyProperty="pNo" resultType="int">
+			SELECT plan_seq.nextval FROM dual
+		</selectKey>
+		INSERT INTO plan(p_no, p_title, p_departure_date, p_num_days, p_num_people, p_c_date, user_no)
+		VALUES(#{pNo}, #{pTitle}, #{pDepartureDate}, #{pNumDays}, #{pNumPeople}, sysdate, #{userNo})
+	</insert>
+	
+	<insert id="insertDetail" parameterType="hashmap">
+		INSERT INTO detail_plan(dp_no, dp_date, p_no)
+		VALUES(detail_plan_seq.nextval, #{dpDate}, #{pNo})
+	</insert>
+	
+	<select id="selectPlanByPno" parameterType="jeju.dto.Plan" resultMap="Plan">
+		SELECT * FROM plan
+		WHERE p_no = #{pNo}
+	</select>
+</mapper>

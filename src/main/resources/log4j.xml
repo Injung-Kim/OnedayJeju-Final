@@ -16,11 +16,11 @@
 	</logger>
 	
 	<logger name="jeju">
-<!-- 		<level value="info" /> -->
 		<level value="debug" />
 	</logger>
-	
-	
+
+
+
 	
 	<!-- 마이바티스 쿼리 Loggers -->
 	<logger name="jdbc.connection">

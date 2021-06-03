@@ -73,6 +73,11 @@
 		<beans:property name="order" value="0" />
 	</beans:bean>
 	
+	<!-- JSON응답용 jsonView를 스프링 빈으로 등록하기 -->
+	<beans:bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" >
+		<beans:property name="contentType" value="application/json;charset=utf-8" />
+	</beans:bean>
+	
 	
 	<context:component-scan base-package="a.b.c, jeju.controller, jeju.service" />
 	

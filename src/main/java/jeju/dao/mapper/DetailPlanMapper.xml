@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="jeju.dao.face.DetailPlanDao">
+	<resultMap type="jeju.dto.DetailPlan" id="DetailPlan">
+		<id column="dp_no" property="dpNo"/>
+		<result column="dp_date" property="dpDate"/>
+		<result column="p_no" property="pNo"/>
+	</resultMap>
+
+	<select id="selectDpListByPno" parameterType="jeju.dto.Plan" resultMap="DetailPlan">
+		SELECT * FROM detail_plan
+		WHERE p_no = #{pNo}
+		ORDER BY dp_no
+	</select>
+	
+	<select id="selectDpInfoListByDpno" parameterType="jeju.dto.DetailPlan" resultType="hashmap">
+		SELECT 
+			dp_no AS dpNo
+			, dppm_order_travel AS orderTravel
+			, dppm.contentid AS contentid
+			, contenttypeid
+			, mapx
+			, mapy
+			, title
+			, firstimage2
+		FROM detail_plan_place_map dppm, place
+		WHERE dp_no = #{dpNo}
+			AND dppm.contentid = place.contentid
+		ORDER BY dppm_order_travel
+	</select>
+	
+	<delete id="deleteAllByDpno" parameterType="jeju.dto.Dppm">
+		DELETE detail_plan_place_map
+		WHERE dp_no = #{dpNo}
+	</delete>
+	
+	<insert id="insertDppm" parameterType="jeju.dto.Dppm">
+		INSERT INTO detail_plan_place_map(dp_no, contentid, dppm_order_travel)
+		VALUES ( #{dpNo}, #{contentid}, #{order} )
+	</insert>
+</mapper>
