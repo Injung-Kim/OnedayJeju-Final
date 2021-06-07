@@ -3,12 +3,97 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jeju.dao.face.QnADao">
+	<!-- 파일처리 ResultMap -->
+	<resultMap type="jeju.dto.qna.FileTB" id="FileTable">
+		<result column="qst_file_no" property="fileNo"/>
+		<result column="qst_origin" property="origin"/>
+		<result column="qst_stored" property="stored"/>
+		<result column="ans_file_no" property="fileNo"/>
+		<result column="ans_origin" property="origin"/>
+		<result column="ans_stored" property="stored"/>
+	</resultMap>
+	
 	<!--질문글 수 조회  -->
 	<select id="selectCntQustion" resultType="int">
 		SELECT count(*) FROM qa_question
 	</select>
 	<!-- 질문글 조회 -->
-	<select id="selectQuestions" resultType="jeju.dto.QnAQuestion">
-		SELECT qst_no, title, user_no, qst_content, qst_time, qst_cnt FROM qa_question
+	<select id="selectQuestions" resultType="jeju.dto.qna.Question" parameterType="jeju.util.Paging">
+		SELECT * FROM 
+		(SELECT ROWNUM rnum, Q.* FROM
+		(SELECT * FROM qa_question ORDER BY qst_no DESC) Q)NUM
+		WHERE rnum BETWEEN ${startNo} AND ${endNo}
 	</select>
+	<!-- 질문글 상세조회  -->
+	<select id="selectQuestionByqstNo" resultType="hashmap" parameterType="int">
+		SELECT Q.qst_no, Q.title, Q.qst_content, Q.qst_cnt, Q.qst_time, U.user_id, U.user_origin 
+		FROM qa_question Q
+		INNER JOIN jejuuser U
+		ON U.user_no = q.user_no
+		WHERE Q.qst_no = ${qstNo}
+	</select>
+	<!-- 해시태그 조회  -->
+	<select id="selectHashTagByqstNo" resultType="hashmap" parameterType="int">
+		SELECT tag_name,H.tag_no from qa_hashtag H
+		INNER JOIN question_tag QT
+		ON QT.TAG_NO = H.TAG_no
+		INNER JOIN qa_question Q
+		ON Q.qst_no = QT.qst_no
+		WHERE Q.qst_no = ${qstNo}
+	</select>
+	<!-- 답변글 갯수 조회  -->
+	<select id="selectCntAnswer" resultType="int" parameterType="int">
+		SELECT count(*) FROM qa_answer 
+		WHERE qst_no = ${qstNo}
+	</select>
+	<!-- 답변글 조회 -->
+	<select id="selectAnswers" resultType="hashmap" parameterType="hashmap">
+		SELECT * FROM(
+		SELECT ROWNUM rnum, ANSWER.* FROM(
+		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_origin 
+		FROM qa_answer A
+		INNER JOIN jejuuser U
+		on U.user_no = A.user_no
+		WHERE qst_no = ${qstNo}
+		ORDER BY ans_time DESC) ANSWER)
+		WHERE RNUM BETWEEN ${ansPaging.startNo} AND ${ansPaging.endNo}
+	</select>
+	<!-- 해시태그 검색 갯수 조회  -->
+	<select id="cntTags" parameterType="String" resultType="int">
+		SELECT count(*) FROM qa_hashtag
+		WHERE tag_name = #{tagName}		
+	</select>
+	<!-- 해시태그 등록하기 -->
+	<insert id="insertTag" parameterType="String">
+		INSERT INTO qa_hashtag(tag_no, tag_name) VALUES(tag_no_seq.nextval, #{tagName})
+	</insert>
+	<!-- 해시태그 조회하기  -->
+	<select id="selectTag" parameterType="String" resultType="jeju.dto.qna.Hashtag">
+		SELECT tag_no, tag_name FROM qa_hashtag
+		WHERE tag_name = #{tagName}
+	</select>
+	<!-- 질문글 추가하기 -->
+	<insert id="insertQuestion" parameterType="jeju.dto.qna.Question">
+		<selectKey resultType="int" keyProperty="qstNo" order="BEFORE">SELECT qst_no_seq.nextval FROM dual</selectKey>
+		INSERT INTO qa_question(qst_no, title, user_no, qst_content) 
+		VALUES(#{qstNo}, #{title}, ${userNo}, #{qstContent})
+	</insert>
+	<!-- 파일명 추가하기 -->
+	<insert id="insertFiles" parameterType="jeju.dto.qna.FileTB">
+	 	INSERT INTO qst_file(qst_file_no, qst_no, qst_origin, qst_stored) VALUES
+	 	(qst_file_no_seq.nextval, #{qstNo}, #{origin}, #{stored})
+	</insert>
+	<!-- 질문글에 태그 추가하기  -->
+	<insert id="insertTagIntoQustion" parameterType="hashmap">
+		INSERT INTO question_tag(quta_no, qst_no, tag_no)
+		VALUES (quta_no_seq.nextval, #{qstNo}, #{tagNo})
+	</insert>
+	<!-- 질문글 번호별 파일 정보 조회하기  -->
+	<select id="selectFiles" resultType="hashmap" parameterType="int">
+		SELECT * FROM qst_file WHERE qst_no = #{qstNo}
+	</select>
+	<!-- 질문글 삭제하기 -->
+	<delete id="deleteQuestion" parameterType="int">
+		DELETE FROM qa_question WHERE qst_no = #{qstNo}
+	</delete>
 </mapper>

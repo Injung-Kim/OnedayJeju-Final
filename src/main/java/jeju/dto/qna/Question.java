@@ -1,8 +1,8 @@
-package jeju.dto;
+package jeju.dto.qna;
 
 import java.util.Date;
 
-public class QnAQuestion {
+public class Question {
 	private int qstNo;
 	private String title;
 	private int userNo;
