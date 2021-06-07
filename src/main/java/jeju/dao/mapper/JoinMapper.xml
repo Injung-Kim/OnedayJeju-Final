@@ -7,5 +7,9 @@
   
 <mapper namespace="jeju.dao.JoinDao">
 
+	<insert id="insertUser" parameterType="jeju.dto.JejuUser">
+		INSERT INTO user () VALUES ()
+	</insert>
+
 </mapper>
   
