@@ -75,13 +75,16 @@ $(document).ready(function(){
 	
 	//좋아요 클릭 이벤트
 	$('.like_btn').click(function(){
+		var userNo = 0;
+		if(${empty sessionScope.uno}){ return false;}
+		else {var userNo = <%=session.getAttribute("uno")%>;}
 		//좋아요 상태 변경
 		$.ajax({
 			type: "get"
 			, url: "/planboard/like"
 			, data:{
 				pbNo: ${info.PBNO}
-				, userNo: ${sessionScope.uno}
+				, userNo: userNo
 			}
 			, dataType: "json"
 			, success: function(res){
@@ -101,13 +104,16 @@ $(document).ready(function(){
 	})
 	//북마크 클릭 이벤트
 	$('.bookmark_btn').click(function(){
+		var userNo = 0;
+		if(${empty sessionScope.uno}){ return false;}
+		else {var userNo = <%=session.getAttribute("uno")%>;}
 		//북마크 상태 변경
 		$.ajax({
 			type: "get"
 			, url: "/planboard/bookmark"
 			, data:{
 				pbNo: ${info.PBNO}
-				, userNo: ${sessionScope.uno}
+				, userNo: userNo
 			}
 			, dataType: "json"
 			, success: function(res){
@@ -184,6 +190,9 @@ $(document).ready(function(){
 	
 	//댓글 작성 이벤트
 	$('#cmtWriteBtn').click(function(){
+		var userNo = 0;
+		if(${empty sessionScope.uno}){ return false;}
+		else {var userNo = <%=session.getAttribute("uno")%>;}
 		//댓글 작성 ajax
 		$.ajax({
 			type: "post"
@@ -191,7 +200,7 @@ $(document).ready(function(){
 			, data: {
 				pbcContent: $('#cmtContent').val()
 				, pbNo: ${info.PBNO}
-				, userNo: ${uno}
+				, userNo: userNo
 			}
 			, dataType: "json"
 			, success: function(res){
@@ -420,7 +429,7 @@ $(document).ready(function(){
 $(document).on("click", ".cmt_delete_btn", function(){
 	var uno = $(this).parent().parent().attr("data-uno");
 	var pbcno = $(this).parent().parent().attr("data-pbcno");
-	if( ${sessionScope.uno} == uno ){
+	if(<%=session.getAttribute("uno")%> == uno ){
 		if(confirm('정말로 삭제하시겠습니까?')){
 			$.ajax({
 				type: "get"

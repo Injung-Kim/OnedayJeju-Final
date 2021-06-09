@@ -105,17 +105,22 @@ public class PlanBoardController {
 		
 		//접속한 유저의 해당 게시글 좋아요 상태 확인
 		PlanLike pl = new PlanLike();
-		pl.setUserNo( (int)session.getAttribute("uno") );
+		if(session.getAttribute("uno") != null) {
+			pl.setUserNo( (int)session.getAttribute("uno") );
+		}
 		pl.setPbNo( Integer.parseInt(pbNo) );
 		int initLikeStatus = planBoardService.getLikeStatus(pl);
 		
 		//접속한 유저의 해당 게시글 북마크 상태 확인
 		Bookmark bm = new Bookmark();
-		bm.setUserNo( (int)session.getAttribute("uno") );
+		if(session.getAttribute("uno") != null) {
+			bm.setUserNo( (int)session.getAttribute("uno") );
+		}
 		bm.setPbNo( Integer.parseInt(pbNo) );
 		int initBmStatus = planBoardService.getBmStatus(bm);
 				
 		logger.debug("info : {}", info);
+		logger.debug("initLikeStatus : {}", initLikeStatus);
 		//모델값 전달
 		model.addAttribute("info", info);
 		model.addAttribute("dpList", dpList);

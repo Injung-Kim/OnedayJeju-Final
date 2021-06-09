@@ -39,6 +39,15 @@
 			<beans:bean class="jeju.interceptor.LoginInterceptor" />
 		</interceptor>
 		
+		
+		<interceptor>
+			<!-- 인터셉터가 적용될 URL -->
+			<mapping path="/plan/**" />
+
+			<!-- 인터셉터 클래스 지정 -->
+			<beans:bean class="jeju.interceptor.PlanInterceptor" />
+		</interceptor>
+		
 	</interceptors>
 	
 
