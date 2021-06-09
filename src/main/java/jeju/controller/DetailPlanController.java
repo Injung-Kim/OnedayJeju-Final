@@ -33,7 +33,7 @@ public class DetailPlanController {
 		//jsonView 지정
 		mav.setViewName("jsonView");
 		
-		//해당 날짜의 상세일정 정보 조회
+		//상세일정번호로 상세일정 정보 조회
 		List<Map<String, Object>> infoList = detailPlanService.getDpInfoListByDpno(inData);
 		
 		//모델값 전달

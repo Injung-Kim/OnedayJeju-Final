@@ -37,9 +37,12 @@ public class PlanController {
 		logger.info("create() POST 요청");
 		
 		//====[TEST] 유저번호=====
-		session.setAttribute("userNo", 1);
-		inData.setUserNo( (int)session.getAttribute("userNo") );
+//		session.setAttribute("userNo", 1);
+//		inData.setUserNo( (int)session.getAttribute("userNo") );
 		//======================
+		
+		//세션에서 유저번호 가져오기
+		inData.setUserNo((int)session.getAttribute("uno") );
 		
 		Plan plan = planService.create(inData);
 		
@@ -52,32 +55,45 @@ public class PlanController {
 		logger.debug("파라미터 inData : {}", inData);
 		
 		//잘못된 경로
-//		if( inData.getpNo() == 0) {
-//			return "redirect:/";
-//		}
+		if( inData.getpNo() == 0) {
+			return "redirect:/";
+		}
 		
 		//파라미터로 일정 조회
 		Plan plan = planService.getPlan(inData);
 		logger.debug("plan : {}", plan);
 		
 		//세션 처리 (조회한 유저의 일정인지 체크)
-//		if( plan.getUserNo() != (Integer)session.getAttribute("uno")) {
-//			return "redirect:/";
-//		}
+		//session.getAttribute("uno") == null 이부분은 인터셉터 작성되면 삭제
+		if( session.getAttribute("uno") == null || ( plan.getUserNo() != (int)session.getAttribute("uno") ) ) {
+			return "redirect:/";
+		}
 		
 		//일정번호로 상세일정 리스트 조회
 		List<DetailPlan> dpList = detailPlanService.getDpListByPno(inData);
 		
-		//상세일정 첫번째날 조회
-//		DetailPlan first = dpList.get(0);
-//		List<Map<String, Object>> firstDetails = detailPlanService.getDpInfoListByDpno(first);
-//		
-//		System.out.println(firstDetails.size() == 0); // 조회결과 없으면 size는 0
-		
 		//모델값 전달
 		model.addAttribute("plan", plan);
 		model.addAttribute("dpList", dpList);
-//		model.addAttribute("firstDetails", firstDetails);
 		return "/plan/update";
+	}
+	
+	@RequestMapping(value="/plan/delete", method=RequestMethod.GET)
+	public String remove(Plan inData, HttpSession session) {
+		logger.info("remove() GET 요청");
+		
+		//일정 조회
+		Plan plan = planService.getPlan(inData);
+		
+		//session.getAttribute("uno") == null 이부분은 인터셉터 작성되면 삭제
+		//본인이 생성한 일정인지 체크
+		if( session.getAttribute("uno") == null || ( plan.getUserNo() != (int)session.getAttribute("uno") )) {
+			return "redirect:/";
+		}
+		//일정 삭제
+		planService.remove(inData);
+		
+		//마이페이지 여행일정으로 이동
+		return "redirect:/mypage/plan";
 	}
 }

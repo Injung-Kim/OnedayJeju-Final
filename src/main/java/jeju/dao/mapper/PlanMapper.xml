@@ -31,4 +31,9 @@
 		SELECT * FROM plan
 		WHERE p_no = #{pNo}
 	</select>
+	
+	<delete id="deletePlanByPno" parameterType="jeju.dto.Plan">
+		DELETE plan
+		WHERE p_no = #{pNo}
+	</delete>
 </mapper>

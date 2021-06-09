@@ -16,5 +16,10 @@ public interface PlanService {
 	 * @return 일정 번호에 해당하는 일정 정보
 	 */
 	public Plan getPlan(Plan inData);
+	/**
+	 * 일정번호에 해당하는 일정을 삭제한다
+	 * @param inData - 일정 번호
+	 */
+	public void remove(Plan inData);
 
 }

@@ -56,4 +56,11 @@ public class PlanServiceImpl implements PlanService {
 		
 		return planDao.selectPlanByPno(inData);
 	}
+	
+	@Override
+	public void remove(Plan inData) {
+		logger.info("remove() 호출");
+		//일정 삭제
+		planDao.deletePlanByPno(inData);
+	}
 }

@@ -56,7 +56,7 @@ html, body {
 .day {
 	width: 148px;
 	height: 80px;
-	border-bottom: 1px solid #00b359;
+	border-bottom: 1px solid #FFFBFA;
 	cursor: pointer;
 }
 .day_active {

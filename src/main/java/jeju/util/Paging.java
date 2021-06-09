@@ -1,6 +1,6 @@
 package jeju.util;
 
-public class NoticePaging {
+public class Paging {
 	private int curPage; //현재 페이지의 번호
 
 	private int totalCount; //총 게시글 수
@@ -18,17 +18,17 @@ public class NoticePaging {
 	private String search; //검색어
 	
 	//디폴트 생성자
-	public NoticePaging() { }
+	public Paging() { }
 	
 	//총 게시글 수를 입력하는 생성자
-	public NoticePaging(int totalCount) {
+	public Paging(int totalCount) {
 		setTotalCount(totalCount);
 		
 		makePaging();
 	}
 	
 	//총 게시글 수, 현재 페이지번호를 입력하는 생성자
-	public NoticePaging(int totalCount, int curPage) {
+	public Paging(int totalCount, int curPage) {
 		setTotalCount(totalCount);
 		setCurPage(curPage);
 		
@@ -36,7 +36,7 @@ public class NoticePaging {
 	}
 	
 	//총 게시글 수, 현재 페이지번호, 보여질 게시글 수를 입력하는 생성자
-	public NoticePaging(int totalCount, int curPage, int listCount) {
+	public Paging(int totalCount, int curPage, int listCount) {
 		setTotalCount(totalCount);
 		setCurPage(curPage);
 		setListCount(listCount);
@@ -45,7 +45,7 @@ public class NoticePaging {
 	}
 	
 	//총 게시글 수, 현재 페이지번호, 보여질 게시글 수, 보여질 페이지 수를 입력하는 생성자
-	public NoticePaging(int totalCount, int curPage, int listCount, int pageCount) {
+	public Paging(int totalCount, int curPage, int listCount, int pageCount) {
 		setTotalCount(totalCount);
 		setCurPage(curPage);
 		setListCount(listCount);

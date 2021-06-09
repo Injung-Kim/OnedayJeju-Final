@@ -22,7 +22,7 @@
 <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
 
 <!-- 드래그 앤 드랍 -->
-<link rel="stylesheet" href="/resources/css/dragstyles.css">
+<link rel="stylesheet" href="/resources/css/drag.css">
 <script src="/resources/js/dragscript.js" defer></script>
 <!-- css -->
 <link rel="stylesheet" href="/resources/css/planupdate.css">
@@ -46,7 +46,7 @@ $(document).ready(function(){
 	//일정 삭제 버튼
 	$("#deleteBtn").click(function(){
 		var url = '/plan/delete?pNo=' + ${plan.pNo};
-		if(confirm('정말로 삭제하시겠습니까?')){
+		if(confirm('일정을 삭제하면 해당 일정으로 작성된 일정공유게시글도 삭제됩니다. 정말로 삭제하시겠습니까? ')){
 			$(location).attr("href", url);
 		}
 	})
@@ -110,6 +110,8 @@ $(document).ready(function(){
 				}
 				//추가한 요소들 드래그 가능하게 설정
 				setDraggable();
+				//비어있으면 안내문구 추가
+				emptyCheck();
 			}
 			, error: function () {
 				console.log("AJAX 실패");
@@ -142,10 +144,11 @@ $(document).ready(function(){
 		searchAjax("/placebycategory", category);
 	})
 	
-	//처음 접속했을때 트리거
+	//====처음 접속했을때 트리거====
 	var first = $(".day")[0];
 	$(first).trigger("click");
 	$(".touristspot").trigger("click");
+	//=======================
 	
 	//상세보기 모달창
 	const modal = document.querySelector(".modal");
@@ -166,7 +169,8 @@ $(document).on("dragend", ".draggable", updateOrder);
 $(document).on("click", ".detail_delete_btn", function(){
 	$(this).parent().remove();
 	updateOrder();
-
+	//비어있으면 안내문구 추가
+	emptyCheck();
 })
 //장소에 대한 상세정보 보기
 $(document).on("click", ".list_box .place_title", function(){
@@ -181,6 +185,7 @@ $(document).on("click", ".list_box .place_title", function(){
 		, success: function( res ) {
 			console.log("AJAX 성공");
 			console.log(res);
+			//상세정보 채워넣기
 			if(res.detailInfo.img != null){
 				$("#modalImg").attr("src", res.detailInfo.img)
 			} else {
@@ -192,6 +197,9 @@ $(document).on("click", ".list_box .place_title", function(){
 			}
 			$(".modal_tel").html("<strong>전화번호</strong> : " + res.detailInfo.tel);
 			$(".modal_addr").html("<strong>주소</strong> : " + res.detailInfo.addr);
+			if(res.detailInfo.homepage == null){
+				res.detailInfo.homepage = '-';
+			}
 			$(".modal_homepage").html("<strong>홈페이지</strong> : " + res.detailInfo.homepage);
 			$(".modal_overview").html("<strong>개요</strong> : " + res.detailInfo.overview);
 		}
@@ -199,10 +207,13 @@ $(document).on("click", ".list_box .place_title", function(){
 			console.log("AJAX 실패");
 		}
 	})
+	//모달 보이게 하기
 	$(".modal").removeClass("hidden");
 })
 //장소 추가
 $(document).on("click", ".place_add_button", function(){
+	//안내문구 삭제
+	$("#infoText").remove();
 	var dataset = $(this).parent().data();
 	//상세일정에 div 추가
 	var element = $("<div>").addClass("plan_place draggable").attr({
@@ -315,7 +326,7 @@ function planUpdateAjax() {
 		}
 	})
 }
-//순서 바꾸는 함수
+//상세일정 순서 정보 바꾸는 함수
 function updateOrder(){
 	var detailPlaces = $(".drag_container").children();
 	
@@ -325,6 +336,15 @@ function updateOrder(){
 	//상세일정 update
 	planUpdateAjax();
 }
+//상세일정 비어있는지 확인하고 태그 추가
+function emptyCheck(){
+	if($('.drag_container').is(':empty')){
+		var infotext = $("<div>").attr("id", "infoText").css({"color":"white", "margin":"10px"})
+		.html("<h4 style='line-height:2em;'><span style='color:#49C6E5;'>Drag & Drop</span>으로 일정 순서를 쉽게 변경할 수 있습니다. <h5>모든 일정은 <span style='color:#49C6E5;'>자동저장</span> 됩니다.</h5></h4>")
+		$(".drag_container").html(infotext);
+	}
+}
+
 </script>
 </head>
 <body>
@@ -412,7 +432,6 @@ function updateOrder(){
 </div>
 
 <!-- 카카오 맵 -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=086009600bc20afd4142f6181ae47e1f"></script>
 <!-- services와 clusterer, drawing 라이브러리 불러오기 -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=086009600bc20afd4142f6181ae47e1f&libraries=services,clusterer,drawing"></script>
 <script type="text/javascript">

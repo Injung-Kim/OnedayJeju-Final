@@ -21,5 +21,10 @@ public interface PlanDao {
 	 * @return 조회된 일정 정보
 	 */
 	public Plan selectPlanByPno(Plan inData);
+	/**
+	 * 일정번호에 해당하는 일정을 삭제
+	 * @param inData - 일정번호
+	 */
+	public void deletePlanByPno(Plan inData);
 	
 }

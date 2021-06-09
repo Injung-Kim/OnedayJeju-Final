@@ -78,6 +78,9 @@
 		<beans:property name="contentType" value="application/json;charset=utf-8" />
 	</beans:bean>
 	
+	<!-- GetImageView 클래스를 getImg 이라는 이름의 스프링 빈으로 등록하기 -->
+	<beans:bean id="getImg" class="jeju.view.GetImageView" />
+	
 	
 	<context:component-scan base-package="a.b.c, jeju.controller, jeju.service" />
 	
