@@ -187,7 +187,7 @@ footer{
 .circle {
     width: 50px;
     height: 50px;
-    border: 1px solid #ccc;
+    border: 1px solid black;
     -moz-border-radius: 50px;
     -webkit-border-radius: 50px;
     border-radius: 50px;
@@ -235,6 +235,9 @@ footer{
 	background-size: cover;
 	background-position: center center;
 }
+.plan_title_btn_area {
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
 /* 메뉴 */
 .plan_menu_box {
 	width: 1140px;
@@ -259,7 +262,7 @@ footer{
 	color: #00BD9D;
 }
 
-#deleteBtn, #updateBtn {
+#deleteBtn, #updateBtn, #listBtn {
 	padding: 10px 15px;
 	border-radius: 10px;
 	border: 1px solid #ccc;
@@ -274,7 +277,10 @@ footer{
 #updateBtn {
 	background-color: #49C6E5;
 }
-#deleteBtn:hover, #updateBtn:hover {
+#listBtn {
+	background-color: #00BD9D;
+}
+#deleteBtn:hover, #updateBtn:hover, #listBtn:hover {
 	font-weight: bold;
 }
 /* 페이지 내용 부분 */
@@ -284,7 +290,6 @@ footer{
 .page.show {
 	display: block;
 	margin-top: 30px;
-	min-height: 600px;
 }
 .page_left {
 	width: 755px;

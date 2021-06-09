@@ -49,6 +49,7 @@ public class PlanBoardController {
 		logger.debug("map : {}", list.get(0));
 		
 		model.addAttribute("list", list);
+		model.addAttribute("paging", paging);
 		return "/planboard/list";
 	}
 	
@@ -84,8 +85,9 @@ public class PlanBoardController {
 	}
 	
 	@RequestMapping(value="/planboard/view", method=RequestMethod.GET)
-	public void view(Model model, String pbNo, HttpSession session) {
+	public void view(Model model, String pbNo, Paging paging, HttpSession session) {
 		logger.info("view() GET 요청");
+		logger.debug("paging: {}", paging);
 		
 		//게시글번호로 공유일정게시글 관련 기본정보 조회(공유일정 게시글 TB + 좋아요수)
 		Map<String, Object> info = planBoardService.getPlanBoardInfo(pbNo);
@@ -120,6 +122,7 @@ public class PlanBoardController {
 		model.addAttribute("detailsList", detailsList);
 		model.addAttribute("initLikeStatus", initLikeStatus);
 		model.addAttribute("initBmStatus", initBmStatus);
+		model.addAttribute("paging", paging); //클릭했을 때 페이지 정보
 	}
 	
 	@RequestMapping(value="/getImg", method=RequestMethod.GET)

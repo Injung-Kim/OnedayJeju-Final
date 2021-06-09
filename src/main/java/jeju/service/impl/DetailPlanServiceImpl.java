@@ -41,7 +41,7 @@ public class DetailPlanServiceImpl implements DetailPlanService {
 		
 		//기존 데이터 삭제
 		detailPlanDao.deleteAllByDpno(inData.get(0));
-		//상세일정을 전부 삭제한 경우
+		//상세일정을 전부 삭제한 경우 삭제만 하고 return
 		if(inData.get(0).getContentid() == null) return;
 		//새로운 데이터 삽입
 		for(Dppm newData : inData) {

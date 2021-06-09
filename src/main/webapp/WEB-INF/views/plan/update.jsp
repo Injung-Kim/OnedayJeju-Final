@@ -123,7 +123,11 @@ $(document).ready(function(){
 	$("#searchBtn").click(function(){
 		var keyword = $("#inputSearch").val();
 		searchAjax("/placebykeword", keyword);
+		
+		//검색창 초기화
+		$("#inputSearch").val('');
 	})
+	//장소검색: 엔터 입력에도 검색되도록 한다
 	$("#inputSearch").keydown(function(){
 		if(event.keyCode == 13){
 			$("#searchBtn").trigger("click");		
@@ -150,7 +154,7 @@ $(document).ready(function(){
 	$(".touristspot").trigger("click");
 	//=======================
 	
-	//상세보기 모달창
+	//====상세보기 모달창====
 	const modal = document.querySelector(".modal");
 	const overlay = modal.querySelector(".modal_overlay");
 	const closeBtn =  modal.querySelector(".modal_close");
@@ -160,7 +164,7 @@ $(document).ready(function(){
 	}
 	overlay.addEventListener("click", closeModal);
 	closeBtn.addEventListener("click", closeModal);
-	
+	//===================
 })
 //동적 태그 재설정
 //드래그
@@ -242,6 +246,9 @@ $(document).on("click", ".place_add_button", function(){
 	updateOrder();
 
 })
+//장소영역 마우스오버에 지도에 마커 표시
+$()
+
 //검색 ajax
 function searchAjax(url, data){
 	$.ajax({
@@ -442,6 +449,7 @@ var options = { //지도를 생성할 때 필요한 기본 옵션
 };
 
 var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
 </script>
 </body>
 </html>

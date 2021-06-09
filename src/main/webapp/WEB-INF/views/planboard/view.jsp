@@ -57,6 +57,9 @@ $(document).ready(function(){
 </script>
 <script>
 $(document).ready(function(){
+	//페이지 로드되었을 때 .page.show 의 div 높이를 자식요소 높이로 맞추기 -> 지도부분 sticky 기능을 위해
+	$('.page.show').css('height', $('.page_left').height());
+	
 	//페이지 요청했을 때 유저의 좋아요 and 북마크 상태 반영
 	if(${initLikeStatus == 1}) {
 		$('.like_btn').addClass('active_btn');
@@ -240,6 +243,12 @@ $(document).ready(function(){
 		}
 	})
 	
+	//목록버튼 클릭
+	$('#listBtn').click(function(){
+		var url = '/planboard/list?curPage=${paging.curPage}&condition=${paging.condition}&search=${paging.search}';
+		$(location).attr('href', url);
+	})
+	
 	//댓글입력창 글자수 세기
 	$('#cmtContent').keyup(function(){
 		var content = $(this).val();
@@ -296,11 +305,30 @@ $(document).ready(function(){
 		$(".modal").removeClass("hidden");
 	})
 	
+	//======================== 카카오 맵 ============================
 	var markers = []; // 마커를 담을 배열입니다
 	var customOverlays = []; // customOverlay를 담을 배열입니다
 	var polylines = []; // 지도에 표시한 선을 담는 배열입니다
+	
 	//지도에서 보기 버튼 클릭
 	$('.map_btn').click(function(){
+		//지도에 표시된 마커, 커스텀오버레이, 선을 제거
+		//마커제거
+		for(var i=0; i<markers.length; i++){
+			markers[i].setMap(null);
+		}
+		markers = [];
+		//커스텀오버레이 제거
+		for(var i=0; i<customOverlays.length; i++){
+			customOverlays[i].setMap(null);
+		}
+		customOverlays = [];
+		//선 제거
+		for(var i=0; i<polylines.length; i++){
+			polylines[i].setMap(null);
+		}
+		polylines = [];
+		
 		var day = $(this).parent().parent().attr('data-id'); //클릭한 버튼이 여행 몇번째 날인지 확인
 		
 		var schList = $('.day_sch_box[data-id^='+ day +']'); //클릭한 날짜의 상세일정 장소들을 저장하는 변수
@@ -312,10 +340,82 @@ $(document).ready(function(){
 					, lng: $(item).attr('data-lng') //경도
 			}
 			positionInfo.push(plainObj);
-			console.log(item);
-			console.log(positionInfo);
 		})
+		
+		// 마커를 표시할 위치와 title 객체 배열입니다 
+		var positions = [];
+		for(var i in positionInfo) {
+			var position = {
+					title: positionInfo[i].title
+					, latlng: new kakao.maps.LatLng( positionInfo[i].lat, positionInfo[i].lng )
+			}
+			positions.push(position);
+		}
+		//마커 이미지의 이미지 주소입니다
+		var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+		//선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
+		var linePath = [];
+
+		for (var i = 0; i < positions.length; i ++) {
+		    
+		    // 마커 이미지의 이미지 크기 입니다
+		    var imageSize = new kakao.maps.Size(24, 35); 
+		    
+		    // 마커 이미지를 생성합니다    
+		    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+		    
+		    // 마커를 생성합니다
+		    var marker = new kakao.maps.Marker({
+		        map: map, // 마커를 표시할 지도 -> 이게 있으면 marker.setMap(map) 안해도 된다.
+		        position: positions[i].latlng, // 마커를 표시할 위치
+		        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+		        image : markerImage, // 마커 이미지 
+		    });
+		    
+		    //표시한 마커는 배열에 저장해둔다.
+		    markers.push(marker);
+		    
+		    // 커스텀 오버레이에 표시할 내용입니다
+		    // HTML 문자열 또는 Dom Element 입니다 
+		    var content = '<div class ="label"><span class="left"></span><span class="center">'+ positions[i].title +'</span><span class="right"></span></div>';
+
+		    // 커스텀 오버레이가 표시될 위치입니다 
+		    var position = new kakao.maps.LatLng(positions[i].latlng.Ma, positions[i].latlng.La);  
+
+		    // 커스텀 오버레이를 생성합니다
+		    var customOverlay = new kakao.maps.CustomOverlay({
+		        position: position,
+		        content: content   
+		    });
+
+		    // 커스텀 오버레이를 지도에 표시합니다
+		    customOverlay.setMap(map);
+		    
+		    //표시한 커스텀 오버레이는 배열에 저장해둔다.
+		    customOverlays.push(customOverlay);
+		    
+		 	//선으로 표시할 좌표를 하나씩 추가합니다.
+		 	linePath.push(positions[i].latlng);
+
+		    
+		}
+
+		//지도에 표시할 선을 생성합니다
+		var polyline = new kakao.maps.Polyline({
+		    path: linePath, // 선을 구성하는 좌표배열 입니다
+		    strokeWeight: 2, // 선의 두께 입니다
+		    strokeColor: 'red', // 선의 색깔입니다
+		    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		    strokeStyle: 'solid' // 선의 스타일입니다
+		});
+		// 지도에 선을 표시합니다 
+		polyline.setMap(map);
+		
+		//표시한 선은 배열에 저장해둔다.
+		polylines.push(polyline);
 	})
+	//============================ 카카오 맵 끝 =============================
 })
 $(document).on("click", ".cmt_delete_btn", function(){
 	var uno = $(this).parent().parent().attr("data-uno");
@@ -474,12 +574,12 @@ function fileCheck(e) {
 		<c:if test="${info.USERNO eq uno }">
 		<button id="deleteBtn" class="pull-right" type="button">삭제</button>
 		<button id="updateBtn" class="pull-right" type="button">사진변경</button>
-		
 		<form id="imageUpdate" action="/planboard/update" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="pbNo" value="${info.PBNO }">
 			<input type="file" name="imgfile" style="display: none;">
 		</form>
 		</c:if>
+		<button id="listBtn" class="pull-right" type="button">목록</button>
 	</div>
 	
 	<!-- 내용  -->
@@ -584,86 +684,5 @@ var options = { //지도를 생성할 때 필요한 기본 옵션
 };
 
 var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-
-var schList = $('.day_sch_box[data-id^=1]'); //만약 첫번째 날을 선택했다면
-var positionInfo = []; //상세일정 장소들의 정보를 담는 객체
-$.each(schList, function(index, item){
-	var plainObj = {
-			title: $(item).attr('data-title') //장소명
-			, lat: $(item).attr('data-lat') //위도
-			, lng: $(item).attr('data-lng') //경도
-	}
-	positionInfo.push(plainObj);
-	console.log(item);
-	console.log(positionInfo);
-})
-
-// 마커를 표시할 위치와 title 객체 배열입니다 
-var positions = [];
-for(var i in positionInfo) {
-	var position = {
-			title: positionInfo[i].title
-			, latlng: new kakao.maps.LatLng( positionInfo[i].lat, positionInfo[i].lng )
-	}
-	positions.push(position);
-}
-console.log(positions)
-
-//마커 이미지의 이미지 주소입니다
-var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-//선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
-var linePath = [];
-
-for (var i = 0; i < positions.length; i ++) {
-    
-    // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new kakao.maps.Size(24, 35); 
-    
-    // 마커 이미지를 생성합니다    
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-    
-    // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
-        map: map, // 마커를 표시할 지도 -> 이게 있으면 marker.setMap(map) 안해도 된다.
-        position: positions[i].latlng, // 마커를 표시할 위치
-        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        image : markerImage, // 마커 이미지 
-    });
-    //마커를 지도위에 표시합니다.
-    //marker.setMap(map);
-    
-    // 커스텀 오버레이에 표시할 내용입니다
-    // HTML 문자열 또는 Dom Element 입니다 
-    var content = '<div class ="label"><span class="left"></span><span class="center">'+ positions[i].title +'</span><span class="right"></span></div>';
-
-    // 커스텀 오버레이가 표시될 위치입니다 
-    var position = new kakao.maps.LatLng(positions[i].latlng.Ma, positions[i].latlng.La);  
-
-    // 커스텀 오버레이를 생성합니다
-    var customOverlay = new kakao.maps.CustomOverlay({
-        position: position,
-        content: content   
-    });
-
-    // 커스텀 오버레이를 지도에 표시합니다
-    customOverlay.setMap(map);
-    
- 	//선으로 표시할 좌표를 하나씩 추가합니다.
- 	linePath.push(positions[i].latlng);
-
-    
-}
-console.log(linePath)
-//지도에 표시할 선을 생성합니다
-var polyline = new kakao.maps.Polyline({
-    path: linePath, // 선을 구성하는 좌표배열 입니다
-    strokeWeight: 2, // 선의 두께 입니다
-    strokeColor: 'red', // 선의 색깔입니다
-    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-    strokeStyle: 'solid' // 선의 스타일입니다
-});
-// 지도에 선을 표시합니다 
-polyline.setMap(map);
 </script>
 <c:import url="/WEB-INF/views/layout/footer.jsp" />

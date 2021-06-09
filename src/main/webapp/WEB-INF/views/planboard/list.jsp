@@ -8,7 +8,7 @@
 <c:if test="${not empty param.condition }">
 	<c:set var="condition" value="${param.condition }" />
 </c:if>
-<c:if test="${not empty param.condition }">
+<c:if test="${not empty param.search }">
 	<c:set var="search" value="${param.search }" />
 </c:if>
 <style type="text/css">
@@ -218,7 +218,11 @@ $(document).ready(function(){
 	//게시글 클릭 이벤트
 	$('.plan').click(function(){
 		var pbno = $(this).attr('data-pbno');
-		var url = '/planboard/view?pbNo='+pbno;
+		//목록으로 가기 구현을 위해 현재페이지, 정렬조건, 검색어도 같이 보낸다.
+		var url = '/planboard/view?pbNo='+ pbno +'&curPage='+${paging.curPage};
+		if(${not empty condition}){
+			var url = '/planboard/view?pbNo='+ pbno +'&curPage='+${paging.curPage}+'&condition=${condition}'+'&search=${search}';
+		}
 		$(location).attr("href", url);
 	})
 	
