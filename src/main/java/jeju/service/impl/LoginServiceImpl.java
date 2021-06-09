@@ -45,6 +45,12 @@ public class LoginServiceImpl implements LoginService{
 	public int getUsernoData(JejuUser login) {
 		return loginDao.selectUserNo(login);
 	}
+	
+
+	@Override
+	public String getProfileData(JejuUser login) {
+		return loginDao.selectUserStored(login);
+	}
 
 
 	@Override
@@ -108,8 +114,6 @@ public class LoginServiceImpl implements LoginService{
 		
 		return result;
 	}
-
-
 
 
 

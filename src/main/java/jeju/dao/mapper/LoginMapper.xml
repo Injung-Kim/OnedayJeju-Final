@@ -49,6 +49,11 @@
 		WHERE user_id = #{userId}
 	</select>
 	
+	<select id="selectUserStored" resultType="String" parameterType="jeju.dto.JejuUser">
+		SELECT user_stored FROM JejuUser
+		WHERE user_id = #{userId}
+	</select>
+	
 	
 	<select id="selectSearchId" resultType="String" parameterType="jeju.dto.JejuUser">
 		SELECT user_id FROM JejuUser

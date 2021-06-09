@@ -40,6 +40,15 @@ public interface LoginDao {
 	
 	
 	/**
+	 * 로그인한 회원의 프로필사진 가져오기
+	 * 
+	 * @param login - 로그인한 회원 정보 객체
+	 * @return 로그인한 회원의 프로필 사진
+	 */
+	public String selectUserStored(JejuUser login);
+
+	
+	/**
 	 * 이름과 휴대폰 번호를 이용한 회원 id 찾기
 	 * 
 	 * @param userData - 입력된 이름, 휴대폰 번호
@@ -63,6 +72,8 @@ public interface LoginDao {
 	 * @param userData - 회원 id, email 정보
 	 */
 	public void updatePw(JejuUser userData);
+
+
 	
 	
 }

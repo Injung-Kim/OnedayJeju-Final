@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 마이바티스 3 Mapper DOCTYPE -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="jeju.dao.face.ExpensesDao">
+	
+	<resultMap type="jeju.dto.Plan" id="Plan">
+		<id column="p_no" property="pNo" />
+		<result column="p_title" property="pTitle" />
+		<result column="p_departure_date" property="pDepartureDate" />
+		<result column="p_num_days" property="pNumDays" />
+		<result column="p_num_people" property="pNumPeople" />
+		<result column="p_c_date" property="pCDate" />
+		<result column="user_no" property="userNo" />
+	</resultMap>
+	
+	<resultMap type="jeju.dto.Expenses" id="Expenses">
+		<id column="exp_no" property="expNo" />
+		<result column="exp_name" property="expName" />
+		<result column="exp_date" property="expDate" />
+		<result column="p_no" property="pNo" />
+		<result column="user_no" property="userNo" />
+		<result column="category" property="category" />
+		<result column="cost" property="cost" />
+		<result column="memo" property="memo" />
+	</resultMap>
+
+
+	<select id="selectPlanList" resultMap="Plan">
+		SELECT * FROM plan
+		ORDER BY p_departure_date
+	</select>
+	
+	<select id="selectExpByPno" parameterType="int" resultType="hashmap">
+		SELECT expenses.*, plan.p_departure_date, plan.p_num_days, plan.p_title
+		FROM expenses, plan
+		WHERE expenses.p_no = plan.p_no
+			AND plan.p_no = #{pNo}
+		ORDER BY exp_date ASC
+	</select>
+	
+	
+	<select id="selectPlanData" parameterType="hashmap" resultType="hashmap">
+		SELECT p_no, p_departure_date, p_num_days
+		FROM plan
+		WHERE plan.p_no = #{pNo}
+	</select>
+
+	
+	<insert id="insertExp" parameterType="jeju.dto.Expenses">
+		<selectKey order="BEFORE" resultType="int" keyProperty="expNo">
+			SELECT seq_exp.nextval FROM dual
+		</selectKey>
+	
+		INSERT INTO expenses (exp_no, exp_name, exp_date, p_no, user_no, category, cost, memo)
+		VALUES (#{expNo}, #{expName}, #{expDate}, #{pNo}, #{userNo}, #{category}, #{cost}, #{memo})
+	</insert>
+	
+	
+	<select id="viewExp" parameterType="int" resultMap="Expenses">
+		SELECT * FROM expenses
+		WHERE exp_no = #{expNo}
+	</select>
+	
+
+	<delete id="deleteExp" parameterType="int">
+		DELETE expenses
+		WHERE exp_no = #{expNo}
+	</delete>
+	
+	
+	<select id="selectAllExp" resultType="hashmap" parameterType="hashmap">
+		SELECT expenses.category, SUM(expenses.cost) cost
+		FROM plan
+		INNER JOIN expenses
+		ON plan.p_no = expenses.p_no
+        WHERE plan.p_no = #{pNo}
+		GROUP BY expenses.category
+	</select>
+	
+	
+
+</mapper>
