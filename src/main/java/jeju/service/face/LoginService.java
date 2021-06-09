@@ -41,6 +41,15 @@ public interface LoginService {
 	
 	
 	/**
+	 * 로그인한 회원의 프로필 사진 정보 가져오기
+	 * 
+	 * @param login - 로그인한 회원 정보 객체
+	 * @return 로그인한 회원의 프로필 사진 정보
+	 */
+	public String getProfileData(JejuUser login);
+	
+	
+	/**
 	 * 이름과 휴대폰 번호를 이용한 회원 id 찾기
 	 * 
 	 * @param name - 입력된 회원 이름

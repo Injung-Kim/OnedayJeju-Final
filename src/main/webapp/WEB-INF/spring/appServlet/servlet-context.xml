@@ -34,6 +34,13 @@
 			
 			<!-- 인터셉터가 적용되지 않도록 제외할 페이지(예외 페이지) -->
 			<exclude-mapping path="/member/logout"/>
+			<exclude-mapping path="/member/mypage"/>
+			<exclude-mapping path="/member/updatenick"/>
+			<exclude-mapping path="/member/mypage/profile"/>
+			<exclude-mapping path="/member/mypage/delprofile"/>
+			<exclude-mapping path="/member/mypage/settings"/>
+			<exclude-mapping path="/member/mypage/updatepw"/>
+			
 
 			<!-- 인터셉터 클래스 지정 -->
 			<beans:bean class="jeju.interceptor.LoginInterceptor" />
@@ -73,6 +80,12 @@
 		<beans:property name="order" value="0" />
 	</beans:bean>
 	
+	<!-- JSON 응답용 jsonView를 스프링 빈으로 등록하기 -->
+	<beans:bean id="jsonView"
+		class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+		<beans:property name="contentType"
+			value="application/json;charset=utf-8" />
+	</beans:bean>
 	
 	<context:component-scan base-package="jeju.controller, jeju.service" />
 	

@@ -135,7 +135,7 @@ function getCookie(cookieName) {
 	
 	<div class="idcheck-container">
 		<input type="checkbox" id="idcheck" >
-		<label><span>아이디 기억하기</span></label>
+		<label for="idcheck"><span>아이디 기억하기</span></label>
 	</div>	
 	
 	<div class="button-container">
