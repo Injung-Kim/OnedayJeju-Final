@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import jeju.dto.Notice;
 import jeju.service.face.NoticeService;
-import jeju.util.NoticePaging;
+import jeju.util.Paging;
 
 @Controller
 @RequestMapping(value="/notice")
@@ -29,11 +29,11 @@ public class NoticeController {
 	@Autowired private NoticeService noticeService;
 	
 	@RequestMapping(value="/list")
-	public void noticeList( NoticePaging inData, Model model) {
+	public void noticeList( Paging inData, Model model) {
 //		logger.info("/notice/list");
 
 		//페이징 계산
-		NoticePaging paging = noticeService.getPaging(inData);
+		Paging paging = noticeService.getPaging(inData);
 		paging.setCondition( inData.getCondition() );
 		paging.setSearch( inData.getSearch() );
 		logger.info("paging : {}", paging);

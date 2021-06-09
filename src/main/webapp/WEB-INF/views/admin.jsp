@@ -4,8 +4,8 @@
 <c:import url="/WEB-INF/views/layout/adminHeader.jsp"/>
 <style type="text/css">
 	.main{
-		width : 1000px;
-		height : 900px;
+		width : 100%;
+		height : 100%;
 	}
 </style>
 <div class="main">

@@ -28,6 +28,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+	//프로필 마이페이지 말풍선 설정
 	 $('#mypage').click(function(){
 		if($('.balloon').hasClass("hidden")){
 			$('.balloon').toggleClass("hidden show")
@@ -46,7 +47,7 @@ $(document).ready(function(){
 
 <header>
 	<a href="/" class="logo"><img src="/resources/image/logo.png" ></a>
-	<!-- <a href="/" class="logo">어느 날, 제주<i class="fas fa-paper-plane"></i></a> -->
+	
 	
 	<c:if test="${empty login }">
 		<div class="nologin" style="right: 40px; position : absolute">
@@ -102,7 +103,7 @@ $(document).ready(function(){
 			<li class="devide">|</li>
 			<li><a href="/notice/list">공지사항</a></li>
 			<li class="devide">|</li>
-			<li><a href="#">Q & A</a></li>
+			<li><a href="/qna/list">Q & A</a></li>
 		</ul>
 	</li>
 	</ul>

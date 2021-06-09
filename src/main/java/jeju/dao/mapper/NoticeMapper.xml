@@ -26,7 +26,7 @@
 		SELECT count(*) FROM Notice
 	</select>
 	
-	<select id="noticePageSelect" resultMap="Notice" parameterType="jeju.util.NoticePaging">
+	<select id="noticePageSelect" resultMap="Notice" parameterType="jeju.util.Paging">
 		SELECT * FROM (
 			SELECT rownum rnum, N.* FROM (
 				<include refid="selectNotice"/>
