@@ -2,7 +2,6 @@ package jeju.dto;
 
 import java.util.Date;
 
-<<<<<<< HEAD
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class Plan {
