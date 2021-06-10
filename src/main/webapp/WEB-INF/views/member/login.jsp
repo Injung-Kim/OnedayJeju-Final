@@ -5,7 +5,7 @@
 
 <c:import url="/WEB-INF/views/layout/header.jsp" />
 
-<!--로그인 css/js -->
+<!--로그인 css -->
 <link rel="stylesheet" href="/resources/css/login.css" type="text/css">
 
 <script type="text/javascript">
@@ -113,7 +113,7 @@ function getCookie(cookieName) {
 
 <div class="sub_title">로그인</div>
 
-<form action="/member/login" method="post" class="form-signin">
+<form action="/member/login" method="post" class="form-signin" autocomplete="off">
 	
 	<div class="input-container">
 		<input type="text" id="userId" name="userId"/>
@@ -135,7 +135,7 @@ function getCookie(cookieName) {
 	
 	<div class="idcheck-container">
 		<input type="checkbox" id="idcheck" >
-		<label><span>아이디 기억하기</span></label>
+		<label for="idcheck"><span>아이디 기억하기</span></label>
 	</div>	
 	
 	<div class="button-container">

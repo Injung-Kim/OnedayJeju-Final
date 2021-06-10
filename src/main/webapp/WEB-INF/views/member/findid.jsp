@@ -5,12 +5,26 @@
 
 <c:import url="/WEB-INF/views/layout/header.jsp" />
 
+<!-- findPage css -->
+<link rel="stylesheet" href="/resources/css/find.css" type="text/css">
+
 <script type="text/javascript">
 
 $(document).ready(function() {
 	
+	//취소 버튼 hover 시
+	$("#cancelIdBtn").hover(function() {
+		$("#cancelIdBtn").text("로그인페이지로");
+		$("#cancelIdBtn").css("color", "#8BD7D2");
+	}, function() {
+		$("#cancelIdBtn").text("취소");
+		$("#cancelIdBtn").css("color", "#ddd");
+	});
+	
 	//취소 버튼 클릭 시
 	$("#cancelIdBtn").click(function() {
+// 		$("#cancelIdBtn").css("color", "#fff");
+// 		$(this).css("color", "#fff");
 		$(location).attr("href", "/member/login");
 	});
 	
@@ -73,28 +87,29 @@ $(document).ready(function() {
 
 
 <div class="sub_title">아이디 찾기
-	<p style="font-size: 0.5em; color: #616161;">이메일 인증이 완료된 회원만 정보 찾기가 가능합니다</p>
+	<p style="font-size:0.4em; color:#d6d6d6">이메일 인증이 완료된 회원만 정보 찾기가 가능합니다</p>
 </div>
 
 
 
 <!-- 아이디 찾기 -->
 <div id="searchId">
-	<div class="form-group">
+	<div class="input-container">
+		<input type="text" id="inputName_1" name="inputName_1" autocomplete="off">
 		<label for="inputName_1">이름</label>
-		<input type="text" id="inputName_1" name="inputName_1" placeholder="ex) 홍길동">
+		<div class="bar"></div>
 	</div>
-	<div class="form-group">
-		<label for="inputPhone_1">휴대폰 번호</label>
-		<input type="text" id="inputPhone_1" name="inputPhone_1" placeholder="(숫자만 입력)">
+	<div class="input-container">
+		<input type="text" id="inputPhone_1" name="inputPhone_1" autocomplete="off">
+		<label for="inputPhone_1">휴대폰 번호(숫자만 입력)</label>
+		<div class="bar"></div>
 	</div>
-	<div class="form-group">
-		<button id="searchIdBtn" type="button" class="btn btn-info">확인</button>
-		<button id="cancelIdBtn" type="button" class="btn btn-default">취소</button><br><br>
-		<button id="searchPwBtn" type="button" class="btn btn-default">비밀번호 찾기</button>
+	<div class="button-container">
+		<button type="button" id="searchIdBtn"><span>확인</span></button><br>
+		<button type="button" id="cancelIdBtn" onclick="test()"><span>취소</span></button><br><br>
+		<button type="button" id="searchPwBtn"><span>비밀번호 찾기</span></button>
 	</div>
 </div>
-
 
 
 
@@ -122,6 +137,8 @@ $(document).ready(function() {
 		</div>
 	</div>
 </div>
+
+</div><!-- .container end -->
 
 
 

@@ -38,15 +38,15 @@ header{
 	height : 70px;
 }
 .menu{
-	/* position: absolute; */
-	background: rgba(21, 61, 58, 0.4);
-	width : 198px;
-	min-height : 1000px;
+	position: absolute;
+	background: rgba(139, 215, 210, 0.5);
+	width : 180px;
+	height : 100%;
 	margin : 0px;
 	text-align: center;
-	padding : 15px;
+	padding : 20px;
 	float : left;
-	/* left : -198px; */
+	left : -160px;
 }
 .adminpage{
 	border-bottom : 1px solid black;
@@ -70,34 +70,50 @@ header{
 article{
 	border : 1px solid #ccc;
 	max-width : 1002px;
-	float : left;
 	padding : 15px;
+	float : left;	
 }
 </style>
 <script type="text/javascript">
-/* $(document).ready(function(){
+$(document).ready(function(){
 	$('#aside').click(function(){
-		if($('.asideicon').hasClass("off")){
-		$('.asdideicon').toggleClass("on")
-		$('.menu').css("left",0)
-		$(article).transform("200px", 0)
-		}
-		
-	}) */
-
+		sidemenu();
+	})
+	$('.menu').mouseleave(function(){
+		sidemenu();
+	})
+})
+// 사이드바 메뉴 (on : 활성화 , off : 비활성화)
+function sidemenu(){
+	if($('.asideicon').hasClass("off")){
+		$('.asideicon').toggleClass("on")
+		$('.asideicon').removeClass("off")		
+		$('.menu').css('position', 'relative');
+		$('.menu').animate({
+			left : 0
+		}, 1000)
+	}else if($('.asideicon').hasClass("on")){
+		$('.asideicon').removeClass("on")		
+		$('.asideicon').toggleClass("off")
+	 	$('.menu').css('position', 'absolute'); 
+		$('.menu').animate({
+		left : -160
+	}, 1000)	
+	}
+}
 </script>
 </head>
 
 <body>
 <header>
-<a href="/admin"><img src="/resources/image/logo.png" alt="어느 날, 제주 로고"></a>
+<a href="/"><img src="/resources/image/logo.png" alt="어느 날, 제주 로고" ></a>
 </header>
 <label for="aside" class="asideicon off"><i class="fas fa-bars"></i></label>
 <input type="button" value="Menu" id="aside">
 <aside>
 	<div class="menu">
 	<div class="adminpage">
-		<img alt="프로필" src="/resources/image/admin.png" style="width : 100px; height : 100px;">
+		<img alt="프로필" src="/resources/image/admin.png" style="width : 100px; height : 100px;" id="profile">
 		<p style="line-height : 50px;"><strong>${nick}</strong> 님</p>
 		<button type="button" class="btn" onclick="location.href='/member/logout'">로그아웃</button>
 	</div>

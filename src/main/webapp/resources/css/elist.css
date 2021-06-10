@@ -1,0 +1,159 @@
+@charset "UTF-8";
+
+.sub_title {
+	margin: 50px 0px;
+	color: #8BD7D2;
+	font-size: 30px;
+	font-weight: 500;
+}
+
+.sub_title > strong {
+	color: #71bdb8;
+	font-size: 33px;
+}
+	
+.list-container {
+	position: relative;
+	width: 650px;
+	float: left;
+}
+
+.list-table tr:nth-child(1) {
+	background-color: #e5fbf0; 
+}
+
+#addExpBtn {
+	float:left;
+	margin: 0 0 10px 20px;
+	background: 0;
+	border: none;
+}
+
+.viewExpBtn {
+	background: 0;
+	border: none;
+}
+
+#delExpBtn {
+	color: black;
+}
+
+.modal-dialog{
+	
+	min-width: 700px;
+}
+
+.modal-body {
+	min-height: 500px;
+	padding: 40px;
+}
+
+.modal-body table tr td {
+	padding: 20px;
+}
+
+.modal-body table tr td input {
+	width: 100%;
+}
+
+.modal-body table tr td textarea {
+	width: 100%;
+	height: 100px;
+}
+
+.modal-footer button:first-child {
+	background: 0;
+	border: none;
+	font-size: 20px;
+	float: left;
+	padding-left: 200px;
+	color: #00BD9D;
+}
+.modal-footer button:last-child {
+	background: 0;
+	border: none;
+	font-size: 20px;
+	float: right;
+	padding-right: 200px;
+	color: #ccc;
+}
+
+#donutchart {
+	float: right;
+}
+
+
+.button-container {
+  text-align: center;
+}
+
+.button-container button {
+  outline: 0;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  background: 0;
+  width: 150px;
+  border: 3px solid #ccc;
+  padding: 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  overflow: hidden;
+  -webkit-transition: .3s ease;
+  transition: .3s ease;
+  color: #ddd;
+  margin: 30px 0 30px 0;
+}
+
+.button-container button span {
+  position: relative;
+  z-index: 1;
+  color: #ccc;
+  -webkit-transition: .3s ease;
+  transition: .3s ease;
+}
+
+.button-container button:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  background: #8BD7D2;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  margin: -15px 0 0 -15px;
+  opacity: 0;
+  -webkit-transition: .3s ease;
+  transition: .3s ease;
+}
+
+
+.button-container button:hover, .button-container button:active, .button-container button:focus {
+  border-color: #8BD7D2;
+}
+
+.button-container button:hover span, .button-container button:active span, .button-container button:focus span {
+  color: #8BD7D2;
+}
+
+.button-container button:active span, .button-container button:focus span {
+  color: #ffffff;
+}
+
+.button-container button:active:before, .button-container button:focus:before {
+  opacity: 1;
+  -webkit-transform: scale(12);
+  transform: scale(12);
+}
+
+i:hover {
+  opacity: 0.6;
+  -webkit-transform: scale(1.7);
+  transform: scale(1.7);
+}
+
+

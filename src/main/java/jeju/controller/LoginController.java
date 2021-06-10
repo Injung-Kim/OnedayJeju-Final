@@ -68,6 +68,7 @@ public class LoginController {
 			session.setAttribute("nick", loginService.getNickData(login));
 			session.setAttribute("grade", loginService.getGradeData(login));
 			session.setAttribute("uno", loginService.getUsernoData(login));
+			session.setAttribute("profile", loginService.getProfileData(login));
 			
 			idCookie.setMaxAge(60*60*24*7); //쿠키 유지 기간을 7일로 지정
 			
@@ -79,8 +80,9 @@ public class LoginController {
 			idCookie.setMaxAge(0);
 			
 		}
-		response.addCookie(idCookie); //response에 Cookie 추가
-		
+//		response.addCookie(idCookie); //response에 Cookie 추가
+		logger.info((String) session.getAttribute("id"));
+		logger.info((String) session.getAttribute("profile"));
 		return mav;
 	}
 	

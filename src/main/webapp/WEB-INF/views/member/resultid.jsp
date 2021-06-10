@@ -5,7 +5,7 @@
 
 <c:if test="${not empty findId }">
 	<h2 id="id_value">회원님의 아이디는 <br>
-	<label id="resultid" style="color:blue;">${findId}</label> 입니다.</h2>
+	<label id="resultid" style="color:#00BD9D;">${findId}</label> 입니다.</h2>
 </c:if>
 
 <c:if test="${empty findId }">

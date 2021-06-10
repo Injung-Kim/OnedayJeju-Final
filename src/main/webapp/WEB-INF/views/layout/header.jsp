@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>어느 날, 제주</title>
 
 <!-- jQuery 2.2.4 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
@@ -23,8 +23,12 @@
 <!--메인 css -->
 <link rel="stylesheet" href="/resources/css/layout.css" type="text/css">
 
+
+
+
 <script type="text/javascript">
 $(document).ready(function(){
+	//프로필 마이페이지 말풍선 설정
 	 $('#mypage').click(function(){
 		if($('.balloon').hasClass("hidden")){
 			$('.balloon').toggleClass("hidden show")
@@ -41,10 +45,9 @@ $(document).ready(function(){
 </head>
 <body>
 
-
 <header>
 	<a href="/" class="logo"><img src="/resources/image/logo.png" ></a>
-	<!-- <a href="/" class="logo">어느 날, 제주<i class="fas fa-paper-plane"></i></a> -->
+	
 	
 	<c:if test="${empty login }">
 		<div class="nologin" style="right: 40px; position : absolute">
@@ -55,12 +58,22 @@ $(document).ready(function(){
 	</c:if>
 	<c:if test="${login}">
 		<span class="welcome"><strong>${nick} </strong>님 환영합니다!</span>
+		
 		<div class="login" style="margin-right: 20px;">
-			<img src="/resources/image/user.png" style="width : 70px; height : 70px;" id="mypage">
 			
-			<c:if test="${grade eq '2' }">		
+			<c:choose>
+				<c:when test="${sessionScope.profile ne null}">
+					<img id="mypage" class="img-circle" alt="user" src="../resources/upload/${sessionScope.profile}" style="width:70px; height:70px;">
+				</c:when>
+				<c:otherwise>
+					<img id="mypage" class="img-circle" alt="user" src="../resources/upload/user.png" style="width:70px; height:70px;">
+				</c:otherwise>
+			</c:choose>
+<%-- 			<img id="mypage" class="img-circle" alt="user" src="../resources/upload/${sessionScope.profile}" style="width:70px; height:70px;"> --%>
+			
+			<c:if test="${grade eq '2' }">
 				<div class="balloon hidden">	
-				<p><a href="#">마이페이지</a></p>
+				<p><a href="/member/mypage">마이페이지</a></p>
 				<p><a href="/member/logout">로그아웃</a></p>
 				</div>
 			</c:if>
@@ -79,7 +92,7 @@ $(document).ready(function(){
 	<a href="/plan/create">여행일정</a>
 	</li>
 	<li >
-	<a href="#">여행경비</a>
+	<a href="/expenses/plist">여행경비</a>
 	</li>
 	<li>
 	<a href="#">커뮤니티</a>
@@ -90,7 +103,7 @@ $(document).ready(function(){
 			<li class="devide">|</li>
 			<li><a href="/notice/list">공지사항</a></li>
 			<li class="devide">|</li>
-			<li><a href="#">Q & A</a></li>
+			<li><a href="/qna/list">Q & A</a></li>
 		</ul>
 	</li>
 	</ul>
