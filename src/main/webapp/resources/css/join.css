@@ -15,9 +15,11 @@
 #checkbox { box-sizing: content-box; padding-top: 10px; font-size: 14px; }
 
 /* joinInfo */
-#inputForm label { font-weight: normal; }
-#inputForm input::placeholder { font-size: 11px; color: #5e5e5e; }
+#infoForm label { font-weight: normal; }
+#infoForm input::placeholder { font-size: 11px; color: #5e5e5e; }
 #required { color: #E74C3C; font-weight: normal; }
+#idCheckMsg { color: #E74C3C; }
+
 
 /* joinReqAuth */
 .msgBox { width: 85%; height: 600px; margin: 0 auto; margin-top: 50px; text-align: center; vertical-align: middle; background-color: #f7f7f7; box-shadow: 6px 6px 10px #E0E0E0; }
@@ -31,6 +33,7 @@
 #btnIdCheck { border: 1px solid #00BD9D; color: #00BD9D; background-color: #FFFFFF; }
 #btnNickCheck { border: 1px solid #00BD9D; color: #00BD9D; background-color: #FFFFFF; }
 #btnZipcode { border: 1px solid #00BD9D; color: #00BD9D; background-color: #FFFFFF; }
+#btnClose { text-align: center; background: #00BD9D; color: #FFFFFF; }
 #btnCancle { border-radius:30px; color: #FFFFFF; font-size: 15px; background-color: #D8D5DB; box-shadow: 6px 6px 10px #E0E0E0; }
 #btnJoin { border-radius:30px; color: #FFFFFF; font-size: 15px; background-color: #8BD7D2; box-shadow: 6px 6px 10px #E0E0E0; }
 #btnMain { border-radius:30px; text-align: center; color: #FFFFFF; font-size: 15px; background-color: #8BD7D2; box-shadow: 6px 6px 10px #E0E0E0; }

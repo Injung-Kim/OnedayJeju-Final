@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 마이바티스 3 Mapper DOCTYPE -->
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-<mapper namespace="jeju.dao.face.JoinDao">
+<mapper namespace="jeju.dao.AdminUserDao">
 	
 	<resultMap type="jeju.dto.JejuUser" id="JejuUser">
 		<result column="user_no" property="userNo"/>
@@ -18,20 +19,19 @@
 		<result column="user_zipcode" property="userZipcode"/>
 		<result column="user_address" property="userAddress"/>
 		<result column="user_address_detail" property="userAddressDetail"/>
+		<result column="user_agree" property="userAgree"/>
+		<result column="user_join_date" property="userJoinDate"/>
 		<result column="user_mail_authkey" property="userMailAuthkey"/>
 		<result column="user_mail_auth" property="userMailAuth"/>
 		<result column="user_grade" property="userGrade"/>
 	</resultMap>
-	
-	<insert id="insertUser" parameterType="jeju.dto.JejuUser">
-		INSERT INTO JejuUser(user_no, user_id, user_pw, user_name, user_nick, user_birth_date, user_email
-		, user_phone, user_zipcode, user_address, user_address_detail, user_mail_authkey, user_mail_auth, user_grade)
-        VALUES (user_no_seq.nextval, #{userId}, #{userPw}, #{userName}, #{userNick}, #{userBirthDate}, #{userEmail}
-        , #{userPhone}, #{userZipcode}, #{userAddress}, #{userAddressDetail}, #{userMailAuthkey}, '0', '2')
-	</insert>
-	
-	<update id="updateMailAuth" parameterType="jeju.dto.JejuUser">
-		UPDATE JejuUser SET user_mail_auth = 1 WHERE user_mail_authkey = #{authkey}
-	</update>
+
+	<select id="selectCountAll" resultType="int">
+		SELECT * FROM (
+			SELECT rownum rnum, JU.* FROM (
+				SELECT 
+			)
+		)
+	</select>
 
 </mapper>

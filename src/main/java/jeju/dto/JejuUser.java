@@ -2,13 +2,15 @@ package jeju.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class JejuUser {
 	private int userNo;
 	private String userId;
 	private String userPw;
 	private String userName;
 	private String userNick;
-	private Date userBirthDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd") private Date userBirthDate;
 	private String userEmail;
 	private String userPhone;
 	private String userZipcode;
@@ -21,7 +23,7 @@ public class JejuUser {
 	private String userGrade;
 	private String userOrigin;
 	private String userStored;
-	
+
 	
 	@Override
 	public String toString() {

@@ -6,7 +6,6 @@
 <c:import url="/WEB-INF/views/layout/header.jsp" />
 
 <link rel="stylesheet" type="text/css" href="/resources/css/join.css" />
-
 <!-- 다음 우편api 적용 -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
@@ -49,18 +48,16 @@ function openDaumPostcode(){
 			}				
 
 			//우편번호와 주소 정보를 해당 필드에 넣는다
-			document.getElementById("inputZipcode").value = data.zonecode;
-			document.getElementById("inputAddress").value = userAddress;
-			document.getElementById("inputAddressDetail").value = extraAddress;
+			document.getElementById("userZipcode").value = data.zonecode;
+			document.getElementById("userAddress").value = userAddress;
+			document.getElementById("userAddressDetail").value = extraAddress;
 		
 		}
 	}).open({
 		popupName: 'zipcodePopup' //팝업이름 설정(여러개의 팝업창 뜨는 것 방지)
 	});
 }
-
 </script>
-
 
 <div class="container">
 	<div class="pageHeader">
@@ -72,75 +69,75 @@ function openDaumPostcode(){
 	<div class="pageContent">
 		<span class="pull-right"><span id="required">*</span>항목은 필수입력항목입니다.</span>
 		<br><br>
-		<form id="inputForm" class="form-horizontal" role="form" action="/user/joinInfo">
+		<form id="infoForm" class="form-horizontal" role="form" action="/user/joinInfo" method="post">
 			<div class="row">
 				<div class="col-md-7 col-md-offset-3">
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputId control-label"><span id="required">*</span>아이디</label>
+							<label for="userId control-label"><span id="required">*</span>아이디</label>
 						</div>
 						<div class="col-md-6">
-							<input type="text" class="col-md-5 form-control" id="inputId" name="userId" placeholder="5~12자리의 영문 소문자, 숫자 조합" required>
+							<input type="text" class="col-md-5 form-control" id="userId" name="userId" placeholder="5~12자리의 영문 소문자, 숫자 조합" required>
 						</div>
 						<div class="col-md-2">
-							<button type="button" class="btn" id="btnIdCheck" onclick="openIdCheck()">중복확인</button>
+							<button type="button" class="btn" id="btnIdCheck">중복확인</button>
 						</div>
 					</div>
 					
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputPw" class="control-label"><span id="required">*</span>비밀번호</label>
+							<label for="userPw" class="control-label"><span id="required">*</span>비밀번호</label>
 						</div>
 						<div class="col-md-6">
-							<input type="password" class="form-control" id="inputPw" name="userPw" placeholder="8~15자리의 영문 소문자, 숫자 조합" required>
+							<input type="password" class="form-control" id="userPw" name="userPw" placeholder="8~15자리의 영문 소문자, 숫자 조합" required>
 						</div>			
 					</div>	
 			
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputPwCheck" class="control-label"><span id="required">*</span>비밀번호확인</label>
+							<label for="checkPw" class="control-label"><span id="required">*</span>비밀번호확인</label>
 						</div>
 						<div class="col-md-6">
-							<input type="password" class="form-control" id="inputPwCheck" placeholder="입력하신 비밀번호를 한 번 더 입력해주세요" required>
+							<input type="password" class="form-control" id="checkPw" placeholder="입력하신 비밀번호를 한 번 더 입력해주세요" required>
+						</div>	
+					</div>
+					
+					<div class="form-group">
+						<div class="col-md-3">
+							<label for="userName" class="control-label"><span id="required">*</span>이름</label>
+						</div>
+						<div class="col-md-6">
+							<input type="text" class="form-control" id="userName" name="userName" placeholder="실명으로 입력해주세요" required>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputName" class="control-label"><span id="required">*</span>이름</label>
+							<label for="userNick" class="control-label"><span id="required">*</span>닉네임</label>
 						</div>
 						<div class="col-md-6">
-							<input type="text" class="form-control" id="inputName" name="userName" placeholder="실명으로 입력해주세요" required>
-						</div>			
-					</div>
-					
-					<div class="form-group">
-						<div class="col-md-3">
-							<label for="inputNick" class="control-label"><span id="required">*</span>닉네임</label>
-						</div>
-						<div class="col-md-6">
-							<input type="text" class="form-control" id="inputNick" name="userNick" placeholder="20자 이내의 한글, 영문, 숫자만 입력해주세요" required>
+							<input type="text" class="form-control" id="userNick" name="userNick" placeholder="20자 이내의 한글, 영문, 숫자만 입력해주세요" required>
 						</div>
 						<div class="col-md-2">
-							<button type="button" class="btn" id="btnNickCheck" onclick="openNickCheck()">중복확인</button>
+							<button type="button" class="btn" id="btnNickCheck">중복확인</button>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputBirthDate" class="control-label"><span id="required">*</span>생년월일</label>
+							<label for="userBirthDate" class="control-label"><span id="required">*</span>생년월일</label>
 						</div>
-						<div class="col-md-4">
-							<input type="date" class="form-control" id="inputBirthDate" name="userBirthDate" required>
+						<div class="col-md-5">
+							<input type="date" class="form-control" id="userBirthDate" name="userBirthDate" required>
 						</div>
 					</div>
 					
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputEmail" class="control-label"><span id="required">*</span>이메일</label>
+							<label for="userEmail" class="control-label"><span id="required">*</span>이메일</label>
 						</div>
 						<div class="col-md-6">
-							<input type="email" class="form-control" id="inputEmail" name="userEmail" required>
+							<input type="email" class="form-control" id="userEmail" name="userEmail" required>
 						</div>
 						<div class="btn-group">
 							<div class="col-md-2">
@@ -161,19 +158,19 @@ function openDaumPostcode(){
 					
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputPhone" class="control-label"><span id="required">*</span>휴대전화번호</label>
+							<label for="userPhone" class="control-label"><span id="required">*</span>휴대전화번호</label>
 						</div>
 						<div class="col-md-6">
-							<input type="tel" class="form-control" id="inputPhone" name="userPhone" required>
+							<input type="tel" class="form-control" id="userPhone" name="userPhone" placeholder="'-'없이 입력해주세요" required>
 						</div>
 					</div>
 					
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputZipcode" class="control-label"><span id="required">*</span>주소</label>
+							<label for="userZipcode" class="control-label"><span id="required">*</span>주소</label>
 						</div>
 						<div class="col-md-6">
-							<input type="text" class="form-control" id="inputZipcode" name="userZipcode" required readonly="readonly">
+							<input type="text" class="form-control" id="userZipcode" name="userZipcode" required readonly="readonly">
 						</div>
 						<div class="col-md-2">
 							<button type="button" class="btn" id="btnZipcode" onclick="openDaumPostcode()">우편번호</button>
@@ -182,19 +179,19 @@ function openDaumPostcode(){
 					
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputAddress" class="control-label"></label>
+							<label for="userAddress" class="control-label"></label>
 						</div>
 						<div class="col-md-8">
-							<input type="text" class="form-control" id="inputAddress" name="userAddress" required readonly="readonly">
+							<input type="text" class="form-control" id="userAddress" name="userAddress" required readonly="readonly">
 						</div>			
 					</div>					
 					
 					<div class="form-group">
 						<div class="col-md-3">
-							<label for="inputAddressDetail" class="control-label"></label>
+							<label for="userAddressDetail" class="control-label"></label>
 						</div>
 						<div class="col-md-8">
-							<input type="text" class="form-control" id="inputAddressDetail" name="userAddressDetail" placeholder="상세주소">
+							<input type="text" class="form-control" id="userAddressDetail" name="userAddressDetail" placeholder="상세주소">
 						</div>			
 					</div>
 				</div><!-- End col -->
@@ -206,7 +203,6 @@ function openDaumPostcode(){
 			</div><!-- End btn -->
 		</form><!-- End inputForm -->
 	</div><!-- End pageContent -->
-	
 </div><!-- End container -->
 
 <c:import url="/WEB-INF/views/layout/footer.jsp" />
