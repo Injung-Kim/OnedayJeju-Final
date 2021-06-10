@@ -381,7 +381,7 @@ $(document).ready(function(){
 		        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
 		        image : markerImage, // 마커 이미지 
 		    });
-		    
+		    console.log(marker);
 		    //표시한 마커는 배열에 저장해둔다.
 		    markers.push(marker);
 		    
@@ -409,7 +409,6 @@ $(document).ready(function(){
 
 		    
 		}
-
 		//지도에 표시할 선을 생성합니다
 		var polyline = new kakao.maps.Polyline({
 		    path: linePath, // 선을 구성하는 좌표배열 입니다
@@ -420,7 +419,6 @@ $(document).ready(function(){
 		});
 		// 지도에 선을 표시합니다 
 		polyline.setMap(map);
-		
 		//표시한 선은 배열에 저장해둔다.
 		polylines.push(polyline);
 	})

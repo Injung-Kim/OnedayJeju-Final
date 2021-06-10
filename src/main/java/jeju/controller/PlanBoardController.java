@@ -46,8 +46,6 @@ public class PlanBoardController {
 		//정렬, 검색어, 페이징처리하여 조회
 		List<Map<String, Object>> list = planBoardService.getList(paging);
 		
-		logger.debug("map : {}", list.get(0));
-		
 		model.addAttribute("list", list);
 		model.addAttribute("paging", paging);
 		return "/planboard/list";

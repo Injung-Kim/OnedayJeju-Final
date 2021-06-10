@@ -218,7 +218,10 @@ html, body {
 	transition: 1s;
 	height: 100%;
 }
-
+.label {
+	color: black;
+	text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
 /* 상세보기 모달 */
 .modal {
 	position: fixed;
@@ -268,3 +271,4 @@ html, body {
 .hidden {
 	display: none;
 }
+

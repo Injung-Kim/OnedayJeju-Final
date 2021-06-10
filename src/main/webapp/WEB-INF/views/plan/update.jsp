@@ -112,11 +112,14 @@ $(document).ready(function(){
 				setDraggable();
 				//비어있으면 안내문구 추가
 				emptyCheck();
+				//지도에 경로 그리기
+				drawPath();
 			}
 			, error: function () {
 				console.log("AJAX 실패");
 			}
 		})
+		
 	})
 	
 	//장소 검색 버튼 클릭
@@ -172,9 +175,13 @@ $(document).on("dragend", ".draggable", updateOrder);
 //장소 삭제
 $(document).on("click", ".detail_delete_btn", function(){
 	$(this).parent().remove();
+	//여행순서 업데이트
 	updateOrder();
+	//지도에 경로 그리기
+	drawPath();
 	//비어있으면 안내문구 추가
 	emptyCheck();
+	
 })
 //장소에 대한 상세정보 보기
 $(document).on("click", ".list_box .place_title", function(){
@@ -244,10 +251,11 @@ $(document).on("click", ".place_add_button", function(){
 	setDraggable();
 	//여행 순서 update
 	updateOrder();
+	//지도에 경로 그리기
+	drawPath();
 
 })
-//장소영역 마우스오버에 지도에 마커 표시
-$()
+
 
 //검색 ajax
 function searchAjax(url, data){
@@ -287,6 +295,9 @@ function searchAjax(url, data){
 				element.append(child1,child2,child3,child4);
 				$(".list_box").append(element);
 			}
+			
+			//지도에 마커와 인포윈도우를 생성합니다
+			createMarker();
 		}
 		, error: function () {
 			console.log("AJAX 실패");
@@ -342,6 +353,8 @@ function updateOrder(){
 	})
 	//상세일정 update
 	planUpdateAjax();
+	//지도에 경로 그리기
+	drawPath();
 }
 //상세일정 비어있는지 확인하고 태그 추가
 function emptyCheck(){
@@ -351,6 +364,7 @@ function emptyCheck(){
 		$(".drag_container").html(infotext);
 	}
 }
+
 
 </script>
 </head>
@@ -449,7 +463,170 @@ var options = { //지도를 생성할 때 필요한 기본 옵션
 };
 
 var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+//===카카오맵===
+//상세일정 순서대로 지도에 경로 그리기
+var markers = []; // 마커를 담을 배열입니다
+var customOverlays = []; // customOverlay를 담을 배열입니다
+var polylines = []; // 지도에 표시한 선을 담는 배열입니다
 
+function drawPath(){
+	console.log('경로그리기 실행')
+	//지도에 표시된 마커, 커스텀오버레이, 선을 제거
+	//마커제거
+	removeMapObj(markers);
+	//커스텀오버레이 제거
+	removeMapObj(customOverlays);
+	//선 제거
+	removeMapObj(polylines);	
+	
+	var schList = $('.plan_place'); //상세일정으로 선택한 장소들을 저장하는 변수
+// 	console.log(schList)
+	// 마커를 표시할 위치와 title 객체 배열입니다 
+	var positions = [];
+	schList.each(function(index, item){
+		var position = {
+				title: $(item).find('.place_title').text()
+				, latlng: new kakao.maps.LatLng( $(item).attr('data-lng'), $(item).attr('data-lat') )
+		}
+		positions.push(position)
+	})
+// 	console.log(positions)
+	//마커 이미지의 이미지 주소입니다
+	var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+	//선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
+	var linePath = [];
+	
+	for (var i = 0; i < positions.length; i ++) {
+	    
+	    // 마커 이미지의 이미지 크기 입니다
+	    var imageSize = new kakao.maps.Size(24, 35); 
+	    
+	    // 마커 이미지를 생성합니다    
+	    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+	    
+	    // 마커를 생성합니다
+	    var marker = new kakao.maps.Marker({
+	        map: map, // 마커를 표시할 지도 -> 이게 있으면 marker.setMap(map) 안해도 된다.
+	        position: positions[i].latlng, // 마커를 표시할 위치
+	        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+	        image : markerImage, // 마커 이미지 
+	    });
+	    marker.setZIndex(3);
+// 	    console.log(marker)
+	    //표시한 마커는 배열에 저장해둔다.
+	    markers.push(marker);
+	    
+	    // 커스텀 오버레이에 표시할 내용입니다
+	    // HTML 문자열 또는 Dom Element 입니다 
+	    var content = '<div class ="label">'+ positions[i].title +'</div>';
+
+	    // 커스텀 오버레이가 표시될 위치입니다 
+	    var position = new kakao.maps.LatLng(positions[i].latlng.Ma, positions[i].latlng.La);  
+
+	    // 커스텀 오버레이를 생성합니다
+	    var customOverlay = new kakao.maps.CustomOverlay({
+	        position: position,
+	        content: content   
+	    });
+	    customOverlay.setZIndex(3);
+// 	    console.log(customOverlay)
+	    // 커스텀 오버레이를 지도에 표시합니다
+	    customOverlay.setMap(map);
+	    
+	    //표시한 커스텀 오버레이는 배열에 저장해둔다.
+	    customOverlays.push(customOverlay);
+	    
+	 	//선으로 표시할 좌표를 하나씩 추가합니다.
+	 	linePath.push(positions[i].latlng);
+		
+	}
+// 	console.log(linePath)
+	//지도에 표시할 선을 생성합니다
+	var polyline = new kakao.maps.Polyline({
+	    path: linePath, // 선을 구성하는 좌표배열 입니다
+	    strokeWeight: 3, // 선의 두께 입니다
+	    strokeColor: 'red', // 선의 색깔입니다
+	    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+	    strokeStyle: 'solid' // 선의 스타일입니다
+	});
+	// 지도에 선을 표시합니다 
+	polyline.setMap(map);
+	polyline.setZIndex(4);
+	
+	//표시한 선은 배열에 저장해둔다.
+	polylines.push(polyline);
+// 	console.log('경로그리기 끝')
+}
+
+//지도에 표시된 객체 제거 함수
+function removeMapObj(arr){
+	for(var i=0; i<arr.length; i++){
+		arr[i].setMap(null);
+	}
+	arr.length = 0;
+}
+
+//장소의 마커를 저장하는 배열입니다
+var placeMarkers = [];
+//검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+var infowindow = new kakao.maps.InfoWindow({zIndex:5, disableAutoPan: true});
+function createMarker(){
+	//장소 마커 제거
+	removeMapObj(placeMarkers);
+	
+	//search_place 요소 선택
+	var places = $('.search_place');
+	for(var i=0; i<places.length; i++){
+		//마커 생성
+		var marker = new kakao.maps.Marker({
+			map: map,
+			position: new kakao.maps.LatLng( $(places[i]).attr('data-lng'), $(places[i]).attr('data-lat'))
+		});
+		marker.index = i;
+		//검색 목록에 있는 요소를 생성합니다
+		var itemEl = $('.search_place').get(i);
+		
+		//마커를 장소마커 배열에 저장합니다
+		placeMarkers.push(marker);
+		
+		// 마커와 검색결과 항목에 mouseover 했을때
+        // 해당 장소에 인포윈도우에 장소명을 표시합니다
+        // mouseout 했을 때는 인포윈도우를 닫습니다
+        (function(marker, title) {
+            kakao.maps.event.addListener(marker, 'mouseover', function() {
+                displayInfowindow(marker, title);
+            });
+
+            kakao.maps.event.addListener(marker, 'mouseout', function() {
+                infowindow.close();
+            });
+			
+         	// 마커에 클릭이벤트를 등록합니다
+            kakao.maps.event.addListener(marker, 'click', function(e) {
+            	var index = marker.index;
+                $('.list_box').scrollTop($('.search_place').outerHeight() * index);
+            });
+         
+            itemEl.onmouseover =  function () {
+                displayInfowindow(marker, title);
+            };
+
+            itemEl.onmouseout =  function () {
+                infowindow.close();
+            };
+        })(marker, $(places[i]).attr('data-title'));
+		
+	}
+}
+//검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
+//인포윈도우에 장소명을 표시합니다
+function displayInfowindow(marker, title) {
+ var content = '<div style="width:max-content; padding:5px; z-index:1;">' + title + '</div>';
+
+ infowindow.setContent(content);
+ infowindow.open(map, marker);
+}
 </script>
 </body>
 </html>
