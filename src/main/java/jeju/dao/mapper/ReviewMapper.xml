@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="jeju.dao.face.ReviewDao">
+
+	<resultMap type="jeju.dto.Review" id="Review">
+		<id column="rv_no" property="rvNo"/>
+		<result column="user_id" property="userId"/>
+		<result column="rv_title" property="rvTitle"/>
+		<result column="rv_content" property="rvContent"/>
+		<result column="rv_create_date" property="rvCreateDate"/>
+		<result column="rv_hit" property="rvHit"/>
+		<result column="rv_link" property="rvLink"/>
+		<result column="rv_budjet" property="rvBudjet"/>
+	</resultMap>
+	
+	<sql id="selectreview">
+        SELECT
+            rv_no, rv_title, rv_content, user_id
+            , hit, rv_create_date
+        FROM review
+	</sql>
+
+	<select id="selectCntAll" resultType="int">
+		SELECT COUNT(*) FROM review
+	</select>
+	
+	<select id="selectPageList" resultMap="Review" parameterType="jeju.util.Paging">
+		SELECT * FROM (
+		    SELECT rownum rnum, R.* FROM (
+		        SELECT
+		            rv_no, rv_title, rv_content, user_id
+		            , rv_create_date, rv_hit
+		        FROM review
+		        ORDER BY rv_no DESC
+		    ) R
+		) L
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+
+	<update id="updateHit" parameterType="jeju.dto.Review" >
+		UPDATE review SET rv_hit = rv_hit + 1
+		WHERE rv_no = #{rvNo }
+	</update>
+	
+	<select id="selectReviewByrvNo" parameterType="jeju.dto.Review" resultMap="Review">
+		SELECT
+			rv_no, rv_title, rv_content, user_id
+			, rv_hit, rv_create_date, rv_link, rv_budjet
+		FROM Review
+		WHERE rv_no = #{rvNo}
+	</select>
+	
+	<insert id="insert" parameterType="jeju.dto.Review">
+		<selectKey order="BEFORE" resultType="int" keyProperty="rvNo">
+			SELECT review_seq.nextval FROM dual
+		</selectKey>
+		INSERT INTO review( rv_no, rv_title, rv_content, user_id, rv_link, rv_budjet)
+		VALUES( #{rvNo}, #{rvTitle}, #{rvContent}, #{userId}, #{rvLink}, #{rvBudjet})
+	</insert>
+</mapper>
