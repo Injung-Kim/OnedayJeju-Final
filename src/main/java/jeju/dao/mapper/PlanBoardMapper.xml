@@ -71,7 +71,7 @@
 					AND (pb_title LIKE '%' || #{search} || '%' OR user_nick LIKE '%' || #{search} || '%')
 					</if>
 	        	<choose>
-	        		<when test="condition == null">
+	        		<when test='condition == null or "".equals(condition)'>
 	        		ORDER BY pb_c_date DESC
 	        		</when>
 		        	<when test='condition != null and condition.equals("latest")'>
@@ -91,7 +91,7 @@
 	<select id="selectPlanByUserno" parameterType="int" resultMap="Plan">
 		SELECT * FROM plan
 		WHERE user_no = #{uno}
-		ORDER BY p_no
+		ORDER BY p_no DESC
 	</select>
 	
 	<insert id="insertPlanBoard" parameterType="jeju.dto.PlanBoard">

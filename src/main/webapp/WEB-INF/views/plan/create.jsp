@@ -31,11 +31,14 @@ label, input {
 	font-weight: bold;
 }
 #myplanBtn {
-	padding: 10px 15px;
+	padding: 5px 10px;
 	background-color: #00BD9D;
 	border-radius: 10px;
 	border: 1px solid #ccc;
 	color: #FFFBFA;
+}
+label {
+	font-size: 16px;
 }
 </style>
 <script type="text/javascript">

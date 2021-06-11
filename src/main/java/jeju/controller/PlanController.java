@@ -65,7 +65,7 @@ public class PlanController {
 		
 		//세션 처리 (조회한 유저의 일정인지 체크)
 		//session.getAttribute("uno") == null 이부분은 인터셉터 작성되면 삭제
-		if( session.getAttribute("uno") == null || ( plan.getUserNo() != (int)session.getAttribute("uno") ) ) {
+		if( ( plan.getUserNo() != (int)session.getAttribute("uno") ) ) {
 			return "redirect:/";
 		}
 		
@@ -87,7 +87,7 @@ public class PlanController {
 		
 		//session.getAttribute("uno") == null 이부분은 인터셉터 작성되면 삭제
 		//본인이 생성한 일정인지 체크
-		if( session.getAttribute("uno") == null || ( plan.getUserNo() != (int)session.getAttribute("uno") )) {
+		if( ( plan.getUserNo() != (int)session.getAttribute("uno") )) {
 			return "redirect:/";
 		}
 		//일정 삭제

@@ -228,14 +228,14 @@ public class PlanBoardController {
 		
 		//session.getAttribute("uno") == null 이부분은 인터셉터 작성되면 삭제
 		//본인이 생성한 일정게시글인지 체크
-		if( session.getAttribute("uno") == null || ( planBoard.getUserNo() != (int)session.getAttribute("uno") )) {
+		if( ( planBoard.getUserNo() != (int)session.getAttribute("uno") )) {
 			return "redirect:/";
 		}
 		//공유일정 게시글 삭제
-		planBoardService.remove(inData);
+		planBoardService.remove(planBoard);
 		
 		//마이페이지 일정공유로 이동
-		return "redirect:/mypage/planboard";
+		return "redirect:/planboard/list";
 	}
 	
 }

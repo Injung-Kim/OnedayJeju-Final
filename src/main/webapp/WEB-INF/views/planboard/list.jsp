@@ -40,7 +40,7 @@ select, input {
 /* 게시글 부분 */
 .plan {
 	width: 360px;
-	height: 300px;
+	height: 320px;
 	border: 1px solid #ccc;
 	display: inline-block;
 	float: left;
@@ -52,9 +52,12 @@ select, input {
 	height: 220px;
 	
 }
-.like_views, .nick_title{
-	margin: 10px;
-} 
+.like_views, .nick{
+	margin: 7px;
+}
+.plan_info {
+	overflow: hidden;
+}
 .plan_info .like_views span {
 	margin: 10px 10px 10px 3px;
 }
@@ -106,7 +109,7 @@ select, input {
 	height: 40px;
 }
 .modal_plan_list {
-	width: 550px;
+	width: 560px;
 	height: 470px;
 	overflow: auto;
 }
@@ -169,7 +172,10 @@ $(document).ready(function(){
 				console.log("AJAX 성공");
 				console.log(res)
 				console.log(res.planList)
-
+				
+				//리스트 비우기
+				$("#planDataList").empty();
+				
 				//일정 요소 만들어서 테이블에 추가하기
 				for(var i in res.planList) {
 					var element = $('<tr>');
@@ -333,8 +339,11 @@ function checkForm() {
 					<div class="inline pull-left">작성일:<span id="createDate"><fmt:formatDate value="${planBoard.cdate }" pattern="yyyy.MM.dd"/></span></div>
 				</div>
 				<div class="clearfix"></div>
-				<div class="nick_title inline">
-					<span id="nick">(${planBoard.nick })</span>
+				<div class="nick inline pull-left">
+					<span id="nick">닉네임: ${planBoard.nick }</span>
+				</div>
+				<div class="clearfix"></div>
+				<div class="planboard_title">
 					<span id="days">[${planBoard.days }일]</span>
 					<span id="planTitle">${planBoard.title }</span>
 				</div>

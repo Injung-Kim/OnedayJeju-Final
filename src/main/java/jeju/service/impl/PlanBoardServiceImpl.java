@@ -306,6 +306,14 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	@Override
 	public void remove(PlanBoard inData) {
 		logger.info("remove() 호출");
+		//기존 파일 삭제하기
+		String path = context.getRealPath("upload") + "/" + inData.getPbFilename(); //삭제할 파일의 경로
+		
+		File file = new File(path); //삭제할 파일 객체
+		
+		if( file.exists() ) { //파일이 존재하면 파일 삭제하기
+			file.delete(); 
+		}
 		//게시글 삭제
 		planBoardDao.deletePlanBoardByPbno(inData);
 	}
