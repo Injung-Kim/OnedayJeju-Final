@@ -33,7 +33,7 @@ $(document).ready(function() {
 	//'취소' 버튼 클릭 시
 	$("#cancelBtn").click(function() {
 		console.log("#cancelBtn clicked");
-		history.go(-1);
+		location.href = "/";
 	})
 	
 })
