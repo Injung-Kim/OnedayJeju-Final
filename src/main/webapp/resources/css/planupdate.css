@@ -1,0 +1,274 @@
+@charset "UTF-8";
+html, body {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+.subject {
+	display: inline-block;
+	font-size: 20px; 
+	font-weight: bold;
+}
+.header_btn {
+	float: right;
+	margin: 10px 14px 0 10px;
+	padding: 3px 8px 0px 8px;
+	font-size: 20px;
+	border-radius: 10px;
+	border: 1px solid #ccc;
+	color: #FFFBFA;
+}
+#deleteBtn {
+	background-color: #cc0000;
+}
+#saveBtn {
+	background-color: #00bd9d;
+}
+#deleteBtn:hover, #saveBtn:hover {
+	font-weight: bold;
+}
+.fl {
+	float: left;
+}
+.fr {
+	float: right;
+}
+.content {
+	height: 100%;
+	width: 100%;
+	border: 1px solid #ccc;
+	position: relative;
+}
+.left_box {
+	position: relative;
+	height: 100%;
+	z-index: 99;
+}
+/* 일자 선택 부분 */
+.days {
+	height: 100%;
+	width: 150px;
+	border: 1px solid #ccc;
+	background-color: #8BD7D2;
+	overflow: auto; 
+}
+.day {
+	width: 148px;
+	height: 80px;
+	border-bottom: 1px solid #FFFBFA;
+	cursor: pointer;
+}
+.day_active {
+	background-color: #00bd9d;
+}
+.date_order {
+	color: #FFFBFA;
+	font-size: 24px;
+	font-weight: 600;
+	padding: 10px 10px 0px 10px;
+}
+.date_weekday {
+	color: #FFFBFA;
+	font-size: 16px;
+	font-weight: 500;
+	padding-top: 18px;
+}
+.date {
+	color: #003300;
+	padding-left: 20px;
+}
+/* 상세일정 부분 */
+.detail_plan {
+	height: 100%;
+	width: 250px;
+	border: 1px solid #ccc;
+	overflow: auto;
+	position: relative;
+}
+.detail_sub_title {
+	border: 1px solid #ccc;
+	background: #ccc;
+	font-size: 24px;
+	font-weight: 800;
+	padding: 5px;
+}
+.detail_img_box {
+	width: 38%;
+}
+.detail_img_box img {
+	width: 80px;
+	height: 70px;
+}
+.plan_place .place_title {
+	width: 62%;
+	padding-top: 10px;
+	font-size: 12px;
+}
+.plan_place {
+	position: relative;
+}
+.detail_delete_btn {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
+/* 장소검색부분  */
+.search {
+	position: absolute;
+	left: 400px;
+	height: 100%;
+	width: 350px;
+	border: 1px solid #ccc;
+	transition: 1s;
+	background-color: white;
+	z-index: 10;
+}
+.place_search_box {
+	padding-top: 20px;
+}
+#input_search {
+	width: 240px;
+}
+#search_btn:hover, .category_btn:hover {
+	font-weight: bold;
+}
+.category_btn:active {
+	background-color: #00BD9D;
+}
+.category_btn {
+	width: 60px;
+	margin: 15px 10px;
+	border-radius: 20px;
+	border: 1px solid #ccc;
+	background-color: #8BD7D2;
+}
+.category_box {
+	border-bottom: 1px solid #ccc;
+}
+.list_box {
+	position: absolute;
+	overflow: auto;
+	width: 100%;
+	top: 103px;
+	bottom: 0;
+	background-color: white;
+}
+.list_box .place_title {
+	text-decoration: underline;
+	font-weight: 600;
+	cursor: pointer;
+}
+.place_list {
+	position: relative;
+	height: 100%;
+	z-index: 999;
+}
+.place_img_box img {
+	width: 150px;
+	height: 100px;
+}
+.search_place {
+	padding: 5px;
+	background-color: white;
+	border-bottom: 1px solid #ccc;
+	position: relative;
+}
+.place_img_box {
+	width: 50%;
+}
+.search_place .place_title {
+	width: 50%;
+	padding-top: 10px;
+	padding-left: 5px;
+}
+.place_add_button {
+	position: absolute;
+	bottom: 8px;
+	right: 8px;
+}
+.on_close_btn {
+	width: 20px;
+	height: 40px;
+	position: absolute;
+	background: url(/resources/image/close_btn.png);
+	right: -20px;
+	cursor: pointer;
+	top: 5px;
+}
+.on_open_btn {
+	width: 20px;
+	height: 40px;
+	position: absolute;
+	background: url(/resources/image/open_btn.png);
+	cursor: pointer;
+	left: 400px;
+	top: 5px;
+	z-index: 2;
+}
+.displaynone {
+	display: none;
+}
+/* 지도 부분 */
+.map_area {
+	position: absolute;
+	right: 0;
+	left: 400px;
+	z-index: 1;
+	transition: 1s;
+	height: 100%;
+}
+.label {
+	color: black;
+	text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+/* 상세보기 모달 */
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
+}
+.modal_overlay {
+	background-color: rgba(0,0,0, 0.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+.modal_content {
+	background-color: white;
+	position: relative;
+	border-radius: 0px;
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+.modal_close {
+	position: absolute;
+	right: 15px;
+	top: 8px;
+	font-size: 20px;
+	font-weight: 700;
+	cursor: pointer;
+}
+.modal_img_box {
+	width: 500px;
+	height: 333px;
+}
+.modal_detail_info {
+	height: 250px;
+	overflow: auto;
+	padding: 10px;
+	width: 500px;
+}
+.modal_img_box img {
+	width: 500px;
+	height: 333px;
+}
+.hidden {
+	display: none;
+}
+

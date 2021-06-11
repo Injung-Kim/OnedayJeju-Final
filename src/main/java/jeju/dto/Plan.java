@@ -2,10 +2,12 @@ package jeju.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Plan {
 	private int pNo;
 	private String pTitle;
-	private Date pDepartureDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")	private Date pDepartureDate;
 	private int pNumDays;
 	private int pNumPeople;
 	private Date pCDate;

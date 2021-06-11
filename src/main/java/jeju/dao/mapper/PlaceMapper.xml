@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="jeju.dao.face.PlaceDao">
+	
+	<resultMap type="hashmap" id="clobmap">
+		<result column="overview" property="overview" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result column="addr" property="addr"/>
+		<result column="tel" property="tel"/>
+		<result column="img" property="img"/>
+		<result column="homepage" property="homepage"/>
+		<result column="title" property="title"/>
+	</resultMap>
+	<select id="selectByKeyword" parameterType="string" resultType="jeju.dto.Place">
+		SELECT * FROM place
+		WHERE title LIKE '%' || #{keyword} || '%'
+		ORDER BY title
+	</select>
+	
+	<select id="selectByCategories" resultType="jeju.dto.Place">
+		SELECT * FROM place
+		WHERE contenttypeid IN ('12', '14', '28')
+		ORDER BY title
+	</select>
+	
+	<select id="selectByCategory" parameterType="string" resultType="jeju.dto.Place">
+		SELECT * FROM place
+		WHERE contenttypeid = #{category}
+		ORDER BY title
+	</select>
+	
+	<select id="selectDetailInfo" parameterType="string" resultType="hashmap" resultMap="clobmap">
+		SELECT 
+			p.addr1 AS addr
+			, p.tel AS tel
+			, p.title AS title
+			, p.firstimage AS img
+			, pd.homepage AS homepage
+			, pd.overview AS overview
+		FROM place p, place_detail pd
+		WHERE p.contentid = pd.contentid
+			AND p.contentid = #{contentid}
+	</select>
+</mapper>

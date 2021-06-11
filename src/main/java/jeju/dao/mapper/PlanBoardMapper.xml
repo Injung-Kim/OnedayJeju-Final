@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="jeju.dao.face.PlanBoardDao">
+	
+	<resultMap type="hashmap" id="PlanBoardInfo">
+		<result column="pb_no" property="pbno"/>
+		<result column="pb_filename" property="filename"/>
+		<result column="pb_title" property="title"/>
+		<result column="pb_views" property="views"/>
+		<result column="pb_c_date" property="cdate"/>
+		<result column="user_nick" property="nick"/>
+		<result column="p_num_days" property="days"/>
+		<result column="likenum" property="likenum"/>
+	</resultMap>
+	
+	<resultMap type="jeju.dto.PlanBoard" id="PlanBoard">
+		<result column="pb_no" property="pbNo"/>
+		<result column="pb_filename" property="pbFilename"/>
+		<result column="pb_title" property="pbTitle"/>
+		<result column="pb_views" property="pbViews"/>
+		<result column="pb_c_date" property="pbCDate"/>
+		<result column="p_no" property="pNo"/>
+		<result column="user_no" property="userNo"/>
+	</resultMap>
+	
+	<resultMap type="jeju.dto.Plan" id="Plan">
+		<id column="p_no" property="pNo"/>
+		<result column="p_title" property="pTitle"/>
+		<result column="p_departure_date" property="pDepartureDate"/>
+		<result column="p_num_days" property="pNumDays"/>
+		<result column="p_num_people" property="pNumPeople"/>
+		<result column="p_c_date" property="pCDate"/>
+		<result column="user_no" property="userNo"/>
+	</resultMap>
+	
+	<resultMap type="jeju.dto.DetailPlan" id="DetailPlan">
+		<id column="dp_no" property="dpNo"/>
+		<result column="dp_date" property="dpDate"/>
+		<result column="p_no" property="pNo"/>
+	</resultMap>
+	
+	<resultMap type="jeju.dto.PBComment" id="PBComment">
+		<id column="pbc_no" property="pbcNo"/>
+		<result column="pbc_content" property="pbcContent"/>
+		<result column="pbc_c_date" property="pbcCDate"/>
+		<result column="pb_no" property="pbNo"/>
+		<result column="user_no" property="userNo"/>
+		<result column="user_nick" property="userNick"/>
+	</resultMap>
+	
+	<select id="selectCntAll" parameterType="jeju.util.Paging" resultType="int">
+		SELECT count(*) FROM plan_board pb, jejuuser u
+		WHERE pb.user_no = u.user_no
+		<if test='search != null and !"".equals(search)'>
+			AND (pb_title LIKE '%' || #{search} || '%' OR user_nick LIKE '%' || #{search} || '%')
+		</if>
+	</select>
+	
+	<select id="selectList" parameterType="jeju.util.Paging" resultMap="PlanBoardInfo">
+		SELECT * FROM (
+	    	(SELECT ROWNUM AS rnum, V.* FROM (
+		        SELECT pb.pb_no, pb_filename, pb_title, pb_views, pb_c_date, u.user_nick, p_num_days
+		            , (SELECT count(*) FROM plan_like pl WHERE pb.pb_no = pl.pb_no AND pl_status = 1) likenum
+		        FROM plan_board pb, jejuuser u, plan p
+		        WHERE pb.user_no = u.user_no
+		        	AND pb.p_no = p.p_no
+		        	<if test='search != null and !"".equals(search)'>
+					AND (pb_title LIKE '%' || #{search} || '%' OR user_nick LIKE '%' || #{search} || '%')
+					</if>
+	        	<choose>
+	        		<when test="condition == null">
+	        		ORDER BY pb_c_date DESC
+	        		</when>
+		        	<when test='condition != null and condition.equals("latest")'>
+		        	ORDER BY pb_c_date DESC
+		        	</when>
+		        	<when test='condition != null and condition.equals("like")'>
+		        	ORDER BY likenum DESC
+		        	</when>
+		        	<when test='condition != null and condition.equals("views")'>
+		        	ORDER BY pb_views DESC
+		        	</when>
+	        	</choose>
+	        	) V))
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
+	<select id="selectPlanByUserno" parameterType="int" resultMap="Plan">
+		SELECT * FROM plan
+		WHERE user_no = #{uno}
+		ORDER BY p_no
+	</select>
+	
+	<insert id="insertPlanBoard" parameterType="jeju.dto.PlanBoard">
+		<selectKey order="BEFORE" keyProperty="pbNo" resultType="int">
+			SELECT plan_board_seq.nextval FROM dual
+		</selectKey>
+		INSERT INTO plan_board(pb_no, pb_filename, pb_title, pb_views, pb_c_date, p_no, user_no)
+		VALUES(#{pbNo}, #{pbFilename}, #{pbTitle}, #{pbViews}, sysdate, #{pNo}, #{userNo})
+	</insert>
+	
+	<select id="selectBoardByPbno" parameterType="int" resultType="hashmap">
+		SELECT 
+			pb_no AS pbNo
+			, pb_filename AS pbFilename
+			, pb_title AS pbTitle
+			, pb_views AS pbViews
+			, pb.p_no AS pNo
+			, pb.user_no AS userNo
+			, (SELECT count(*) FROM plan_like pl WHERE pb.pb_no = pl.pb_no AND pl_status = 1) AS likenum
+			, p_departure_date AS startdate
+			, p_num_days AS days
+			, p_departure_date + p_num_days - 1 AS enddate
+		FROM plan_board pb, plan p
+		WHERE pb_no = #{pbno} AND pb.p_no = p.p_no
+	</select>
+	
+	<select id="selectDpListByPno" parameterType="int" resultMap="DetailPlan">
+		SELECT * FROM detail_plan
+		WHERE p_no = #{pNo}
+		ORDER BY dp_no
+	</select>
+	
+	<select id="selectDetailsByDpno" parameterType="int" resultType="hashmap">
+		SELECT 
+			dp_no AS dpno
+			, dppm_order_travel AS ordertravel
+			, dppm.contentid AS contentid
+			, contenttypeid
+			, addr1
+			, mapx
+			, mapy
+			, title
+			, firstimage2
+		FROM detail_plan_place_map dppm, place p
+		WHERE dp_no = #{dpNo} AND dppm.contentid = p.contentid
+		ORDER BY dp_no, ordertravel
+	</select>
+	
+	<update id="updateViews" parameterType="int">
+		UPDATE plan_board
+		SET pb_views = pb_views + 1
+		WHERE pb_no = #{pbno}
+	</update>
+	
+	<select id="selectCmtByPbno" parameterType="jeju.dto.PlanBoard" resultMap="PBComment">
+		SELECT 
+			pbc.*
+			, u.user_nick AS user_nick
+		FROM plan_board_comment pbc, jejuuser u
+		WHERE pb_no = #{pbNo}
+			AND pbc.user_no = u.user_no
+		ORDER BY pbc_no DESC
+	</select>
+	
+	<insert id="insertComment" parameterType="jeju.dto.PBComment">
+		<selectKey order="BEFORE" keyProperty="pbcNo" resultType="int">
+			SELECT plan_board_comment_seq.nextval FROM dual
+		</selectKey>
+		INSERT INTO plan_board_comment (pbc_no, pbc_content, pbc_c_date, pb_no, user_no)
+		VALUES (#{pbcNo}, #{pbcContent}, sysdate, #{pbNo}, #{userNo})
+	</insert>
+	
+	<select id="selectCmtByPbcno" parameterType="jeju.dto.PBComment" resultMap="PBComment">
+		SELECT 
+			pbc.*
+			, u.user_nick AS user_nick
+		FROM plan_board_comment pbc, jejuuser u
+		WHERE pbc_no = #{pbcNo}
+			AND pbc.user_no = u.user_no
+	</select>
+	
+	<delete id="deleteComment" parameterType="jeju.dto.PBComment">
+		DELETE plan_board_comment
+		WHERE pbc_no = #{pbcNo}
+	</delete>
+	
+	<select id="selectLikePresence" parameterType="jeju.dto.PlanLike" resultType="integer">
+		SELECT pl_status FROM plan_like
+		WHERE user_no = #{userNo} AND pb_no = #{pbNo}
+	</select>
+	
+	<insert id="insertLike" parameterType="jeju.dto.PlanLike">
+		INSERT INTO plan_like(user_no, pb_no, pl_status)
+		VALUES (#{userNo}, #{pbNo}, 1)
+	</insert>
+	
+	<update id="updateLike" parameterType="hashmap">
+		UPDATE plan_like
+		SET
+		<choose>
+		<when test="presence == 1">
+			pl_status = 0
+		</when>
+		<when test="presence == 0">
+			pl_status = 1
+		</when>
+		</choose>
+		WHERE user_no = #{userNo} AND pb_no = #{pbNo}
+	</update>
+	
+	<select id="selectLikeCnt" parameterType="jeju.dto.PlanLike" resultType="int">
+		SELECT count(*) FROM plan_like
+		WHERE pb_no = #{pbNo} AND pl_status = 1
+	</select>
+	
+	<select id="selectLikeStatus" parameterType="jeju.dto.PlanLike" resultType="int">
+		SELECT count(*) FROM plan_like
+		WHERE pb_no = #{pbNo} AND user_no = #{userNo} AND pl_status = 1
+	</select>
+	
+	<select id="selectBmPresence" parameterType="jeju.dto.Bookmark" resultType="integer">
+		SELECT bm_status FROM bookmark
+		WHERE user_no = #{userNo} AND pb_no = #{pbNo}
+	</select>
+	
+	<insert id="insertBookmark" parameterType="jeju.dto.Bookmark">
+		INSERT INTO bookmark(user_no, pb_no, bm_status)
+		VALUES (#{userNo}, #{pbNo}, 1)
+	</insert>
+	
+	<update id="updateBookmark" parameterType="hashmap">
+		UPDATE bookmark
+		SET
+		<choose>
+		<when test="presence == 1">
+			bm_status = 0
+		</when>
+		<when test="presence == 0">
+			bm_status = 1
+		</when>
+		</choose>
+		WHERE user_no = #{userNo} AND pb_no = #{pbNo}
+	</update>
+	
+	<select id="selectBmStatus" parameterType="jeju.dto.Bookmark" resultType="int">
+		SELECT count(*) FROM bookmark
+		WHERE pb_no = #{pbNo} AND user_no = #{userNo} AND bm_status = 1
+	</select>
+	
+	<select id="selectFilenameByPbno" parameterType="jeju.dto.PlanBoard" resultType="string">
+		SELECT pb_filename FROM plan_board
+		WHERE pb_no = #{pbNo}
+	</select>
+	
+	<update id="updatePlanBoard" parameterType="jeju.dto.PlanBoard">
+		UPDATE plan_board
+		SET pb_filename = #{pbFilename}
+		WHERE pb_no = #{pbNo}
+	</update>
+	
+	<select id="selectPlanBoardByPbno" parameterType="jeju.dto.PlanBoard" resultMap="PlanBoard">
+		SELECT * FROM plan_board
+		WHERE pb_no = #{pbNo}
+	</select>
+	
+	<delete id="deletePlanBoardByPbno" parameterType="jeju.dto.PlanBoard">
+		DELETE plan_board
+		WHERE pb_no = #{pbNo}
+	</delete>
+</mapper>

@@ -89,7 +89,7 @@ $(document).ready(function(){
 <nav>
 	<ul class="nav_first">
 	<li >
-	<a href="#">여행일정</a>
+	<a href="/plan/create">여행일정</a>
 	</li>
 	<li >
 	<a href="/expenses/plist">여행경비</a>
@@ -97,7 +97,7 @@ $(document).ready(function(){
 	<li>
 	<a href="#">커뮤니티</a>
 		<ul class="nav_second">
-			<li><a href="#">일정 공유</a></li>
+			<li><a href="/planboard/list">일정 공유</a></li>
 			<li class="devide">|</li>
 			<li><a href="#">여행 후기</a></li>
 			<li class="devide">|</li>

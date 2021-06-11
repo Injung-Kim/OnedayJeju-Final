@@ -1,0 +1,23 @@
+@charset "UTF-8";
+body {
+	margin: 0;
+}
+
+.drag_container {
+	background-color: #333;
+    position:absolute;
+    width: 100%;
+    top:46px;
+    bottom:0;
+}
+
+.draggable {
+	padding: 5px;
+	background-color: white;
+	border: 1px solid black;
+	cursor: move;
+}
+
+.draggable.dragging {
+	opacity: .5;
+}
