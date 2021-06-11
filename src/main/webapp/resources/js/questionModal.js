@@ -2,10 +2,13 @@ $(document).ready(function(){
 	$('#btnImg').click(function(){
 		$('input[name="upload"]').click()
 	})
+	
 	$('#uploadFiles').change(function(){
+		//기존 업로드 파일명 삭제
+		$('.thumbnail span').remove()
 		var files = $('#uploadFiles')[0].files
 		for(var i = 0; i < files.length ;i++){
-			console.log(files[i].name)
+			//console.log(files[i].name)
 			$('.thumbnail').append(
 					$('<span></span>').attr('id',i).html(files[i].name)
 					.append($('<button class="deleteTag">&times;</button>').attr('id', i)))
@@ -30,7 +33,6 @@ $(document).ready(function(){
 			, dataType : "json"
 			, success : function(data){
 				console.log("ajax성공")
-				console.log(data.hashtag.tagName)
 				//태그이름 보여주기
 				$('.tagbox').append(
 					$('<span></span>').attr('id',data.hashtag.tagNo).html('#' + data.hashtag.tagName).fadeIn(800)
@@ -47,7 +49,7 @@ $(document).ready(function(){
 				$('.deleteTag[id='+ data.hashtag.tagNo + ']').click(function(){
 					$('#'+data.hashtag.tagNo).remove()
 					$('input[value='+ data.hashtag.tagNo +']').remove()
-				})	
+				})
 				
 			}
 			, error : function(){
@@ -62,8 +64,12 @@ $(document).ready(function(){
 	$('.sendQst').click(function(){
 		var check = confirm('질문을 등록하시겠습니까?')
 		if(check){
-			console.log('질문 등록 확인')
+			console.log($('input[name=tagNo]').val())
+			if($('input[name=tagNo]').val() == null){
+				alert('태그를 한 개 이상 추가해주세요')
+			}else{
 			$('#qstForm').submit()
+			}
 		}
 	})
 	

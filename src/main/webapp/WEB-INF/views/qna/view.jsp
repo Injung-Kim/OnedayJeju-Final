@@ -14,7 +14,7 @@
 	}
 	.question{
 		width : 80%;
-		height : 380px;
+		/* height : 380px; */
 		text-align: right;
 		padding : 15px;
 	}
@@ -30,11 +30,11 @@
 		margin-right : 18px;
 		color : #00a388;
 	}
-	.tag span{
-		border : 1px solid #02b6de;
+	.question .tag span{
 		line-height : 85px;
-		border-radius: 30px;
-		padding : 8px 12px;
+/* 		border : 1px solid #02b6de; */
+/* 		border-radius: 30px; */
+/* 		padding : 8px 12px; */
 	}
 	.makeAnswer{
 		background: #00bd9d;
@@ -94,6 +94,9 @@ $(document).ready(function(){
 		</div>
 		<h4 style="font-weight : bold; font-size : 22px;">${TITLE}</h4>
 		<p style="margin-top: 30px;">${QST_CONTENT}</p>
+		<c:forEach items="${files}" var="file">
+		<img src="/qna/${file.get('QST_STORED')}" style="width : 200px; height : 200px;"/>
+		</c:forEach>
 	</div>
 <!-- 해시태그  -->
 	<div class="tag">
@@ -104,7 +107,7 @@ $(document).ready(function(){
 	<!-- 작성자와 로그인한 아이디 비교하여 버튼 구분하기  -->
 	<c:choose>
 		<c:when test="${id eq USER_ID}">
-		<button type="button" class="btn updateQst">수정</button>
+		<button type="button" class="btn updateQst" data-toggle="modal" data-target="#updateQstModal" id="updateQst">수정</button>
 		<button type="button" class="btn deleteQst">삭제</button>
 		</c:when>
 		<c:otherwise>
@@ -137,5 +140,5 @@ $(document).ready(function(){
 	</div>
 	</c:forEach>
 </div>
-
+<c:import url="/WEB-INF/views/qna/qstUpdateModal.jsp"/>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>

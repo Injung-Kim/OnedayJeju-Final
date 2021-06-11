@@ -8,17 +8,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
-import jeju.dto.qna.Question;
+import jeju.dto.qna.Question_original;
 import jeju.util.Paging;
 
 public interface QnAService {
 	/**
 	 * 질문글 전체 갯수 조회하기
 	 * 
-	 * 
+	 * @param word 요청받은 해시태그 검색어
 	 * @return 조회된 질문글의 게시글 갯수
 	 */
-	public int getCntQuestions();
+	public int getCntQuestions(String word);
 	/**
 	 * 페이징 정보 생성하기
 	 * 페이지 번호를 요청받아 페이지 정보 생성 후 전달하기
@@ -27,13 +27,15 @@ public interface QnAService {
 	 * @return 생성된 페이지 정보
 	 */
 	public Paging getPaging(Paging paging);
+
 	/**
 	 * 질문글 전체 리스트 조회하기
 	 * 이후 태그명으로 전체 리스트 불러올 예정
 	 * @param paging 요청받은 현재 페이지 정보
+	 * @param word 검색한 태그명
 	 * @return DB에 저장된 전체 질문글 리스트
 	 */
-	public List<Question> getQuestionList(Paging paging);
+	public List<HashMap<String, Object>> getQuestionList(Paging paging, String word);
 	/**
 	 * 질문글 상세조회하기
 	 * 질문글 번호를 요청받아 해당하는 질문글 테이블 정보 반환받기
@@ -101,7 +103,7 @@ public interface QnAService {
 	 * @param filetable 작성한 글 번호에 첨부할 파일정보
 	 * @param tagNo 입력한 태그명에 해당하는 DB 태그번호
 	 */
-	public void createQuestion(Question question, List<FileTB> filetable, int[] tagNo);
+	public void createQuestion(Question_original question, List<FileTB> filetable, int[] tagNo);
 	/**
 	 * 변경전 저장되어있는 파일 관리하기
 	 * 첨부파일 정보가 변경될 경우(삭제할 경우) 경로에 저장된 파일까지 모두 삭제
@@ -116,6 +118,21 @@ public interface QnAService {
 	 * @param qstNo 요청받은 질문글 번호
 	 */
 	public void deleteQuestion(int qstNo);
+	/**
+	 * 질문글에 첨부된 파일정보 리스트
+	 * 
+	 * @param qstNo 요청받은 질문글 번호
+	 * @return 조회한 파일 정보 리스트
+	 */
+	public List<HashMap<String, Object>> getFiles(int qstNo);
+	/**
+	 * 질문글 업데이트
+	 * 
+	 * @param question 수정한 질문글 정보가 담긴 dto객체
+	 * @param filetable 새로 첨부한 파일 정보
+	 * @param tagNo 변경한 태그번호 
+	 */
+	public void updateQuestion(Question_original question, List<FileTB> filetable, int[] tagNo);
 	
 
 }

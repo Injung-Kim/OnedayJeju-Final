@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style type="text/css">
 /* 모달 그림자 창 너비 설정 */
 .fade{
@@ -44,10 +45,31 @@
 	color : #ccc;
 	padding : 0px 0px 0px 5px;
 }
+
 </style>
 <script src="/resources/js/questionModal.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	//태그별 버튼 클릭시 태그 정보 변경(삭제)
+	$(document.body).on("click", ".tagbox button", function() {
+		var id = $(this).parent().attr("id");
+		$(this).parent().remove()
+		$(".tagForm").find("#" + id).remove()
+	})
+	//질문글 수정 폼 전송하기
+	$('.update').click(function(){
+		var check = confirm('수정하시겠습니까?')
+		if(check){
+			$('#updateQstForm').submit()
+		}
+	})
+	/* $(document.body).on("click", ".thumbnail button", function() {
+		$(this).parent().remove()
+	}) */
+})
+</script>
 <!-- 모달창  -->
-<div class="modal fade -modal-lg" id="writeQstModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade -modal-lg" id="updateQstModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
    		<div class="modal-content">
      		<div class="modal-header">
@@ -55,15 +77,16 @@
        		<h4>질문하기</h4>
      		</div>
      		<div class="modal-body">
-     		<!--질문글 작성 폼  -->
-     		<form action="/qna/write/question" method="post" id="qstForm" enctype="multipart/form-data">
+     		<!--질문글 수정 폼  -->
+     		<form action="/qna/update/question" method="post" id="updateQstForm" enctype="multipart/form-data">
+     		<input type="hidden" name="qstNo" value="${QST_NO}"/>
      		<div class="form-group">
      		<label for="title" class="sr-only">제목</label>
-       		<input type="text" placeholder="제목을 입력하세요" name="title"  class="form-control" style="width : 80%; display: inline-block; margin-right : 10px;">
+       		<input type="text" placeholder="제목을 입력하세요" name="title"  class="form-control" value="${TITLE}" style="width : 80%; display: inline-block; margin-right : 10px;">
 			<img src="/resources/image/image.png" alt="업로드 이미지" id="btnImg" style="width : 35px; height : 35px; cursor : pointer;"/><br>
 			</div>
 			<div class="form-group">
-       		<textarea placeholder="내용을 입력하세요" name="qstContent" class="form-control" rows="8"></textarea>
+       		<textarea placeholder="내용을 입력하세요" name="qstContent" class="form-control" rows="8">${QST_CONTENT}</textarea>
        		</div>
 			<div class="fileup">
 			<input multiple="multiple" type="file" id="uploadFiles" name="upload" style="display:none;"/>
@@ -71,25 +94,42 @@
 			<div class="writeQst">
 			</div>
        		</form>
-       		<!--질문글 작성 폼 end  -->
+       		<!--질문글 수정 폼 end  -->
        		
+       		<!-- 첨부파일  -->
      	 	<div class="thumbnail">
-     	 	
+     	 	<c:forEach items="${files}" var="file">
+     	 		<%-- <span id="no${file.get('QST_FILE_NO')}">${file.get("QST_ORIGIN")} --%>
+     	 		<span>${file.get("QST_ORIGIN")}
+     	 		<button type="button" class="deleteTag">&times;</button>
+     	 		</span>
+     	 	</c:forEach>
      	 	</div>
      	 	<div class="tag" style="text-align: right;">
-     	 		<!-- 태그 작성 폼  -->
+     	 		<!-- 태그 추가 폼  -->
      	 		<form action="/qna/insert/tag" method="post" class="tagForm">
      	 		<input type="text" id="makeTag" name="tagName" placeholder="추가할 태그를 입력하세요" class="form-control" style="display:none;" required="required"/>
+     	 		<!-- 기존에 등록된 태그목록 -->
+     	 		<c:forEach items = "${tagList}" var="tag">
+     	 		<input type="checkbox" name="tagNo" id="${tag.get('TAG_NO')}" value="${tag.get('TAG_NO')}" style="display:none" checked="checked"/>
+     	 		</c:forEach>
      	 		<button type="button" class="tagSubmit addTag" style="display:none;">태그 추가</button>     	 		
      	 		</form>
+     	 		<!-- 태그가 저장될 div -->
      	 		<div class="tagbox" style="display : inline-block;">
+     	 		<!-- 기존에 등록된 태그목록 -->
+     	 		<c:forEach items = "${tagList}" var="tag">
+				<span id="${tag.get('TAG_NO')}">#${tag.get("TAG_NAME")}
+				<button class="deleteTag" id="btn${tag.get('TAG_NO')}">&times;</button>
+				</span>
+				</c:forEach>
      	 		</div>
      	 		<button type="button" class="addTag" id="addTag">태그 추가</button>     	 		
      	 	</div>
      	 	</div>
       		<div class="modal-footer">
         	<button type="button" class="btn btn-default" data-dismiss="modal">작성취소</button>
-        	<button type="button" class="btn btn-primary sendQst">질문하기</button>
+        	<button type="button" class="btn btn-primary update">수정하기</button>
      	 	</div>
     	</div><!--modal.content  -->
   	</div><!--modal.dialog  -->

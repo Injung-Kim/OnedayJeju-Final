@@ -13,16 +13,78 @@
 		<result column="ans_stored" property="stored"/>
 	</resultMap>
 	
+	<resultMap type="jeju.dto.qna.Question" id="QuestionMap">
+		<id column="qst_no" property="qstNo"/>
+		<!-- <association property="userId" column="{user_no = userno}" select = "selectUserID">
+		</association> -->
+		<collection column="{qst_no=qst_no}" property="qtags" ofType="hashmap" select="selectQtag" >
+		</collection>
+	</resultMap>
+	
+<!-- 	<select id="selectQ" resultMap="QuestionMap" parameterType="hashmap">
+		SELECT QA.* FROM qa_question QA 
+		WHERE qst_no IN ( 
+		    SELECT qst_no from question_tag 
+		    WHERE tag_no IN (
+		        SELECT tag_no FROM qa_hashtag
+				WHERE tag_name LIKE '%' || #{tag_name, jdbcType=VARCHAR} ||'%'
+		    )
+		)
+		ORDER BY qst_no DESC
+	</select> -->
+	<select id="selectQ" resultMap="QuestionMap" parameterType="hashmap">
+		SELECT QA.*, U.user_id FROM qa_question QA 
+		JOIN jejuuser U ON QA.user_no = U.user_no
+		WHERE qst_no IN ( 
+		    SELECT qst_no from question_tag 
+		    WHERE tag_no IN (
+		        SELECT tag_no FROM qa_hashtag
+				WHERE tag_name LIKE '%' || #{tag_name, jdbcType=VARCHAR} ||'%'
+		    )
+		)
+		ORDER BY qst_no DESC
+	</select>
+	
+	<select id="selectQtag" resultType="hashmap" parameterType="hashmap">
+		SELECT QT.tag_no, HT.tag_name FROM question_tag QT
+		JOIN qa_hashtag HT ON QT.tag_no = HT.tag_no
+		WHERE QT.qst_no = #{qst_no }
+	</select>
+	
 	<!--질문글 수 조회  -->
-	<select id="selectCntQustion" resultType="int">
-		SELECT count(*) FROM qa_question
+	<select id="selectCntQustion" resultType="int" parameterType="String">
+		<choose>
+		<when test="!''.equals(tagName)">
+		SELECT count(*) FROM qa_question Q
+		LEFT JOIN question_tag QT
+		ON qt.qst_no = q.qst_no
+		LEFT JOIN qa_hashtag H
+		ON h.tag_no = qt.tag_no
+		WHERE tag_name like '%' || #{tagName} || '%'
+		</when>
+		<otherwise>
+		SELECT count(*) FROM qa_question Q
+		</otherwise>
+		</choose>
 	</select>
 	<!-- 질문글 조회 -->
-	<select id="selectQuestions" resultType="jeju.dto.qna.Question" parameterType="jeju.util.Paging">
+	<select id="selectQuestions" resultType="hashmap" parameterType="hashmap">
 		SELECT * FROM 
 		(SELECT ROWNUM rnum, Q.* FROM
-		(SELECT * FROM qa_question ORDER BY qst_no DESC) Q)NUM
-		WHERE rnum BETWEEN ${startNo} AND ${endNo}
+		(SELECT Q.qst_no, Q.title, Q.qst_content, Q.qst_cnt, Q.qst_time, U.user_id, h.tag_name
+		FROM qa_question Q
+		INNER JOIN jejuuser U
+		ON U.user_no = Q.user_no
+		LEFT JOIN question_tag QT
+		ON QT.qst_no = Q.qst_no
+		LEFT JOIN qa_hashtag H
+		ON H.tag_no = QT.tag_no
+		<if test='tagName != null and tagName != ""'>
+		WHERE H.tag_name like '%'|| #{tagName} ||'%'
+		</if>
+		ORDER BY Q.qst_no DESC
+		) Q)NUM
+		WHERE rnum BETWEEN #{paging.startNo} AND #{paging.endNo}
 	</select>
 	<!-- 질문글 상세조회  -->
 	<select id="selectQuestionByqstNo" resultType="hashmap" parameterType="int">
@@ -32,6 +94,10 @@
 		ON U.user_no = q.user_no
 		WHERE Q.qst_no = ${qstNo}
 	</select>
+	<update id="updateCntQuestion" parameterType="int">
+		UPDATE qa_question SET qst_cnt = qst_cnt + 1
+		WHERE qst_no = ${qstNo}
+	</update>
 	<!-- 해시태그 조회  -->
 	<select id="selectHashTagByqstNo" resultType="hashmap" parameterType="int">
 		SELECT tag_name,H.tag_no from qa_hashtag H
@@ -95,5 +161,20 @@
 	<!-- 질문글 삭제하기 -->
 	<delete id="deleteQuestion" parameterType="int">
 		DELETE FROM qa_question WHERE qst_no = #{qstNo}
+	</delete>
+	<!-- 질문글 업데이트 -->
+	<update id="updateQuestion" parameterType="jeju.dto.qna.Question">
+		
+		UPDATE qa_question SET title = #{title}, qst_content = #{qstContent}
+		WHERE qst_no = #{qstNo}
+	</update>
+	<!-- 첨부파일 삭제하기 -->
+	<delete id="deleteFiles" parameterType="int">
+		DELETE FROM qst_file WHERE qst_no = #{qstNo}
+	</delete>
+	
+	<!-- 태그번호 삭제하기 -->
+	<delete id="deleteTags" parameterType="int">
+		DELETE FROM question_tag WHERE qst_no = #{qstNo}
 	</delete>
 </mapper>

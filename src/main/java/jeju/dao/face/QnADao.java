@@ -4,27 +4,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
-import jeju.dto.qna.Question;
-import jeju.util.Paging;
+import jeju.dto.qna.Question_original;
+import jeju.dto.qna.QuestionTag;
 
 public interface QnADao {
+	
+	public List<HashMap<String, Object>> selectQ(HashMap<String,Object> map);
+	public List<QuestionTag> selectQtag(int qstNo);
+	
+	
 	/**
 	 * 질문글 테이블 전체 조회하기
 	 * 이후 추가 구현할 예정
-	 * @param paging 보여질 페이지 정보(한 페이지 당 5개 글 구현)
-	 * 
+	 * @param map 보여질 페이지 정보(한 페이지 당 5개 글 구현), 검색한 해시태그
+	 * @return 조회된 질문글 전체 리스트
 	 */
-	public List<Question> selectQuestions(Paging paging);
+	public List<Map<String, Object>> selectQuestions(Map<String, Object> map);
 	/**
 	 * 질문글 전체 갯수 조회하기
+	 * @param word 키워드로 검색한 해시태그
 	 * 
 	 * 
 	 * @return 조회된 질문글의 게시글 갯수
 	 */
-	public int selectCntQustion();
+	public int selectCntQustion(String word);
 	/**
 	 * 요청받은 번호에 해당하는 질문글 상세정보 조회하기
 	 * 
@@ -79,7 +84,7 @@ public interface QnADao {
 	 * 
 	 * @param question 요청받은 질문글 정보(제목, 작성자, 내용)
 	 */
-	public void insertQuestion(Question question);
+	public void insertQuestion(Question_original question);
 	/**
 	 * 저장한 파일 DB에 저장하기
 	 * 등록한 질문글 번호를 받아 질문글과 연결하기
@@ -107,6 +112,33 @@ public interface QnADao {
 	 * @param qstNo 삭제할 질문글 번호
 	 */
 	public void deleteQuestion(int qstNo);
+	/**
+	 * 질문글 수정하기
+	 * 수정된 질문글 본문 내용을 입력받아 질문 테이블 업데이트
+	 * 
+	 * @param question 수정하여 요청받은 질문글
+	 */
+	public void updateQuestion(Question_original question);
+	/**
+	 * 기존에 등록된 파일 정보 삭제
+	 * 
+	 * @param qstNo 수정할 게시글 번호
+	 */
+	public void deleteFiles(int qstNo);
+	/**
+	 * 태그정보 변경
+	 * 기존의 태그 정보와 게시글과의 연결 끊기
+	 * 게시글 번호에 저장된 태그 번호를 삭제하고 이후 새로운 태그정보 추가
+	 * 
+	 * @param qstNo 게시글 번호
+	 */
+	public void deleteTags(int qstNo);
+	/**
+	 * 상세정보 조회시 조회수 증가
+	 * 
+	 * @param qstNo 상제 조회할 질문글 번호
+	 */
+	public void updateCntQuestion(int qstNo);
 
 	
 }

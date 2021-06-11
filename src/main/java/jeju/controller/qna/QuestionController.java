@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jeju.dto.qna.FileTB;
-import jeju.dto.qna.Question;
+import jeju.dto.qna.Question_original;
 import jeju.service.face.QnAService;
 import jeju.util.Paging;
 
@@ -28,18 +28,19 @@ import jeju.util.Paging;
 public class QuestionController {
 	@Autowired QnAService qnaService;
 	private Logger logger = LoggerFactory.getLogger(QuestionController.class);
-	
 	//질문글 리스트 불러오기
 	@RequestMapping(value="/list")
-	public void listAll(Paging paging, Model model) {
+	public void listAll(Paging paging, Model model, String word) {
+		logger.info("요청성공 : {}", word);
 		//질문 게시글 갯수 구하기
-		paging.setTotalCount(qnaService.getCntQuestions());
+		paging.setTotalCount(qnaService.getCntQuestions(word));
+		
 		//페이징 생성하기
 		Paging qnaPaging = qnaService.getPaging(paging);
-		List<Question> list = qnaService.getQuestionList(qnaPaging);
-		logger.debug("list : {}", list);	
+		List<HashMap<String, Object>> map = qnaService.getQuestionList(qnaPaging, word);
+		logger.info("list : {}", map);	
 		//질문글 리스트 전달
-		model.addAttribute("questionList", list);
+		model.addAttribute("questionList", map);
 	}
 	
 	//질문글 상세정보
@@ -54,10 +55,15 @@ public class QuestionController {
 		for(HashMap<String, Object> tagName : tag) {
 			logger.debug("해시태그 이름 : {}", tagName.get("TAG_NAME"));
 		}
-		
+		//질문글에 등록된 첨부파일 정보
+		List<HashMap<String, Object>> files = qnaService.getFiles(qstNo);
+		for(HashMap<String, Object> file : files) {
+			logger.info("파일첨부 정보 : {}", file.get("QST_ORIGIN"));
+		}
 		//답변글 게시글 수 구하기
 		int totalCount = qnaService.getCntAnswers(qstNo);
 		paging.setTotalCount(totalCount);
+		
 		//페이징 생성하기
 		Paging ansPaging = qnaService.getPaging(paging);
 		Map<String, Object> ansParam = new HashMap<String, Object>();
@@ -73,6 +79,8 @@ public class QuestionController {
 		map.addAllAttributes(view);
 		//등록된 해시태그 리스트 전달
 		model.addAttribute("tagList", tag);
+		//등록된 첨부파일 리스트 전달
+		model.addAttribute("files", files);
 		
 		//답변글 정보 전달
 		model.addAttribute("answers", list);
@@ -85,10 +93,19 @@ public class QuestionController {
 	public String writeQuestion(
 			@RequestParam(value="upload", required = false) List<MultipartFile> file
 			, HttpSession session
-			, Question question
+			, Question_original question
 			, int[] tagNo
 			) {
 		logger.debug("태그번호 받아오기 : {}", tagNo);
+		
+			//파일 크기 확인하기
+			logger.info("filesize : {}", file.size());
+			for(MultipartFile f : file) {
+				logger.info("개별 파일 : {}", f);
+				logger.info("개별 파일크기 : {}", f.getSize());
+				logger.info("-----------");
+			}
+		
 		
 		// 파일 처리하기
 		List<FileTB> filetable = qnaService.createFile(file);
@@ -113,4 +130,29 @@ public class QuestionController {
 		
 		return "redirect:/qna/list";
 	}
+	//질문글 수정하기
+	@RequestMapping(value="/update/question", method = RequestMethod.POST)
+	@Transactional
+	public String updateQst(
+			@RequestParam(value="upload", required = false) List<MultipartFile> file
+			, HttpSession session
+			, Question_original question
+			, int[] tagNo
+			) {
+		logger.info("수정하기 요청성공");
+		// 저장한 첨부파일 업데이트
+		int qstNo = question.getQstNo();
+		qnaService.removeFiles(qstNo);
+		//첨부파일 생성
+		List<FileTB> filetable = qnaService.createFile(file);
+		
+		
+		// 질문글 업데이트
+		qnaService.updateQuestion(question, filetable, tagNo);
+		
+		return "redirect:/qna/list";
+	}
+	
+	
+	
 }
