@@ -1,5 +1,24 @@
 @charset "UTF-8";
 
+
+input[type="text"], input[type="password"] {
+	border: 0;
+	height: 30px;
+	border: 1px solid transparent;
+	border-bottom-color: #ccc;
+	padding: 4px;
+/* 	transition: 0.4s; */
+	-webkit-transition: 0.2s ease;
+	transition: 0.2s ease;
+	outline: none;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+	border-bottom-color: #8BD7D2;
+	border-width: medium;
+	
+}
+
 article {
 	background-color: #f5f5f5;
 }
@@ -34,7 +53,7 @@ article {
 	background-color: #FFFBFA;
 }
 
-.user_profile button:hover {
+.user_profile button:hover, #setPwBtn:hover {
 	background: #8BD7D2; 
 	border: #8BD7D2;
 	color: #ffffff;
@@ -118,6 +137,15 @@ article {
     border: none;
     background: 0;	
 }
+
+.table tr {
+	height: 50px;
+}
+
+.modal-body td:nth-child(n) {
+	padding-top: 13px;
+}
+
 .modal-footer button:first-child {
 	background: 0;
 	border: none;
