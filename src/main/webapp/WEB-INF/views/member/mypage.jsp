@@ -160,7 +160,8 @@ function mysubmit(sub) {
 				<td><button id="updateNick">닉네임 변경</button>
 				<div class="divToggle" style="display:none; margin: 3px;">
 				<form action="/member/mypage" method="post" name="updateForm">
-					<input type="text" id="newNick" name="userNick" />
+					<input type="text" id="newNick" name="userNick" class="effect-5" />
+					<span class="focus-border"></span>
 					<button id="okNickBtn">변경</button>
 				</form>
 				</div>

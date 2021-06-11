@@ -46,7 +46,7 @@ $(document).ready(function(){
 <body>
 
 <header>
-	<a href="/" class="logo"><img src="/resources/image/logo.png" ></a>
+	<a href="/" class="logo"><img src="/resources/image/logo2.png" alt="어느 날, 제주 로고" ></a>
 	
 	
 	<c:if test="${empty login }">
@@ -57,9 +57,9 @@ $(document).ready(function(){
 		</div>
 	</c:if>
 	<c:if test="${login}">
-		<span class="welcome"><strong>${nick} </strong>님 환영합니다!</span>
+		<span class="welcome" style="margin-top: 20px;"><strong>${nick} </strong>님 환영합니다!</span>
 		
-		<div class="login" style="margin-right: 20px;">
+		<div class="login" style="margin: 20px 20px 0 0;">
 			
 			<c:choose>
 				<c:when test="${sessionScope.profile ne null}">
