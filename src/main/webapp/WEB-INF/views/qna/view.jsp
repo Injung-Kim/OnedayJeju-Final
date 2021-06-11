@@ -79,6 +79,10 @@ $(document).ready(function(){
 		var confirmDelete = confirm('삭제하시겠습니까?')
 		if(confirmDelete){location.href="/qna/delete/question?qstNo=${QST_NO}"}
 	})
+	$('.makeAnswer').click(function(){
+		var login = ${login}
+		console.log(login)
+	})
 })
 </script>
 <!-- 질문글 -->
@@ -139,6 +143,14 @@ $(document).ready(function(){
 		</c:if>
 	</div>
 	</c:forEach>
+	<!--답변글 작성 Form  -->
+	<div class="writeAnswer">
+	<form action="/write/answer" method="post">
+	<input type="text"/>
+	<textarea rows="" cols=""></textarea>
+	</form>
+	</div>
+	
 </div>
 <c:import url="/WEB-INF/views/qna/qstUpdateModal.jsp"/>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>

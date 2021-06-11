@@ -12,11 +12,9 @@
 		<result column="ans_origin" property="origin"/>
 		<result column="ans_stored" property="stored"/>
 	</resultMap>
-	
+	<!-- 질문글 리스트 ResultMap -->
 	<resultMap type="jeju.dto.qna.Question" id="QuestionMap">
 		<id column="qst_no" property="qstNo"/>
-		<!-- <association property="userId" column="{user_no = userno}" select = "selectUserID">
-		</association> -->
 		<collection column="{qst_no=qst_no}" property="qtags" ofType="hashmap" select="selectQtag" >
 		</collection>
 	</resultMap>
@@ -32,8 +30,11 @@
 		)
 		ORDER BY qst_no DESC
 	</select> -->
+	<!-- 질문글 리스트 조회, 태그명 해시맵 추가 -->
 	<select id="selectQ" resultMap="QuestionMap" parameterType="hashmap">
-		SELECT QA.*, U.user_id FROM qa_question QA 
+		SELECT * FROM
+		(SELECT rownum rnum, qst.* FROM
+		(SELECT QA.*, U.user_id FROM qa_question QA 
 		JOIN jejuuser U ON QA.user_no = U.user_no
 		WHERE qst_no IN ( 
 		    SELECT qst_no from question_tag 
@@ -43,6 +44,8 @@
 		    )
 		)
 		ORDER BY qst_no DESC
+		)QST
+		)WHERE rnum between #{paging.startNo, jdbcType=INTEGER} and #{paging.endNo, jdbcType=INTEGER}
 	</select>
 	
 	<select id="selectQtag" resultType="hashmap" parameterType="hashmap">
@@ -53,19 +56,16 @@
 	
 	<!--질문글 수 조회  -->
 	<select id="selectCntQustion" resultType="int" parameterType="String">
-		<choose>
-		<when test="!''.equals(tagName)">
-		SELECT count(*) FROM qa_question Q
-		LEFT JOIN question_tag QT
-		ON qt.qst_no = q.qst_no
-		LEFT JOIN qa_hashtag H
-		ON h.tag_no = qt.tag_no
-		WHERE tag_name like '%' || #{tagName} || '%'
-		</when>
-		<otherwise>
-		SELECT count(*) FROM qa_question Q
-		</otherwise>
-		</choose>
+		SELECT COUNT(*) FROM qa_question QA
+		WHERE qst_no IN ( 
+    		SELECT qst_no from question_tag 
+    		WHERE tag_no IN (
+        		SELECT tag_no FROM qa_hashtag
+        <if test='#{tagName} != null and #{tagName}.equals("")'> 
+        		WHERE tag_name LIKE '%' || #{tagName} || '%'
+        </if>
+    		)
+		)
 	</select>
 	<!-- 질문글 조회 -->
 	<select id="selectQuestions" resultType="hashmap" parameterType="hashmap">

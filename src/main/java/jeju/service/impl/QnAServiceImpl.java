@@ -52,10 +52,9 @@ public class QnAServiceImpl implements QnAService{
 	public List<HashMap<String, Object>> getQuestionList(Paging paging, String word) {
 		
 		HashMap<String, Object> param = new HashMap<>();
-//		param.put("tag_name", "내맘");
 		param.put("tag_name", word);
 		param.put("paging", paging);
-		
+		logger.info("paging {}", paging);
 		List<HashMap<String, Object>> result = qnaDao.selectQ(param);
 		logger.info("result {}", result);
 		

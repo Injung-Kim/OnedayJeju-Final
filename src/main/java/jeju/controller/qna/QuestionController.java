@@ -41,6 +41,7 @@ public class QuestionController {
 		logger.info("list : {}", map);	
 		//질문글 리스트 전달
 		model.addAttribute("questionList", map);
+		model.addAttribute("paging", qnaPaging);
 	}
 	
 	//질문글 상세정보

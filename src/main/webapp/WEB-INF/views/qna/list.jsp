@@ -4,27 +4,30 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <style type="text/css">
 .listWrapper{
-	width: 80%;
+	width: 60%;
 }
 .qstList{
 	box-sizing : border-box;
 	border : 1px solid #49c6e5;
 	border-radius : 15px;
-	padding : 15px 20px;
+	padding : 10px 20px;
 	background: #fffbfa;
-	height: 155px;
+	/* height: 155px; */
 	margin-top: 18px;
 	transition: border 0.2s;
 }
+
 .qstList:hover{
 	border : 2px solid #49c6e5;
 	cursor : pointer;
 }
 /*시간, 번호정보*/
 .qstInfo{
-	display : flex;
-	flex-flow: row nowrap;
-	justify-content: space-between;
+	display : inline-block;
+	width : 30%;
+}
+.qstInfo span{
+	margin-right : 20px;
 }
 
 .qstInfo p{ 
@@ -32,13 +35,23 @@
 	margin : 0px;
 }
 /* 내용 간략히 */
-#content{
+.content{
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	font-size: 12px;
+	min-height : 42px;
     width: 80%;
-    margin: 0px;
+    margin: 11px 0px;
+}
+.tagList{
+	text-align: right;
+	color : #00bd9d;
+	display : inline-block;
+	width : 79%;
+}
+.tagList span{
+	padding : 0px 0px 0px 10px;
 }
 .searchTag{
 	width : 50%;
@@ -70,12 +83,11 @@ $(document).ready(function(){
 		console.log("클릭함")
 		//로그인 상태 구분하여 작성 폼 모달 로드하기
 		var login = ${sessionScope.login}
-		/*  if(login == undefined ){
+		console.log(login == null)
+		if(login == null){
 			alert("로그인이 필요합니다")
 			location.href='/member/login'
-			}  */
-		console.log(login == undefined)
-	
+		}
 	})
 })
 </script>
@@ -90,37 +102,26 @@ $(document).ready(function(){
 	<button type="button" class="btn btn-lg btn-block" data-toggle="modal" data-target="#writeQstModal" id="writeQst">질문하기</button>
 	<c:forEach items="${questionList }" var="qst">
 		<div class="qstList" onclick="location.href='/qna/view?qstNo=${qst.qstNo}'">
+			<h4 style="display : inline-block; width : 69%">${qst.title}</h4> 
 			<div  align = "right" class="qstInfo">
-				<p id="time"><fmt:formatDate value="${qst.qstTime}" pattern="yyyy-MM-dd hh:mm:ss"/></p>
-				<span>작성자 ${qst.userId}</span>
-<%-- 				<span>조회수 ${qst.get('QST_CNT')}</span> --%>
-				<p>${qst.qstNo}</p>
+				<span><i class="fas fa-pencil-alt"></i> ${qst.userId}</span>
+				<span><i class="far fa-eye"></i> ${qst.qstCnt}</span>
+				<span style="margin : 0px; font-size: small;">${qst.qstNo}</span>
 			</div>
-			<h4>${qst.title}</h4> 
-			<div id="content">${qst.qstContent }</div>
+			<div class="content">${qst.qstContent }</div>
+			<span id="time"><fmt:formatDate value="${qst.qstTime}" pattern="yyyy-MM-dd hh:mm:ss"/></span>
+			<div class="tagList">
 			<c:if test="${qst.qtags.size() ne 0 }">
 			<c:forEach items="${qst.qtags }" var="qtag">
 				<span>#${qtag.TAG_NAME }</span>
 			</c:forEach>
 			</c:if>
-<%-- 			<span>#${qst.TAG_NAME }</span> --%>
+			</div>
 		</div><!--qstList  -->
 	</c:forEach>
-<%-- 	<c:forEach items="${questionList }" var="qst"> --%>
-<%-- 		<div class="qstList" onclick="location.href='/qna/view?qstNo=${qst.get('QST_NO')}'"> --%>
-<!-- 			<div  align = "right" class="qstInfo"> -->
-<%-- 				<p id="time"><fmt:formatDate value="${qst.get('QST_TIME')}" pattern="yyyy-MM-dd hh:mm:ss"/></p> --%>
-<%-- 				<span>작성자 ${qst.get('USER_ID')}</span> --%>
-<%-- 				<span>조회수 ${qst.get('QST_CNT')}</span> --%>
-<%-- 				<p>${qst.get('QST_NO')}</p> --%>
-<!-- 			</div> -->
-<%-- 			<h4>${qst.get('TITLE')}</h4>  --%>
-<%-- 			<div id="content">${qst.get('QST_CONTENT') }</div> --%>
-<!-- 			<span>#${qst.get('TAG_NAME')}</span> -->
-<!-- 		</div>qstList  -->
-<%-- 	</c:forEach> --%>
 </div><!--listWrapper  -->
 <c:import url="/WEB-INF/views/qna/questionModal.jsp"/>
+<c:import url="/WEB-INF/views/qna/QuestionPaging.jsp"/>
 <c:import url="/WEB-INF/views/layout/footer.jsp"/>
 </body>
 </html>
