@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="jeju.dao.face.RvCommentDao">
+	
+	<resultMap type="jeju.dto.RvComment" id="RvComment">
+		<id column="rv_no" property="rvNo"/>
+		<result column="rv_cmtno" property="rvCmtNo"/>
+		<result column="user_id" property="userId"/>
+		<result column="rv_content" property="rvContent"/>
+		<result column="rv_create_date" property="rvCreateDate"/>
+	</resultMap>
+
+	<select id="selectComment" parameterType="jeju.dto.Review" resultMap="RvComment">
+		SELECT * FROM (
+			SELECT R.* FROM (
+				SELECT
+					rv_cmtno
+					, rv_no
+					, user_id
+					, rv_content
+					, rv_create_date
+				FROM rv_comment
+				WHERE rv_no = #{rvNo}
+				ORDER BY rv_create_date
+			) R
+		)
+	</select>
+	
+	<insert id="insertComment" parameterType="jeju.dto.RvComment">
+		INSERT INTO rv_comment (rv_cmtno, rv_no, user_id, rv_content)
+		VALUES (rv_comment_seq.nextval, #{rvNo}, #{userId}, #{rvContent})
+	</insert>
+</mapper>
