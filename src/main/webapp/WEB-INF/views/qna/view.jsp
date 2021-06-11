@@ -4,74 +4,76 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:import url="/WEB-INF/views/layout/header.jsp"/>
 <style type="text/css">
-	/*질문글 css*/
-	.qstWrapper{
-		width : 100%;
-		border-top : 3px solid #49c6e5;
-		border-bottom : 3px solid #49c6e5;
-		border-radius : 25px;
-		background: #fffbfa;
-	}
-	.question{
-		width : 80%;
-		/* height : 380px; */
-		text-align: right;
-		padding : 15px;
-	}
-	.question .qstInfo{
-		float : right;
-		margin : 0 0 0 40px;
-	}
-	.question #content{
-		text-align : left;
-		line-height :  27px;
-	}
-	.question .qstInfo #qstCnt{
-		margin-right : 18px;
-		color : #00a388;
-	}
-	.question .tag span{
-		line-height : 85px;
-/* 		border : 1px solid #02b6de; */
-/* 		border-radius: 30px; */
-/* 		padding : 8px 12px; */
-	}
-	.makeAnswer{
-		background: #00bd9d;
-		color : #fffbfa;
-	}
-	/*답변글 css  */
-	.ansWrapper{
-		width : 100%;
-		margin-top : 20px;
-	}
-	.answers{
-		width : 80%;
-		border : 1px solid #49c6e5;
-		height : 350px;
-		border-radius: 15px;
-		margin-bottom : 25px;
-		padding: 15px;
-		text-align: right;
-	}
-	.answers #ansInfo{
-		text-align: left;
-	}
-	.answers #userid{
-		line-height: 56px;
-    	vertical-align: text-top;
-    	font-size: 23px;
-	}
-	
-	.answers #divider{
-		margin-top : 5px;
-		margin-bottom : 20px;
-	}
-	.ansContent{
-		height : 53%;
-		text-align: left;
-	}
-	
+/*질문글 css*/
+.qstWrapper{
+	width : 100%;
+	border-top : 3px solid #49c6e5;
+	border-bottom : 3px solid #49c6e5;
+	border-radius : 25px;
+	background: #fffbfa;
+}
+.question{
+	width : 80%;
+	text-align: right;
+	padding : 15px;
+}
+.question .qstInfo{
+	float : right;
+	margin : 0 0 0 40px;
+}
+.question #content{
+	text-align : left;
+	line-height :  27px;
+}
+.question .qstInfo #qstCnt{
+	margin-right : 18px;
+	color : #00a388;
+}
+.question .tag span{
+	line-height : 85px;
+}
+.makeAnswer{
+	background: #00bd9d;
+	color : #fffbfa;
+}
+/*답변글 css  */
+.ansWrapper{
+	width : 100%;
+	margin-top : 20px;
+}
+.answers{
+	width : 80%;
+	border : 1px solid #49c6e5;
+	height : 350px;
+	border-radius: 15px;
+	margin-bottom : 25px;
+	padding: 15px;
+	text-align: right;
+}
+.answers #ansInfo{
+	text-align: left;
+}
+.answers #userid{
+	line-height: 56px;
+   	vertical-align: text-top;
+   	font-size: 23px;
+}
+
+.answers #divider{
+	margin-top : 5px;
+	margin-bottom : 20px;
+}
+.ansContent{
+	height : 53%;
+	text-align: left;
+}
+/* 질문글 작성 폼 */
+.writeAnswer{
+	width : 80%;
+	border-radius: 15px;
+	/* background: #00a388; */
+	border : 1px solid #ccc;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -81,8 +83,20 @@ $(document).ready(function(){
 	})
 	$('.makeAnswer').click(function(){
 		var login = ${login}
-		console.log(login)
+		if(login){
+			$('writeAnswer').attr('style','display : block;')
+		}else{
+			alert('로그인이 필요합니다')
+			location.href='/member/login'
+		}
 	})
+	$('.ansImg').click(function(){
+		$('#ansFiles').click()
+	})
+	$('#submitAnswer').click(function(){
+		$('#ansForm').submit()
+	})
+	
 })
 </script>
 <!-- 질문글 -->
@@ -145,9 +159,13 @@ $(document).ready(function(){
 	</c:forEach>
 	<!--답변글 작성 Form  -->
 	<div class="writeAnswer">
-	<form action="/write/answer" method="post">
-	<input type="text"/>
-	<textarea rows="" cols=""></textarea>
+	<h3>답변하기</h3>
+	<form action="/qna/write/answer" method="post" id="ansForm">
+	<textarea rows="6"  placeholder="내용을 입력하세요" class="form-control"></textarea>
+	<input type="file" name="files" multiple="multiple" style="display:none;" id="ansFiles">
+	<input type="hidden" name="qstNo" value="${QST_NO}"/>
+	<img src="/resources/image/image.png" style="width : 80px; height : 80px;" class="ansImg">
+	<button id="submitAnswer" type="button" class="btn btn-lg btn-block">답변하기</button>
 	</form>
 	</div>
 	
