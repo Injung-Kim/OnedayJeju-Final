@@ -1,6 +1,7 @@
 package jeju.dao.face;
 
 import java.util.HashMap;
+import java.util.List;
 
 import jeju.dto.Plan;
 
@@ -26,5 +27,11 @@ public interface PlanDao {
 	 * @param inData - 일정번호
 	 */
 	public void deletePlanByPno(Plan inData);
+	/**
+	 * 로그인한 유저가 생성한 일정들을 모두 조회한다.
+	 * @param myplan - 유저번호
+	 * @return 로그인한 유저의 모든 일정 리스트
+	 */
+	public List<Plan> selectAll(Plan myplan);
 	
 }

@@ -1,7 +1,6 @@
 package jeju.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import jeju.dto.DetailPlan;
 import jeju.dto.Plan;
@@ -95,5 +95,22 @@ public class PlanController {
 		
 		//마이페이지 여행일정으로 이동
 		return "redirect:/mypage/plan";
+	}
+	
+	@RequestMapping(value="/plan/list", method=RequestMethod.GET)
+	public ModelAndView getList(ModelAndView mav, HttpSession session) {
+		logger.info("/plan/list getList() GET 요청");
+		//viewName 지정
+		mav.setViewName("jsonView");
+		
+		//자신의 일정 조회
+		Plan myplan = new Plan();
+		myplan.setUserNo((int)session.getAttribute("uno"));
+		List<Plan> planList = planService.getList(myplan);
+		
+		//모델값 전달
+		mav.addObject("planList", planList);
+		
+		return mav;
 	}
 }

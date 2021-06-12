@@ -36,4 +36,10 @@
 		DELETE plan
 		WHERE p_no = #{pNo}
 	</delete>
+	
+	<select id="selectAll" parameterType="jeju.dto.Plan" resultMap="Plan">
+		SELECT * FROM plan
+		WHERE user_no = #{userNo}
+		ORDER BY p_c_date DESC
+	</select>
 </mapper>

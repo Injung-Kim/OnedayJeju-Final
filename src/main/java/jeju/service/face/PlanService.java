@@ -1,5 +1,7 @@
 package jeju.service.face;
 
+import java.util.List;
+
 import jeju.dto.Plan;
 
 public interface PlanService {
@@ -21,5 +23,11 @@ public interface PlanService {
 	 * @param inData - 일정 번호
 	 */
 	public void remove(Plan inData);
+	/**
+	 * 로그인한 유저가 작성한 일정을 모두 조회한다.
+	 * @param myplan - 유저번호
+	 * @return 본인이 작성한 일정 리스트
+	 */
+	public List<Plan> getList(Plan myplan);
 
 }
