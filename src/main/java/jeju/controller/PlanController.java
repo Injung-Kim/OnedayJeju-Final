@@ -94,7 +94,7 @@ public class PlanController {
 		planService.remove(inData);
 		
 		//마이페이지 여행일정으로 이동
-		return "redirect:/mypage/plan";
+		return "redirect:/member/mypage";
 	}
 	
 	@RequestMapping(value="/plan/list", method=RequestMethod.GET)

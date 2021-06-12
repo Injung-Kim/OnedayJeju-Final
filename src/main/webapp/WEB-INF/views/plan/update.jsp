@@ -52,7 +52,7 @@ $(document).ready(function(){
 	})
 	//저장&닫기 버튼
 	$("#saveBtn").click(function(){
-		$(location).attr("href", "/mypage/plan");
+		$(location).attr("href", "/member/mypage");
 	})
 	
 	//여행 날짜 클릭

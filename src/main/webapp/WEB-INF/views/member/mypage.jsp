@@ -10,7 +10,17 @@
 <!-- findPage css -->
 <link rel="stylesheet" href="/resources/css/mypage.css" type="text/css">
 
-
+<style type="text/css">
+.mypage_myplan {
+	text-align: center;
+}
+.myplan_list {
+	width: 900px;
+	height: 600px;
+	margin-top: 20px;
+	overflow: auto;
+}
+</style>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -118,7 +128,93 @@ function mysubmit(sub) {
 }
 
 </script>
+<!-- 나의일정 버튼 자바스크립트 -->
+<script type="text/javascript">
+$(document).ready(function (){
+	
+	//나의 일정 버튼 클릭
+	$('#myplanBtn').click(function(){
+		console.log("나의 일정 클릭");
+		$.ajax({
+			type: "get"
+			, url: "/plan/list"
+			, dataType: "json"
+			, success: function( res ){
+				console.log('나의일정 ajax 성공');
+				console.log(res.planList);
+				
+				var html = ''; //추가할 html 내용을 담을 변수입니다.
+				
+				if(res.planList.length == 0) {
+					//생성한 일정이 없는 경우
+					html = '<tr><td colspan="6">생성한 일정이 없습니다. 나만의 일정을 만들어 보세요 :)</td></tr>';
+				} else {
+					//생성한 일정이 있는 경우
+					html = ''; 
+					
+					for(var plan of res.planList){
+						var innerhtml = '<tr>'
+									+	'<td>'+plan.pNo+'</td>'
+									+	'<td><a href="/plan/update?pNo='+plan.pNo+'">'+plan.pTitle+'</a></td>'
+									+	'<td>'+getFormatDate(plan.pDepartureDate)+'</td>'
+									+	'<td>'+plan.pNumDays+'일</td>'
+									+	'<td>'+plan.pNumPeople+'명</td>'
+									+	'<td>'+getFormatDate(plan.pCDate)+'</td>'
+									+	'</tr>';
+						html += innerhtml;
+					}
+				}
+				
+				//일정목록 태그 생성
+				var parent = $('<div class="mypage_myplan">');
+				var parentHtml = '<h3>${nick } 님의 일정 목록</h3>'
+						+	'<div class="myplan_list">'
+						+	'<table class="table table-striped">'
+						+	'<thead>'
+						+	'<tr>'
+						+	'<th class="text-center" style="width: 10%">일정번호</th>'
+						+	'<th class="text-center" style="width: 40%">일정명</th>'
+						+	'<th class="text-center" style="width: 15%">여행출발일</th>'
+						+	'<th class="text-center" style="width: 10%">여행일수</th>'
+						+	'<th class="text-center" style="width: 10%">여행인원</th>'
+						+	'<th class="text-center" style="width: 15%">생성일</th>'
+						+	'</tr>'
+						+	'</thead>'
+						+	'<tbody class="text-center">'
+						+	html
+						+	'</tbody>'
+						+	'</table>'
+						+	'</div>';
+				//최상위 요소에 html 추가
+				parent.html(parentHtml);
 
+				//원래 있던 내용 틀에 서버에서 받아온 데이터 추가
+				$('.user_board_content').html(parent);
+				
+			}
+			, error: function(){
+				console.log('나의일정 ajax 실패');
+			}
+		})
+	}) //클릭 이벤트 끝
+	
+	//마이페이지 들어왔을 때 나의일정이 보이도록 트리거 설정
+	$('#myplanBtn').trigger('click');
+	
+})
+/**
+ *  yyyyMMdd 포맷으로 반환
+ */
+function getFormatDate(value){
+	var date = new Date(value);
+    var year = date.getFullYear();              //yyyy
+    var month = (1 + date.getMonth());          //M
+    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    var day = date.getDate();                   //d
+    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    return  year + '.' + month + '.' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+}
+</script>
 
 <div class="container">
 
@@ -185,13 +281,13 @@ function mysubmit(sub) {
 </div>
 
 <div class="user_board_btn">
-	<button>나의 일정</button>
+	<button id="myplanBtn">나의 일정</button>
 	<button>여행 후기</button>
 	<button>Q & A</button>
 </div>
 
 <div class="user_board_content">
-
+	
 </div>
 
 

@@ -191,7 +191,10 @@ $(document).ready(function(){
 	//댓글 작성 이벤트
 	$('#cmtWriteBtn').click(function(){
 		var userNo = 0;
-		if(${empty sessionScope.uno}){ return false;}
+		if(${empty sessionScope.uno}){ 
+			alert('로그인 후 이용해주세요.'); 
+			return false;
+		}
 		else {var userNo = <%=session.getAttribute("uno")%>;}
 		//댓글 작성 ajax
 		$.ajax({
@@ -633,7 +636,7 @@ function fileCheck(e) {
 	<div class="page" data-id="2">
 		<div class="page_left">
 			<div class="comment_box">
-				<div class="comment_num">댓글 000</div>
+				<div class="comment_num">댓글 0</div>
 				<div class="comment_list">
 <!-- 					<div class="commnet"> -->
 <!-- 						<div class="cmt_user_info"> -->
