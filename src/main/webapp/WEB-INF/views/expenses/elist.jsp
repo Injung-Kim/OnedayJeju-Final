@@ -94,11 +94,15 @@ var expno = '';
 			alert("카테고리를 선택해주세요");
 			return false;
 		}
+		
+		//상호명(상세정보) 정규식
 		if ($("#expName").val() == '' || $("#expName").val().length > 45 || !$r1.test($("#expName").val()) ) {
 			alert("상호명(상세정보)를 영어 대소문자, 한글, 숫자를 사용해 45자 이내로 작성해주세요")
 			$("#expName").focus();
 			return false;
 		}
+		
+		//비용 정규식
 		if ($("#cost").val() == '' || $("#cost").val() < 100 || !$r2.test($("#cost").val()) ) {
 			alert("사용 금액을 공백없이 숫자로만 100원 이상 작성해주세요")
 			$("#cost").focus();
@@ -153,41 +157,6 @@ var expno = '';
 		
 		$("#viewModal .modal-title").text("경비 상세보기")
 	});
-	
-
-// 	$("#modalSubmit").click(function() {
-			
-// 		checkModal = function( ) {
-// 			var category = $("#category").val();
-// 			var expname = $("#expName").val();
-// 			var cost = $("#cost").val();
-			
-// 			//상호명(상세정보) 정규식
-// 			var expRegExp = /^[가-힣a-zA-Z0-9]*$/;
-			
-// 			//비용 정규식
-// 			var costRegExp = /^[0-9]*$/;
-			
-// 			if (cost == "" || cost == null) {
-// 				alert("'비용'은 필수입력사항입니다.");
-// 				return false;
-// 			} else if (cost.match(costRegExp) == null) {
-// 				alert("숫자만 입력해주세요.");
-// 				return false;
-// 			} else if (expname == "" || expname == null) {
-// 				alert("'상호명(상세정보)'은 필수입력사항입니다.");
-// 				return false;
-// 			} else if (expname.match(expRegExp) == null) {
-// 				alert("특수문자는 입력할 수 없습니다.");
-// 				return false;
-// 			} else if (category == "" || category == null) {
-// 				alert("'카테고리'는 필수입력사항입니다.");
-// 				return false;
-// 			} else {
-// 				return true;
-// 			}
-// 		}
-// 	})
 	
 })
 

@@ -122,8 +122,6 @@ public class LoginController {
 		logger.info(resultid);
 		
 		model.addAttribute("findId", resultid);
-//		model.addAttribute("findId", "TEST");
-		
 		
 		return "member/resultid";
 	}

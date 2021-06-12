@@ -35,7 +35,7 @@
 a { text-decoration:none !important } 
 a:hover { text-decoration:none !important }
 header{
-	height : 70px;
+	height : 100px;
 }
 .menu{
 	position: absolute;
@@ -106,7 +106,7 @@ function sidemenu(){
 
 <body>
 <header>
-<a href="/"><img src="/resources/image/logo.png" alt="어느 날, 제주 로고" ></a>
+<a href="/"><img src="/resources/image/logo2.png" alt="어느 날, 제주 로고" style="height: 100px;"></a>
 </header>
 <label for="aside" class="asideicon off"><i class="fas fa-bars"></i></label>
 <input type="button" value="Menu" id="aside">

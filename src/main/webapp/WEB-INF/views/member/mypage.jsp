@@ -64,44 +64,21 @@ $(document).ready(function(){
 					, "newAddressDetail": $("#newAddressDetail").val()}
 			, dataType: "json"
 			, success: function(res) {
-				alert("변경되었습니다.");
+// 				alert("변경되었습니다.");
 				location.href=res.redirectUrl;
 			}
 			, error: function(res) {
-				alert("!! 변경 실패 !!");
+// 				alert("!! 변경 실패 !!");
 			}
 		})
 // 		location.reload(true);
 	});
 	
 	
+	
 	//pw변경 모달의 '변경하기' 버튼 클릭 시
 	$("#pwmodalSubmit").click(function() {
 		console.log("비밀번호 변경 모달 내 변경 버튼");
-		
-		//비밀번호 정규식
-// 		$reg = /^[a-z0-9]*$/;
-		
-
-// 		if ($("#newPw").val() != $("#newPwRe").val()) {
-// 			alert("새 비밀번호와 새 비밀번호 확인값이 일치하지 않습니다");
-// 			console.log("새 비밀번호와 새 비밀번호 확인값이 일치하지 않습니다");
-// 			return false;
-// 		}
-
-// 		if (!$reg.test($("#newPw").val() || $("#newPw").val().length < 8 || $("#newPw").val().length > 15)) {
-// 			alert("비밀번호는 8 ~ 15자리 영어 소문자, 숫자 조합으로 설정해야합니다");
-// 			console.log("비밀번호는 8 ~ 15자리 영어 소문자, 숫자 조합으로 설정해야합니다");
-// 			return false;
-// 		}
-
-// 		if ($("#newPw").val() == $("#newPwRe").val()) {
-// 			alert("비밀번호가 변경되었습니다");
-// 			console.log("비밀번호가 변경되었습니다");
-// 			$('#setPwModal').modal("hide"); //닫기
-// 			return true;
-// 		}
-	
 		
 		$.ajax ({
 			url: "/member/mypage/updatepw"
@@ -183,7 +160,8 @@ function mysubmit(sub) {
 				<td><button id="updateNick">닉네임 변경</button>
 				<div class="divToggle" style="display:none; margin: 3px;">
 				<form action="/member/mypage" method="post" name="updateForm">
-					<input type="text" id="newNick" name="userNick" />
+					<input type="text" id="newNick" name="userNick" class="effect-5" />
+					<span class="focus-border"></span>
 					<button id="okNickBtn">변경</button>
 				</form>
 				</div>

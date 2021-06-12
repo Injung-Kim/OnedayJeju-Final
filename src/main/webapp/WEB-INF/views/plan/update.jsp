@@ -371,7 +371,7 @@ function emptyCheck(){
 <body>
 
 <div class="header">
-	<a href="/" class="logo"><img src="/resources/image/logo.png" ></a>
+	<a href="/" class="logo"><img src="/resources/image/logo2.png" alt="어느 날, 제주 로고" style="height: 80px;"></a>
 
 	<div class="subject">상세 일정 만들기</div>
 	<button id="deleteBtn" class="header_btn" type="button">삭제</button>
