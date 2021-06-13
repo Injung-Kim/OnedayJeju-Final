@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
 import jeju.dto.qna.Question_original;
@@ -102,10 +103,10 @@ public interface QnADao {
 	/**
 	 * 질문글에 등록된 파일 정보 가져오기
 	 * 
-	 * @param qstNo 요청받은 질문글 번호
+	 * @param file 요청받은 게시글 번호
 	 * @return 질문글 번호로 저장된 파일 정보
 	 */
-	public List<HashMap<String, Object>> selectFiles(int qstNo);
+	public List<HashMap<String, Object>> selectFiles(FileTB file);
 	/**
 	 * 질문글 관련 정보 삭제
 	 * 
@@ -139,6 +140,19 @@ public interface QnADao {
 	 * @param qstNo 상제 조회할 질문글 번호
 	 */
 	public void updateCntQuestion(int qstNo);
+	/**
+	 * 답변글 생성하기
+	 * 
+	 * 
+	 * @param answer 요청받은 답변글 정보
+	 */
+	public void insertAnswer(Answer answer);
+	/**
+	 * 답변글 삭제하기
+	 * 
+	 * @param ansNo 요청받은 답변글 번호
+	 */
+	public void deleteAnswer(FileTB ansNo);
 
 	
 }

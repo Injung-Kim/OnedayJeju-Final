@@ -6,9 +6,11 @@
 	<!-- 파일처리 ResultMap -->
 	<resultMap type="jeju.dto.qna.FileTB" id="FileTable">
 		<result column="qst_file_no" property="fileNo"/>
+		<result column="qst_no" property="qstNo"/>
 		<result column="qst_origin" property="origin"/>
 		<result column="qst_stored" property="stored"/>
 		<result column="ans_file_no" property="fileNo"/>
+		<result column="ans_no" property="ansNo"/>
 		<result column="ans_origin" property="origin"/>
 		<result column="ans_stored" property="stored"/>
 	</resultMap>
@@ -16,6 +18,12 @@
 	<resultMap type="jeju.dto.qna.Question" id="QuestionMap">
 		<id column="qst_no" property="qstNo"/>
 		<collection column="{qst_no=qst_no}" property="qtags" ofType="hashmap" select="selectQtag" >
+		</collection>
+	</resultMap>
+	<!-- 답변글 리스트 ResultMap  -->
+	<resultMap type="jeju.dto.qna.Answer" id="AnswerMap">
+		<id column="ans_no" property="ansNo"/>
+		<collection column="{ans_no=ans_no}" property="filenames" ofType="hashmap" select="selectFilenames">
 		</collection>
 	</resultMap>
 	
@@ -113,7 +121,7 @@
 		WHERE qst_no = ${qstNo}
 	</select>
 	<!-- 답변글 조회 -->
-	<select id="selectAnswers" resultType="hashmap" parameterType="hashmap">
+	<!-- <select id="selectAnswers" resultType="hashmap" parameterType="hashmap">
 		SELECT * FROM(
 		SELECT ROWNUM rnum, ANSWER.* FROM(
 		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_origin 
@@ -123,6 +131,19 @@
 		WHERE qst_no = ${qstNo}
 		ORDER BY ans_time DESC) ANSWER)
 		WHERE RNUM BETWEEN ${ansPaging.startNo} AND ${ansPaging.endNo}
+	</select> -->
+	<!-- 답변글 조회 -->
+	<select id="selectAnswers" resultMap="AnswerMap" parameterType="hashmap">
+		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_origin
+		FROM qa_answer A
+		INNER JOIN jejuuser U
+		on U.user_no = A.user_no
+		WHERE qst_no = #{qstNo}
+		ORDER BY ans_time DESC
+	</select>
+	<select id="selectFilenames" resultType="hashmap" parameterType="hashmap">
+		SELECT ans_origin, ans_stored FROM ans_file ANF
+		WHERE ANF.ans_no = #{ans_no}
 	</select>
 	<!-- 해시태그 검색 갯수 조회  -->
 	<select id="cntTags" parameterType="String" resultType="int">
@@ -146,8 +167,16 @@
 	</insert>
 	<!-- 파일명 추가하기 -->
 	<insert id="insertFiles" parameterType="jeju.dto.qna.FileTB">
+		<choose>
+		<when test="#{qstNo} != null and #{ansNo} == null">
 	 	INSERT INTO qst_file(qst_file_no, qst_no, qst_origin, qst_stored) VALUES
 	 	(qst_file_no_seq.nextval, #{qstNo}, #{origin}, #{stored})
+	 	</when>
+	 	<when test="#{ansNo} != null">
+	 	INSERT INTO ans_file(ans_file_no, ans_no, ans_origin, ans_stored) VALUES	 	
+	 	(ans_file_no_seq.nextval, #{ansNo}, #{origin}, #{stored})
+	 	</when>
+	 	</choose>
 	</insert>
 	<!-- 질문글에 태그 추가하기  -->
 	<insert id="insertTagIntoQustion" parameterType="hashmap">
@@ -155,8 +184,15 @@
 		VALUES (quta_no_seq.nextval, #{qstNo}, #{tagNo})
 	</insert>
 	<!-- 질문글 번호별 파일 정보 조회하기  -->
-	<select id="selectFiles" resultType="hashmap" parameterType="int">
+	<select id="selectFiles" resultType="hashmap" parameterType="jeju.dto.qna.FileTB">
+		<choose>
+		<when test="#{qstNo} != null">
 		SELECT * FROM qst_file WHERE qst_no = #{qstNo}
+		</when>
+		<when test="#{ansNo} != null">
+		SELECT * FROM ans_file WHERE ans_no = #{ansNo}
+		</when>
+		</choose>
 	</select>
 	<!-- 질문글 삭제하기 -->
 	<delete id="deleteQuestion" parameterType="int">
@@ -176,5 +212,15 @@
 	<!-- 태그번호 삭제하기 -->
 	<delete id="deleteTags" parameterType="int">
 		DELETE FROM question_tag WHERE qst_no = #{qstNo}
+	</delete>
+	<!-- 답변글 생성하기 -->
+	<insert id="insertAnswer" parameterType="jeju.dto.qna.Answer">
+	<selectKey resultType="int" keyProperty="ansNo" order="BEFORE">SELECT ans_no_seq.nextval FROM dual</selectKey>
+		INSERT INTO qa_answer(ans_no, qst_no, user_no, ans_content)
+		VALUES(#{ansNo}, #{qstNo}, #{userNo}, #{ansContent})
+	</insert>
+	<!-- 답변글 삭제하기-->
+	<delete id="deleteAnswer" parameterType="jeju.dto.qna.FileTB">
+		DELETE FROM qa_answer WHERE ans_no = #{ansNo}
 	</delete>
 </mapper>

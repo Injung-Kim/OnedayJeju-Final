@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.web.multipart.MultipartFile;
 
+import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
 import jeju.dto.qna.Question_original;
@@ -108,9 +111,9 @@ public interface QnAService {
 	 * 변경전 저장되어있는 파일 관리하기
 	 * 첨부파일 정보가 변경될 경우(삭제할 경우) 경로에 저장된 파일까지 모두 삭제
 	 * 
-	 * @param qstNo 작성된 게시글 번호
+	 * @param file 작성된 게시글 번호
 	 */
-	public void removeFiles(int qstNo);
+	public void removeFiles(FileTB file);
 	/**
 	 * 질문글 삭제하기
 	 * 등록된 첨부파일, 태그번호, 답변글, 질문글 모두 삭제
@@ -133,6 +136,23 @@ public interface QnAService {
 	 * @param tagNo 변경한 태그번호 
 	 */
 	public void updateQuestion(Question_original question, List<FileTB> filetable, int[] tagNo);
+	/**
+	 * 답변글 추가하기
+	 * 질문글 상세보기에서 답변글 생성 폼을 통해 답변글 값 요청받기
+	 * 로그인을 한 유저에게서 작성자(유저번호) 전달받기 
+	 * 
+	 * @param list 업로드한 파일리스트
+	 * @param session 로그인 정보
+	 * @param answer 요청받아 dto 저장한 답변글 정보
+	 */
+	public void createAnswer(List<FileTB> list, HttpSession session, Answer answer);
+	/**
+	 * 게시글 삭제하기
+	 * 답변글 번호를 요청받아 해당 답변글 삭제
+	 * 
+	 * @param ansNo 요청받아 dto 저장한 답변글 번호
+	 */
+	public void deleteAnswer(FileTB ansNo);
 	
 
 }
