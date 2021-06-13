@@ -23,19 +23,21 @@ $(document).ready(function() {
 	
 	<div class="rel write_search_box">
 	
-		<div class="rel write_box">
+	<c:if test="${grade < 2 }">
+		<div class="abs write_box">
 			<button class="write_btn box_shadow bor_rad_ten" onclick="location.href='/notice/write'">글 작성</button>
 		</div>
+	</c:if>
 	
-		<div class="rel search_box">
+		<div class="abs search_box">
 			<select class="abs bor_rad_ten box_shadow" id="condition" name="condition">
-				<option value="title">제목</option>
-				<option value="content">내용</option>
-				<option value="title_and_content">제목+내용</option>
+				<option value="title" <c:if test="${paging.condition eq 'title' }">selected</c:if>>제목</option>
+				<option value="content" <c:if test="${paging.condition eq 'content' }">selected</c:if>>내용</option>
+				<option value="title_and_content" <c:if test="${paging.condition eq 'title_and_content' }">selected</c:if>>제목+내용</option>
 			</select>
 	
-			<input class="abs bor_rad_ten box_shadow" type="text" id="search" name="search" />
-			<button class="abs search_btn box_shadow bor_rad_ten" id="btnSearch">검색</button>
+			<input class="abs bor_rad_ten box_shadow" type="text" id="search" name="search" value="${paging.search }" />
+			<button class="abs search_btn box_shadow bor_rad_ten" id="btnSearch" >검색</button>
 		</div>	
 	
 	
@@ -48,7 +50,10 @@ $(document).ready(function() {
 		
 			<div class="title_box">
 				<a href="/notice/view?ntNo=${notice.ntNo }">${notice.ntTitle }</a>
-				<span>#</span>
+				
+				<c:if test="${notice.fileCnt > 0 }">
+					<i class="fas fa-paperclip"></i>
+				</c:if>
 			</div>
 		
 			<div class="info">

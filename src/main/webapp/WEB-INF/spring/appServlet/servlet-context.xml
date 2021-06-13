@@ -54,6 +54,14 @@
 			<!-- 인터셉터 클래스 지정 -->
 			<beans:bean class="jeju.interceptor.PlanInterceptor" />
 		</interceptor>
+		
+		<interceptor>
+			<!-- 인터셉터가 적용될 URL -->
+			<mapping path="/notice/**" />
+
+			<!-- 인터셉터 클래스 지정 -->
+			<beans:bean class="jeju.interceptor.NoticeInterceptor" />
+		</interceptor>
 	</interceptors>
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->

@@ -48,11 +48,8 @@
 			</array>
 		</property>
 		
-		<!--snakeCase to camelCase 자동변환-->
-		<property name="configuration">
-			<bean class="org.apache.ibatis.session.Configuration">
-				<property name="mapUnderscoreToCamelCase" value="true"/>
-			</bean>
+		<property name="configLocation">
+			<value>classpath:/mybatis-config.xml</value>
 		</property>
 	</bean>
 

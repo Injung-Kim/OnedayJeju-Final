@@ -12,14 +12,47 @@
 		<result column="nt_title" property="ntTitle"/>
 		<result column="nt_content" property="ntContent"/>
 		<result column="nt_div" property="ntDiv"/>
+		<result column="nt_ctime" property="ntCtime"/>
 		<result column="nt_utime" property="ntUtime"/>
+		
+		<result column="file_cnt" property="fileCnt"/>
 	</resultMap>
 	
+	<resultMap type="jeju.dto.NoticeFile" id="NoticeFile">
+		<id column="ntf_no" property="ntfNo"/>
+		<result column="nt_no" property="ntNo"/>
+		<result column="ntf_ogname" property="ntfOgname"/>
+		<result column="ntf_stname" property="ntfStname"/>
+		<result column="ntf_ctime" property="ntfCtime"/>
+	</resultMap>
+	
+	<resultMap type="jeju.dto.NtcReport" id="NtcReport">
+		<id column="ntc_no" property="ntcNo"/>
+		<result column="user_id" property="userId"/>
+		<result column="ntcr_content" property="ntcrContent"/>
+	</resultMap>
+	
+	<resultMap type="jeju.dto.NoticeComment" id="NoticeComment">
+		<id column="ntc_no" property="ntcNo"/>
+		<result column="nt_no" property="ntNo"/>
+		<result column="ntc_content" property="ntcContent"/>
+		<result column="ntc_id" property="ntcId"/>
+		<result column="ntc_delete" property="ntcDelete"/>
+		<result column="ntc_ctime" property="ntcCtime"/>
+		<result column="ntc_utime" property="ntcUtime"/>
+
+		<result column="like_cnt" property="likeCnt"/>
+		<result column="dislike_cnt" property="disLikeCnt"/>
+		<result column="report_cnt" property="reportCnt"/>
+	</resultMap>
+	
+	
 	<sql id="selectNotice">
-		SELECT 
-			nt_no, nt_title, nt_content, nt_div
-			, nt_utime, hit
-		FROM notice
+			SELECT 
+				nt_no, nt_title, nt_content, nt_div
+				, nt_ctime , nt_utime, hit
+				, (SELECT Count(*) FROM NoticeFile WHERE nt_no = notice.nt_no) file_cnt
+            FROM notice
 	</sql>
 
 	<select id="selectCntAll" resultType="int">
@@ -63,5 +96,190 @@
 		SELECT * FROM notice
 		WHERE nt_no = #{ntNo }
 	</select>
+	
+	<insert id="insertNotice" parameterType="jeju.dto.Notice">
+	
+		<selectKey order="BEFORE" resultType="int" keyProperty="ntNo">
+			SELECT nt_no_seq.nextval FROM dual
+		</selectKey>
+				
+		INSERT INTO Notice ( nt_no, user_no, nt_title, nt_content, nt_div)
+		VALUES ( #{ntNo }, #{userNo } , #{ntTitle }, #{ntContent }, #{ntDiv } )
+	</insert>
+	
+	<insert id="insertNoticeFile" parameterType="jeju.dto.NoticeFile">
+		INSERT INTO NoticeFile ( ntf_no, nt_no, ntf_ogname, ntf_stname )
+		VALUES ( ntf_no_seq.nextval , #{ntNo }, #{ntfOgname }, #{ntfStname } )
+	</insert>
+	
+	<select id="selectNtfByNtNo" resultMap="NoticeFile" parameterType="jeju.dto.Notice">
+		SELECT * FROM noticeFile
+		WHERE nt_no = #{ntNo }
+		ORDER BY nt_no
+	</select>
+	
+	<select id="selectNtfByNtfNo" resultMap="NoticeFile" parameterType="jeju.dto.NoticeFile" >
+		SELECT * FROM noticeFile
+		WHERE ntf_no = #{ntfNo }
+	</select>
+	
+	<delete id="deleteNtfFile" parameterType="jeju.dto.NoticeFile">
+		DELETE NoticeFile
+		WHERE ntf_no = #{ntfNo }
+	</delete>
+	
+	<select id="countNtf" resultType="int" parameterType="jeju.dto.NoticeFile" >
+		SELECT count(*) FROM NoticeFile
+		WHERE ntf_no = #{ntfNo }
+	</select>
+	
+	<update id="updateNotice" parameterType="jeju.dto.Notice">
+		UPDATE Notice
+		SET nt_title = #{ntTitle }, nt_content = #{ntContent }, nt_div = #{ntDiv }, nt_utime = SYSDATE
+		WHERE nt_no = #{ntNo }
+	</update>
+	
+	<delete id="deletNotice" parameterType="jeju.dto.Notice">
+		DELETE Notice
+		WHERE nt_no = #{ntNo }
+	</delete>
+	
+	<insert id="insertParentComment" parameterType="jeju.dto.NoticeComment">
+		INSERT INTO NoticeComment ( ntc_no, nt_no, ntc_id, ntc_content  )
+		VALUES ( ntc_no_seq.nextval, #{ntNo }, #{ntcId }, #{ntcContent } )
+	</insert>
+	
+	<select id="selectAllNtc" resultMap="NoticeComment" parameterType="jeju.util.Paging">
+		SELECT * FROM (
+			SELECT rownum rnum, N.* FROM (
+                SELECT
+                	ntc_no, nt_no, ntc_content
+                	, ntc_id, ntc_delete, ntc_ctime, ntc_utime  
+					, (SELECT Count(*) FROM ntcLike WHERE ntc_no = NoticeComment.ntc_no) like_cnt
+					, (SELECT Count(*) FROM ntcDisLike WHERE ntc_no = NoticeComment.ntc_no) dislike_cnt
+                FROM NoticeComment
+                WHERE nt_no = #{ntNo }
+                ORDER BY ntc_no DESC
+			) N
+		) R
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	<update id="updateNtcDeleteY" parameterType="jeju.dto.NoticeComment">
+		UPDATE NoticeComment
+		SET ntc_delete = 'yes'
+		WHERE ntc_no = #{ntcNo }
+	</update>
+	
+	<update id="updateNtcDeleteN" parameterType="jeju.dto.NoticeComment">
+		UPDATE NoticeComment
+		SET ntc_delete = 'no'
+		WHERE ntc_no = #{ntcNo }
+	</update>
+	
+	<select id="selectNtc" resultMap="NoticeComment" parameterType="jeju.dto.NoticeComment">
+		SELECT * FROM NoticeComment
+		WHERE ntc_no = #{ntcNo }
+	</select>
+	
+	<update id="updateNtc" parameterType="jeju.dto.NoticeComment">
+		UPDATE NoticeComment
+		SET ntc_content = #{ntcContent } , ntc_utime = SYSDATE
+		WHERE ntc_no = #{ntcNo }
+	</update>
+	
+	<select id="selectCntNtcLike" resultType="int" parameterType="jeju.dto.NtcLike">
+		SELECT Count(*) FROM ntcLike
+		WHERE user_id = #{userId }
+			AND ntc_no = #{ntcNo }
+	</select>
 
+	<select id="selectCntNtcDisLike" resultType="int" parameterType="jeju.dto.NtcDisLike">
+		SELECT Count(*) FROM ntcDisLike
+		WHERE user_id = #{userId }
+			AND ntc_no = #{ntcNo }
+	</select>
+	
+	<delete id="deleteNtcLike" parameterType="jeju.dto.NtcLike">
+		DELETE ntcLike
+		WHERE user_id = #{userId }
+			AND ntc_no = #{ntcNo }
+	</delete>
+	
+	<insert id="insertNtcLike" parameterType="jeju.dto.NtcLike">
+		INSERT INTO ntcLike (user_id, ntc_no) 
+		VALUES ( #{userId }, #{ntcNo } )
+	</insert>
+
+	<delete id="deleteNtcDisLike" parameterType="jeju.dto.NtcDisLike">
+		DELETE ntcDisLike
+		WHERE user_id = #{userId }
+			AND ntc_no = #{ntcNo }
+	</delete>
+	
+	<insert id="insertNtcDisLike" parameterType="jeju.dto.NtcDisLike">
+		INSERT INTO ntcDisLike (user_id, ntc_no) 
+		VALUES ( #{userId }, #{ntcNo } )
+	</insert>
+	
+	<select id="selectTotalLike" resultType="int" parameterType="jeju.dto.NtcLike">
+		SELECT Count(*) FROM ntcLike
+		WHERE ntc_no = #{ntcNo }
+	</select>
+
+	<select id="selectTotalDisLike" resultType="int" parameterType="jeju.dto.NtcDisLike">
+		SELECT Count(*) FROM ntcDisLike
+		WHERE ntc_no = #{ntcNo }
+	</select>
+	
+	<insert id="insertNtcReport" parameterType="jeju.dto.NtcReport">
+		INSERT INTO NtcReport ( user_id, ntc_no, ntcr_content )
+		VALUES ( #{userId }, #{ntcNo }, #{ntcrContent } )
+	</insert>
+	
+	<select id="NtcReportCnt" resultType="int" parameterType="jeju.dto.NtcReport" >
+		SELECT Count(*) FROM NtcReport
+		WHERE user_id = #{userId }
+			AND ntc_no = #{ntcNo }
+	</select>
+	
+	<select id="selectNtcCntAll" resultType="int" parameterType="jeju.util.Paging">
+		SELECT count(*) FROM NoticeComment
+		WHERE nt_no = #{ntNo }
+	</select>
+	
+	<select id="selectAllComment" resultMap="NoticeComment">
+		SELECT
+			ntc_no, nt_no, ntc_content
+			, ntc_id, ntc_delete, ntc_ctime, ntc_utime  
+			, (SELECT Count(*) FROM ntcLike WHERE ntc_no = NoticeComment.ntc_no) like_cnt
+			, (SELECT Count(*) FROM ntcDisLike WHERE ntc_no = NoticeComment.ntc_no) dislike_cnt
+			, (SELECT Count(*) FROM ntcReport WHERE ntc_no = NoticeComment.ntc_no) report_cnt
+		FROM NoticeComment
+		ORDER BY ntc_no DESC
+	</select>
+	
+	<select id="selectCntAllComment" resultType="int">
+		SELECT Count(*) FROM NoticeComment
+	</select>
+	
+	<select id="selectCntByNtcNo" resultType="int" parameterType="jeju.dto.NoticeComment">
+		SELECT Count(*) FROM NoticeComment
+		WHERE ntc_no = #{ntcNo }
+	</select>
+	
+	<delete id="deleteNtc" parameterType="jeju.dto.NoticeComment">
+		DELETE NoticeComment
+		WHERE ntc_no = #{ntcNo }
+	</delete>
+	
+	<select id="selectAllNtcReport" resultMap="NtcReport">
+		SELECT * FROM NtcReport
+	</select>
+	
+	<select id="selectCntNtcReport" resultType="int">
+		SELECT Count(*) FROM NtcReport
+	</select>
+
+	
 </mapper>
