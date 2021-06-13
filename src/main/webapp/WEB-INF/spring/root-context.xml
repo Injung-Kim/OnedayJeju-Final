@@ -53,17 +53,33 @@
 		</property>
 	</bean>
 
-
 	
 	<!-- 마이바티스 인터페이스 설정(DAO설정) -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="jeju.dao" />
 	</bean>
 	
-	
-	<!-- 트랜잭션 매니저를 스프링 빈으로 등록하기 -->
+	<!-- 이메일 인증 관련 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="onedayjeju@gmail.com" />
+		<property name="password" value="jejutest" />
+		<property name="defaultEncoding" value="utf-8"></property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+  
+	<!-- 트랜잭션 매니저 등록 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"/>
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
 </beans>
