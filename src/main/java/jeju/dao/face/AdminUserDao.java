@@ -25,16 +25,23 @@ public interface AdminUserDao {
 	/**
 	 * userNo를 이용한 사용자정보 조회
 	 * 
-	 * @param userNo - 선택된 사용자아이디의 사용자번호
+	 * @param user - userNo를 가진 객체
 	 * @return 조회된 사용자정보
 	 */
-	public JejuUser selectInfoByUserNo(int userNo);
+	public JejuUser selectInfo(JejuUser userInfo);
 
 	/**
-	 * 사용자정보 삭제
+	 * 사용자정보 수정
 	 * 
-	 * @param userNo - 삭제할 사용자의 번호
+	 * @param user - 수정할 사용자정보
 	 */
-	public void delete(int userNo);
+	public void update(JejuUser user);
+	
+	/**
+	 * 사용자계정 삭제
+	 * 
+	 * @param user - 삭제할 사용자의 사용자번호 객체
+	 */
+	public void delete(JejuUser user);
 	
 }

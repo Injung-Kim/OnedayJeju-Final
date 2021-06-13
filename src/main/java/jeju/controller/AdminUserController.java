@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import jeju.dto.JejuUser;
 import jeju.service.face.AdminUserService;
@@ -24,31 +24,31 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/list")
 	public void getList(Paging inData, Model model) {
-//		logger.info("/admin/user/list 접속");
-//		logger.info("파라미터 : {}", inData);
+		logger.info("/admin/user/list [GET]");
 		
 		//페이징 계산
 		Paging paging = adminUserService.getPaging(inData);
-		paging.setSearch(inData.getSearch());
-//	logger.info("페이징: {}", paging);
+//		paging.setSearch(inData.getSearch());
+//		logger.info("페이징: {}", paging);
 		
-		//회원 목록 조회
+		//사용자 목록 조회
 		List<JejuUser> userList = adminUserService.getList(paging);
-		for(int i=0; i<userList.size(); i++) {
+		for(int i=0; i < userList.size(); i++) {
 //			logger.info(userList.get(i).toString());
 		}
 		
 		//모델값 전달
-		model.addAttribute("userList", userList);
+		model.addAttribute("list", userList);
 		model.addAttribute("paging", paging);
 	}
 	
 	@RequestMapping(value = "/info")
-	public String getInfo(@RequestParam int userNo, Model model) {
-//		logger.info("/admin/user/info userNo : {}", userNo);
+	public String getInfo(JejuUser userInfo, Model model) {
+		logger.info("/admin/user/info [GET]");
+		logger.info("userNo : {}", userInfo.toString());
 		
-		//사용자번호로 사용자정보 조회 
-		JejuUser userInfo = adminUserService.getInfo(userNo);
+		//사용자정보 조회
+		userInfo = adminUserService.getInfo(userInfo);
 //		logger.info("사용자정보 : {}", userInfo.toString());
 		
 		//모델값 전달
@@ -57,12 +57,39 @@ public class AdminUserController {
 		return "admin/user/info";
 	}
 	
-	@RequestMapping(value = "/delete")
-	public String delete(@RequestParam int userNo) {
-		logger.info("/admin/user/delete");
+	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+	public String modify(JejuUser user, Model model) {
+		logger.info("/admin/user/modify [GET]");
+		logger.info("userNo : {}", user.toString());
+		
+		//조회된 사용자정보
+		user = adminUserService.getInfo(user);
+		logger.info("사용자정보 : {}", user.toString());
+		
+		//사용자정보 전달
+		model.addAttribute("user", user);
+		
+		return "admin/user/modify";
+	}
+	
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String modifyProcess(JejuUser user) {
+		logger.info("/admin/user/modify [POST]");
+		logger.info("사용자정보 수정 : {}", user);
+		
+		//사용자정보 수정
+		adminUserService.modify(user);
+		
+		return "redirect:/admin/user/info?userNo="+user.getUserNo();
+	}
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String delete(JejuUser user) {
+		logger.info("/admin/user/delete [GET]");
 		
 		//사용자계정 삭제
-		adminUserService.delete(userNo);
+		adminUserService.delete(user);
+		
 		return "redirect:/admin/user/list";
 	}
 	

@@ -7,8 +7,8 @@
   
 <mapper namespace="jeju.dao.face.AdminUserDao">
 	
-	<resultMap type="jeju.dto.JejuUser" id="User">
-		<result column="user_no" property="userNo"/>
+	<resultMap type="jeju.dto.JejuUser" id="JejuUser">
+		<id column="user_no" property="userNo"/>
 		<result column="user_id" property="userId"/>
 		<result column="user_pw" property="userPw"/>
 		<result column="user_name" property="userName"/>
@@ -30,7 +30,7 @@
 		SELECT COUNT(*) FROM JejuUser
 	</select>
 	
-	<select id="selectPageList" resultMap="User" parameterType="jeju.util.Paging">
+	<select id="selectPageList" resultMap="JejuUser" parameterType="jeju.util.Paging">
 		SELECT * FROM (
 			SELECT rownum rnum, J.* FROM (
 				SELECT user_no, user_id, user_name, user_nick, user_email, user_join_date, user_mail_auth, user_grade
@@ -40,13 +40,19 @@
 		WHERE rnum BETWEEN #{startNo} AND #{endNo}
 	</select>
 	
-	<select id="selectInfoByUserNo" resultMap="User" parameterType="int" >
-		SELECT user_id, user_name, user_nick, user_birth_date, user_email, user_phone, user_address, user_address_detail
-		FROM JejuUser
-		WHERE user_no = #{userNo}
+	<select id="selectInfo" resultMap="JejuUser" parameterType="jeju.dto.JejuUser" >
+		SELECT user_no, user_id, user_name, user_nick, user_birth_date, user_email, user_phone, user_address, user_address_detail
+		FROM JejuUser WHERE user_no = #{userNo}
 	</select>
 	
-	<delete id="delete" parameterType="int">
+	<update id="update" parameterType="jeju.dto.JejuUser">
+		UPDATE JejuUser 
+		SET user_id = #{userId}, user_pw = #{userPw}, user_name = #{userName}, user_nick = #{userNick}, user_birth_date = #{userBirthDate}
+			,user_email = #{userEmail}, user_phone = #{userPhone}, user_address = #{userAddress}, user_address_detail = #{userAddressDetail}
+		WHERE user_no = #{userNo} 
+	</update>
+	
+	<delete id="delete" parameterType="jeju.dto.JejuUser">
 		DELETE JejuUser WHERE user_no = #{userNo}
 	</delete>
 

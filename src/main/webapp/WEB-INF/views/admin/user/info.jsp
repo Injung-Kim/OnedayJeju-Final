@@ -9,74 +9,75 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/adminUser.css" />
 
 <script type="text/javascript">
-function del(userNo) {
-	var result = confirm("계정을 삭제하시겠습니까? 삭제된 계정은 복원할 수 없습니다.");
-	if(result) {
-		location.href='delete?userNo='+${info.userNo};
-	}
-}
-
-/* $(document).ready(function() {
-	
+$(document).ready(function() {
+	//목록 버튼 클릭
+	$("#btnList").click(function() {
+		location.href='list';
+	})
+	//수정 버튼 클릭
+	$("#btnModify").click(function() {
+		location.href='modify?userNo='+${info.userNo}; //수정페이지로 이동
+	})
 	//삭제 버튼 클릭
 	$("#btnDelete").click(function() {
 		var result = confirm('계정을 삭제하시겠습니까? 삭제된 계정은 복원할 수 없습니다.');
 		if(result){
-			location.href='/admin/user/delete?userNo='+${userNo}; //확인
+			location.href='delete?userNo='+${info.userNo}; //확인버튼 클릭하면 삭제
 		} else { } //취소
-	});
-}
- */
+	})
+})
 </script>
 
 <div class="container">
 	<div class="pageHeader">
-		<p class="pull-left">회원관리 > <span id="page">회원정보</span></p>
+		<span class="pull-left">회원관리 > <span id="page">회원정보</span></span>
+		<hr>
 	</div><!-- End pageHeader -->
 	
 	<div class="pageContent">
 		<table id="tbInfo" class="table table-bordered table-hover">
 			<tr>
-				<th>아이디</th>
-				<td>${info.userId}</td>
+				<th>번호</th>
+				<td><input type="text" class="form-control" id="userNo" name="userNo" value="${info.userNo}" readonly></td>
 			</tr>
 			<tr>
-				<th>비밀번호</th>
-				<td><input type="password" id="userPw" name="userPw" placeholder="비밀번호는 변경만 가능" readonly><small>&ensp;8~15자리의 영문 소문자, 숫자 조합</small></td>
+				<th>아이디</th>
+				<td><input type="text" class="form-control" id="userId" name="userId" value="${info.userId}" readonly> </td>
 			</tr>
 			<tr>
 				<th>이름</th>
-				<td>${info.userName}</td>
+				<td><input type="text" class="form-control" id="userName" name="userName" value="${info.userName}" readonly></td>
 			</tr>
 			<tr>
 				<th>닉네임</th>
-				<td>${info.userNick}</td>
+				<td><input type="text" class="form-control" id="userNick" name="userNick" value="${info.userNick}" readonly></td>
 			</tr>
 			<tr>
 				<th>생년월일</th>
-				<td><fmt:formatDate value="${info.userBirthDate}" pattern="yyyy-MM-dd"/></td>
+				<td><input type="date" class="form-control" id="userBirhDate" name="userBirthDate" value="<fmt:formatDate value="${info.userBirthDate}" pattern="yyyy-MM-dd"/>" readonly></td>
 			</tr>
 			<tr>
 				<th>이메일</th>
-				<td>${info.userEmail}</td>
+				<td><input type="email" class="form-control" id="userEmail" name="userEmail" value="${info.userEmail}" readonly></td>
 			</tr>
 			<tr>
 				<th>휴대전화번호</th>
-				<td>${info.userPhone}</td>
+				<td><input type="tel" class="form-control" id="userPhone" name="userPhone" value="${info.userPhone}" readonly></td>
 			</tr>
 			<tr>
 				<th>주소</th>
-				<td>${info.userAddress}${info.userAddressDetail}</td>
+				<td>
+					<input type="text" class="form-control" id="userAddress" name="userAddress" value="${info.userAddress}" readonly>
+					<input type="text" class="form-control" id="userAddressDetail" name="userAddressDetail" value="${info.userAddressDetail}" readonly>
+				</td>
 			</tr>
 		</table>
 	</div><!-- End pageContent -->
 	
-	<div id="btn" class="text-center">
-		<button type="button" id="btnBack" onclick="location.href='/admin/user/list'">이전</button>
-		<c:if test="${uno ne info.userNo}">
-			<button type="button" id="btnModify" onclick="location.href='/admin/user/modify?userNo=${info.userNo}'">수정</button>
-			<button type="button" id="btnDelete" onclick="del(${info.userNo})">삭제</button>
-		</c:if>
+	<div align="center">
+		<button type="button" class="btn" id="btnList">이전</button>
+		<button type="button" class="btn" id="btnModify">수정</button>
+		<button type="button" class="btn" id="btnDelete">삭제</button>
 	</div><!-- End btn -->
 
 </div><!-- End container -->

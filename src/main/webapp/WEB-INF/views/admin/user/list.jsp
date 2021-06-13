@@ -10,7 +10,6 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-
 	//검색버튼 클릭
 	$("#btnSearch").click(function() {
 		location.href="/admin/user/list?search="+$("#search").val();
@@ -20,30 +19,33 @@ $(document).ready(function() {
 	$("#btnCreate").click(function() {
 		location.href="/admin/user/create";
 	});
-	
 })
 </script>
 
 <div class="container">
 	<div class="pageHeader">
-		<p class="pull-left">회원관리 > <span id="page">전체회원</span></p>
+		<span class="pull-left">회원관리 > <span id="page">전체회원</span></span>
+	<hr>
 	</div><!-- End pageHeader -->
 	
 	<div class="pageContent">
-		<%-- 관리자계정 생성 버튼 --%>
-		<div class="form-inline pull-right">
-			<select class="form-control">
-				<option value="">선택</option>
-			</select>
-			<input type="text" id="search" class="form-control" name="search" value="${param.search}">
-			<button id="btnSearch" class="btn">검색</button>
-		</div>
-		
 		<%-- 총 회원 수 --%>
 		<span class="pull left">( 총 회원 수 : ${paging.totalCount }명 )</span>
-		<div class="clearfix"></div>
-		<br>
 		
+		<%-- 회원 검색 --%>
+		<div class="form-inline pull-right">
+			<select class="form-control">
+				<option value="#">선택</option>
+				<option value="#">아이디</option>
+				<option value="#">이름</option>
+				<option value="#">닉네임</option>
+				<option value="#">이메일</option>
+			</select>
+			<input type="text" id="search" class="form-control" name="search" value="${param.search}">
+			<button type="button" id="btnSearch" class="btn">검색</button>
+		</div><!-- End search -->
+		<br><br>
+				
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -59,16 +61,16 @@ $(document).ready(function() {
 			</thead>
 		
 			<tbody>
-			<c:forEach items="${userList}" var="jejuUser">
+			<c:forEach items="${list}" var="list">
 				<tr>
-					<td>${jejuUser.userNo}</td>
-					<td><a href="/admin/user/info?userNo=${jejuUser.userNo}">${jejuUser.userId}</a></td>
-					<td>${jejuUser.userName}</td>
-					<td>${jejuUser.userNick}</td>
-					<td>${jejuUser.userEmail}</td>
-					<td><fmt:formatDate value="${jejuUser.userJoinDate}" pattern="yyyy-MM-dd"/></td>
-					<td>${jejuUser.userMailAuth}</td>
-					<td>${jejuUser.userGrade}</td>
+					<td>${list.userNo}</td>
+					<td><a href="/admin/user/info?userNo=${list.userNo}">${list.userId}</a></td>
+					<td>${list.userName}</td>
+					<td>${list.userNick}</td>
+					<td>${list.userEmail}</td>
+					<td><fmt:formatDate value="${list.userJoinDate}" pattern="yyyy-MM-dd"/></td>
+					<td>${list.userMailAuth}</td>
+					<td>${list.userGrade}</td>
 				</tr>
 			</c:forEach>	
 			</tbody>
@@ -79,12 +81,12 @@ $(document).ready(function() {
 	<%-- 관리자계정 생성 버튼 --%>
 	<c:if test="${grade eq '0'}">
 		<div class="pull-right">
-			<button class="btn" id="btnCreate">관리자계정 생성</button>
+			<button type="button" class="btn" id="btnCreate">관리자계정 생성</button>
 		</div>
 	</c:if>
 	
 	<%-- 페이징 JSP --%>
-	<jsp:include page="/WEB-INF/views/util/adminUserPaging.jsp" />
+<%-- 	<jsp:include page="/WEB-INF/views/util/adminUserPaging.jsp" /> --%>
 
 </div><!-- End container -->
 

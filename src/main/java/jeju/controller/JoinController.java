@@ -29,7 +29,7 @@ public class JoinController {
 	
 	@RequestMapping(value = "/joinInfo", method = RequestMethod.GET)	
 	public void join() {
-//			logger.info("/user/joinInfo [GET]");
+//		logger.info("/user/joinInfo [GET]");
 	}
 	
 	@RequestMapping(value = "/joinInfo", method = RequestMethod.POST)
