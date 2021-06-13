@@ -18,23 +18,49 @@ $(document).ready(function(){
 	
 	$("#ntTitle").focus();
 	
+	
+	
 	//파일네임 추출
 	$("#file").change(function(e){
 		
-		$(".upload_name").remove();
 
+		$(".update_upload_name").remove();
+
+		var upLoadFileCnt = $(".update_download_name").length;
+		
 		var files = e.target.files;
 		
 		//파일 갯수 제한
-		if( 3 < files.length  ) {
-			alert( "최대 업로드 갯수는 3개입니다");
+		if( $(".update_download_name").length == 3) {
 			
+			alert( "최대 업로드 갯수는 3개입니다");
 			return false;
+			
+		}
+		if( $(".update_download_name").length == 2) {
+
+			if( 1 < files.length  ) {
+			alert( "최대 업로드 갯수는 3개입니다");
+			return false;
+				
+			}
+			
+			
+		}
+		if( $(".update_download_name").length == 1) {
+
+			if( 2 < files.length  ) {
+			alert( "최대 업로드 갯수는 3개입니다");
+			return false;
+				
+			}
+			
 		}
 		
 		
+		
 		//생성된 파일 name 삭제
-		$(".upload-name").remove();
+		$(".update_upload_name").remove();
 		
 		//파일객체확인
 // 		console.log( e )
@@ -51,7 +77,7 @@ $(document).ready(function(){
 		for(var i=0; i<files.length; i++) {
 			
 			$("<input>").attr({
-				class : "upload_name"
+				class : "update_upload_name"
 				, type : "text"
 				, readonly : "readonly"
 			}).appendTo($(".file_box")).val( i+1 + ". " + files[i].name );
@@ -91,17 +117,45 @@ $(document).ready(function(){
 
 }); 
 
+	function uploadDel( ntfNo ) {
+			
+		if( confirm("첨부파일을 삭제 하시겠습니까?") ) {
+		
+			$.ajax({
+				type: "post"
+				,url: "/notice/fileDelete"
+				,dataType: "json"
+				,data: {ntfNo: ntfNo}
+				, success: function( res ) {
+						
+					if( res ) {
+					$("[download-del='"+ntfNo+"']").remove();
+					} else {
+						alert("첨부파일이 삭제되지 않았습니다.")
+					}
+				}
+				, error: function() {
+// 					console.log("에이잭스 실패")
+				}			
+				
+			})
+			
+		} // if( confirm("첨부파일을 삭제 하시겠습니까?") )
+		
+	}
+
 </script>
 
 <div class="container">
 
-	<form action="/notice/write" method="post" enctype="multipart/form-data">
+	<form action="/notice/update" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="ntNo" value="${notice.ntNo }" />
 	
 		<div class="view_box bor_rad_five">
 		
 			<div class="top">
 				<h3 class="sub">
-					<input class="box_shadow" type="text" id="ntTitle" name="ntTitle" placeholder="제목을 작성해주세요"/>
+					<input class="box_shadow" type="text" id="ntTitle" name="ntTitle" placeholder="제목을 작성해주세요" value="${notice.ntTitle }"/>
 				</h3>
 			</div>
 		
@@ -114,30 +168,41 @@ $(document).ready(function(){
 						<li>|</li>
 						<li>
 							<select class="box_shadow" id="ntDiv" name="ntDiv">
-								<option value="관리자">관리자</option>
-								<option value="여행일정">여행일정</option>
-								<option value="여행경비">여행경비</option>
-								<option value="여행경비">커뮤니티</option>
+								<option value="관리자" <c:if test="${notice.ntDiv eq '관리자' }">selected</c:if> >관리자</option>
+								<option value="여행일정" <c:if test="${notice.ntDiv eq '여행일정' }">selected</c:if> >여행일정</option>
+								<option value="여행경비" <c:if test="${notice.ntDiv eq '여행경비' }">selected</c:if> >여행경비</option>
+								<option value="여행경비" <c:if test="${notice.ntDiv eq '커뮤니티' }">selected</c:if> >커뮤니티</option>
 							</select>
 						</li>
-						<li>작성일</li>
+						<li>수정일</li>
 						<li>|</li>
 						<li><fmt:formatDate value="${now }" pattern="yy-MM-dd"/></li>
 					</ul>
 			</div>
 			
-			<div class="con"><textarea rows="10" style="width: 100%" id="ntContent" name="ntContent"></textarea></div>
+			<div class="con"><textarea rows="10" style="width: 100%" id="ntContent" name="ntContent" >${notice.ntContent}</textarea></div>
 			<hr style="margin-top: 5px; margin-bottom:0;">
 			<p class="count ntContent_cnt"><span>0</span> / 3800</p>
-
+			
 		</div>
 		
 		<div class="rel mid">
 		
 			<div class="file_box"> 
-	 			 <label class="box_shadow bor_rad_ten" for="file">업로드</label> 
-	 			 <input multiple="multiple" type="file" id="file" name="file"/> 
+	 			<label class="box_shadow bor_rad_ten" for="file">업로드</label> 
+	 			<input multiple="multiple" type="file" id="file" name="file"/> 
 			</div>
+			
+			<c:forEach var="noticeFileList" items="${noticeFileList }" varStatus="status">
+				<div download-del="${noticeFileList.ntfNo }" class="update_download_name">
+					<span><i class="fas fa-file"></i> . </span>
+					<a href="#">${noticeFileList.ntfOgname }</a>
+				</div>
+					<span download-del="${noticeFileList.ntfNo }" class="cursor" onclick="uploadDel( ${noticeFileList.ntfNo })">
+						<i class="fas fa-trash-alt"></i>
+					</span>
+			</c:forEach>
+			
 			<input type="submit" class="abs update_btn box_shadow bor_rad_ten" id="btnWrite" value="등록" />
 			<input type="button" class="abs delete_btn box_shadow bor_rad_ten" onclick="history.go(-1)" value="취소" />
 	
@@ -145,8 +210,6 @@ $(document).ready(function(){
 		</div>
 		
 	</form>
-	
-	
 
 	
 <!-- container -->
@@ -159,14 +222,15 @@ $(document).ready(function(){
 		oAppRef: oEditors,
 		elPlaceHolder: "ntContent", //에디터가 적용될 <textarea>의 id
 		sSkinURI: "/resources/se2/SmartEditor2Skin.html", //에디터 스킨
-		fCreator: "createSEditor2"
+		fCreator: "createSEditor2",
+
 
 	})
 	
 	setTimeout(function() { 
 		var ctntarea = document.querySelector("iframe").contentWindow.document.querySelector("iframe").contentWindow.document.querySelector(".se2_inputarea");
 		
-		ctntarea.addEventListener("keyup", function(e) { 
+		ctntarea.addEventListener("keyup", function (e) { 
 			
 			var text = this.innerHTML; 
 			text = text.replace(/<br>/ig, ""); // br 제거
@@ -203,7 +267,6 @@ $(document).ready(function(){
 				text2 = text.substr(0, rlen);
 				this.innerHTML = text2;
 				$('.count span').html("3800");
-				
 			} else {
 				document.querySelector(".count span").innerHTML = rbyte;
 				
@@ -211,19 +274,17 @@ $(document).ready(function(){
 		});
 	}, 1000)
 
-
+	
 	// <form>태그가 submit되면 스마트에디터에 작성된 내용이 <textarea>에
 	//적용되도록 하는 코드
 	function submitContents(elClickedObj) {
 	
 		oEditors.getById["ntContent"].exec("UPDATE_CONTENTS_FIELD", []);
-	
 		try {
 			elClickedObj.form.submit();
 		} catch(e) { }
 	
 	}
-	
 </script>
 
 	

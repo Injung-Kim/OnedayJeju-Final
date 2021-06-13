@@ -16,6 +16,7 @@ public class Paging {
 
 	private String condition; //검색 대상
 	private String search; //검색어
+	private int ntNo; //게시글 번호
 	
 	//디폴트 생성자
 	public Paging() { }
@@ -88,11 +89,10 @@ public class Paging {
 
 	@Override
 	public String toString() {
-		return "NoticePaging [curPage=" + curPage + ", totalCount=" + totalCount + ", listCount=" + listCount
-				+ ", totalPage=" + totalPage + ", pageCount=" + pageCount + ", startPage=" + startPage + ", endPage="
-				+ endPage + ", startNo=" + startNo + ", endNo=" + endNo + ", condition=" + condition + ", search="
-				+ search + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+		return "Paging [curPage=" + curPage + ", totalCount=" + totalCount + ", listCount=" + listCount + ", totalPage="
+				+ totalPage + ", pageCount=" + pageCount + ", startPage=" + startPage + ", endPage=" + endPage
+				+ ", startNo=" + startNo + ", endNo=" + endNo + ", condition=" + condition + ", search=" + search
+				+ ", ntNo=" + ntNo + "]";
 	}
 
 	public int getCurPage() {
@@ -182,6 +182,16 @@ public class Paging {
 	public void setSearch(String search) {
 		this.search = search;
 	}
+
+	public int getNtNo() {
+		return ntNo;
+	}
+
+	public void setNtNo(int ntNo) {
+		this.ntNo = ntNo;
+	}
+
+
 	
 	
 	
