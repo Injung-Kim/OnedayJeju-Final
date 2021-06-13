@@ -17,7 +17,7 @@ public class JejuUser {
 	private String userAddress;
 	private String userAddressDetail;
 	private String userAgree;
-	private Date userJoinDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd") private Date userJoinDate;
 	private String userMailAuthkey;
 	private String userMailAuth;
 	private String userGrade;

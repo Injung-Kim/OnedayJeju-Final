@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jeju.dao.face.JoinDao;
 import jeju.dto.JejuUser;
@@ -44,6 +45,7 @@ public class JoinServiceImpl implements JoinService {
 	}
 	
 	@Override
+	@Transactional
 	public void join(JejuUser user) {
 				
 		//임의의 인증키 생성

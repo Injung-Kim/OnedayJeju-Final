@@ -88,11 +88,9 @@ public class Paging {
 
 	@Override
 	public String toString() {
-		return "NoticePaging [curPage=" + curPage + ", totalCount=" + totalCount + ", listCount=" + listCount
-				+ ", totalPage=" + totalPage + ", pageCount=" + pageCount + ", startPage=" + startPage + ", endPage="
-				+ endPage + ", startNo=" + startNo + ", endNo=" + endNo + ", condition=" + condition + ", search="
-				+ search + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+		return "Paging [curPage=" + curPage + ", totalCount=" + totalCount + ", listCount=" + listCount + ", totalPage="
+				+ totalPage + ", pageCount=" + pageCount + ", startPage=" + startPage + ", endPage=" + endPage
+				+ ", startNo=" + startNo + ", endNo=" + endNo + ", condition=" + condition + ", search=" + search + "]";
 	}
 
 	public int getCurPage() {

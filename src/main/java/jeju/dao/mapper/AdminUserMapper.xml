@@ -5,9 +5,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-<mapper namespace="jeju.dao.AdminUserDao">
+<mapper namespace="jeju.dao.face.AdminUserDao">
 	
-	<resultMap type="jeju.dto.JejuUser" id="JejuUser">
+	<resultMap type="jeju.dto.JejuUser" id="User">
 		<result column="user_no" property="userNo"/>
 		<result column="user_id" property="userId"/>
 		<result column="user_pw" property="userPw"/>
@@ -27,11 +27,27 @@
 	</resultMap>
 
 	<select id="selectCountAll" resultType="int">
-		SELECT * FROM (
-			SELECT rownum rnum, JU.* FROM (
-				SELECT 
-			)
-		)
+		SELECT COUNT(*) FROM JejuUser
 	</select>
+	
+	<select id="selectPageList" resultMap="User" parameterType="jeju.util.Paging">
+		SELECT * FROM (
+			SELECT rownum rnum, J.* FROM (
+				SELECT user_no, user_id, user_name, user_nick, user_email, user_join_date, user_mail_auth, user_grade
+				FROM JejuUser ORDER BY user_no ASC
+			) J
+		) R
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
+	<select id="selectInfoByUserNo" resultMap="User" parameterType="int" >
+		SELECT user_id, user_name, user_nick, user_birth_date, user_email, user_phone, user_address, user_address_detail
+		FROM JejuUser
+		WHERE user_no = #{userNo}
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		DELETE JejuUser WHERE user_no = #{userNo}
+	</delete>
 
 </mapper>
