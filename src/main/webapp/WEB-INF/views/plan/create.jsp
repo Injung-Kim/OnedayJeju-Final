@@ -45,7 +45,7 @@ label {
 $(document).ready(function(){
 	//나의 일정보기 버튼
 	$("#myplanBtn").click(function(){
-		$(location).attr("href", "/mypage/plan")
+		$(location).attr("href", "/member/mypage")
 	})
 	//생성 버튼
 	$("#submitBtn").click(function(){

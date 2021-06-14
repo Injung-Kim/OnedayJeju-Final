@@ -261,4 +261,15 @@
 		DELETE plan_board
 		WHERE pb_no = #{pbNo}
 	</delete>
+	
+	<select id="selectBookmarkList" parameterType="int" resultMap="PlanBoardInfo">
+		SELECT pb.pb_no, pb_filename, pb_title, pb_views, pb_c_date, u.user_nick, p_num_days
+		    , (SELECT count(*) FROM plan_like pl WHERE pb.pb_no = pl.pb_no AND pl_status = 1) likenum
+		FROM bookmark b, plan_board pb, jejuuser u, plan p
+		WHERE (b.user_no = ${userNo} AND b.bm_status = 1)
+		    AND b.pb_no = pb.pb_no
+		    AND pb.user_no = u.user_no
+		    AND pb.p_no = p.p_no
+		    ORDER BY pb_c_date DESC
+	</select>
 </mapper>

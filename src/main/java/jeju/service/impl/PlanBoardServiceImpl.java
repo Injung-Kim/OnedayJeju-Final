@@ -317,4 +317,11 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		//게시글 삭제
 		planBoardDao.deletePlanBoardByPbno(inData);
 	}
+	
+	
+	@Override
+	public List<Map<String, Object>> getBookmarkList(int userNo) {
+		logger.info("getBookmarkList() 호출");
+		return planBoardDao.selectBookmarkList(userNo);
+	}
 }

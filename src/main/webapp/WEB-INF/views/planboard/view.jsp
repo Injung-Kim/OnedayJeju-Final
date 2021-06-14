@@ -499,24 +499,34 @@ function fileCheck(e) {
 
 
 <header>
-	<a href="/" class="logo"><img src="/resources/image/logo.png" ></a>
-	<!-- <a href="/" class="logo">어느 날, 제주<i class="fas fa-paper-plane"></i></a> -->
+	<a href="/" class="logo"><img src="/resources/image/logo2.png" alt="어느 날, 제주 로고" ></a>
+	
 	
 	<c:if test="${empty login }">
 		<div class="nologin" style="right: 40px; position : absolute">
 			<a href="/member/login">로그인</a>
 			| 
-			<a href="#">회원가입</a>
+			<a href="/user/joinAgree">회원가입</a>
 		</div>
 	</c:if>
 	<c:if test="${login}">
-		<span class="welcome"><strong>${nick} </strong>님 환영합니다!</span>
-		<div class="login" style="margin-right: 20px;">
-			<img src="/resources/image/user.png" style="width : 70px; height : 70px;" id="mypage">
+		<span class="welcome" style="margin-top: 20px;"><strong>${nick} </strong>님 환영합니다!</span>
+		
+		<div class="login" style="margin: 20px 20px 0 0;">
 			
-			<c:if test="${grade eq '2' }">		
+			<c:choose>
+				<c:when test="${sessionScope.profile ne null}">
+					<img id="mypage" class="img-circle" alt="user" src="../resources/upload/${sessionScope.profile}" style="width:70px; height:70px;">
+				</c:when>
+				<c:otherwise>
+					<img id="mypage" class="img-circle" alt="user" src="../resources/upload/user.png" style="width:70px; height:70px;">
+				</c:otherwise>
+			</c:choose>
+<%-- 			<img id="mypage" class="img-circle" alt="user" src="../resources/upload/${sessionScope.profile}" style="width:70px; height:70px;"> --%>
+			
+			<c:if test="${grade eq '2' }">
 				<div class="balloon hidden">	
-				<p><a href="#">마이페이지</a></p>
+				<p><a href="/member/mypage">마이페이지</a></p>
 				<p><a href="/member/logout">로그아웃</a></p>
 				</div>
 			</c:if>
@@ -529,28 +539,28 @@ function fileCheck(e) {
 			
 		</div>
 	</c:if>
-	<nav>
-		<ul class="nav_first">
-		<li >
-		<a href="/plan/create">여행일정</a>
-		</li>
-		<li >
-		<a href="#">여행경비</a>
-		</li>
-		<li>
-		<a href="#">커뮤니티</a>
-			<ul class="nav_second">
-				<li><a href="/planboard/list">일정 공유</a></li>
-				<li class="devide">|</li>
-				<li><a href="#">여행 후기</a></li>
-				<li class="devide">|</li>
-				<li><a href="/notice/list">공지사항</a></li>
-				<li class="devide">|</li>
-				<li><a href="#">Q & A</a></li>
-			</ul>
-		</li>
+<nav>
+	<ul class="nav_first">
+	<li >
+	<a href="/plan/create">여행일정</a>
+	</li>
+	<li >
+	<a href="/expenses/plist">여행경비</a>
+	</li>
+	<li>
+	<a href="#">커뮤니티</a>
+		<ul class="nav_second">
+			<li><a href="/planboard/list">일정 공유</a></li>
+			<li class="devide">|</li>
+			<li><a href="/review/list">여행 후기</a></li>
+			<li class="devide">|</li>
+			<li><a href="/notice/list">공지사항</a></li>
+			<li class="devide">|</li>
+			<li><a href="/qna/list">Q & A</a></li>
 		</ul>
-	</nav>
+	</li>
+	</ul>
+</nav>
 </header>
 
 

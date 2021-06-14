@@ -141,4 +141,10 @@ public interface PlanBoardService {
 	 * @param inData - 게시글번호
 	 */
 	public void remove(PlanBoard inData);
+	
+	/**
+	 * 로그인한 유저가 북마크한 일정공유게시글을 조회한다.
+	 * @return 북마크한 일정공유게시글 정보
+	 */
+	public List<Map<String, Object>> getBookmarkList(int userNo);
 }

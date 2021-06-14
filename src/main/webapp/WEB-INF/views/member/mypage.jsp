@@ -10,7 +10,9 @@
 <!-- findPage css -->
 <link rel="stylesheet" href="/resources/css/mypage.css" type="text/css">
 
+<!-- 나의일정, 북마크 css -->
 <style type="text/css">
+/* 나의 일정 부분 */
 .mypage_myplan {
 	text-align: center;
 }
@@ -20,7 +22,51 @@
 	margin-top: 20px;
 	overflow: auto;
 }
+/* 북마크 부분 */
+.plan {
+	width: 360px;
+	height: 320px;
+	border: 1px solid #dfdfdf;
+	display: inline-block;
+	float: left;
+	margin: 30px 40px;
+	cursor: pointer;
+}
+.plan_img_box img {
+	width: 358px;
+	height: 220px;
+	
+}
+.like_views, .nick{
+	margin: 7px;
+}
+.plan_info {
+	overflow: hidden;
+}
+.plan_info .like_views span {
+	margin: 10px 10px 10px 3px;
+}
+.inline {
+	display: inline-block;
+}
+#days {
+	color: #49C6E5;
+	font-weight: 500;
+}
+#planTitle {
+	font-weight: 600;
+}
+.mypage_bookmark {
+	text-align: center; 
+}
+.list_box {
+	width: 900px;
+	height: 600px;
+	margin-top: 20px;
+	overflow: auto;
+}
 </style>
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -128,9 +174,15 @@ function mysubmit(sub) {
 }
 
 </script>
-<!-- 나의일정 버튼 자바스크립트 -->
+<!-- 나의일정/북마크 버튼 자바스크립트 -->
 <script type="text/javascript">
 $(document).ready(function (){
+	
+	//일정만들기 버튼 클릭
+	$('.createPlanBtn').click(function(){
+		//일정 생성 페이지로 이동
+		$(location).attr('href', '/plan/create');
+	})
 	
 	//나의 일정 버튼 클릭
 	$('#myplanBtn').click(function(){
@@ -141,7 +193,8 @@ $(document).ready(function (){
 			, dataType: "json"
 			, success: function( res ){
 				console.log('나의일정 ajax 성공');
-				console.log(res.planList);
+				
+				$('.user_board_content').empty(); //일정 목록이 들어갈 태그의 내용을 비웁니다.
 				
 				var html = ''; //추가할 html 내용을 담을 변수입니다.
 				
@@ -167,7 +220,7 @@ $(document).ready(function (){
 				
 				//일정목록 태그 생성
 				var parent = $('<div class="mypage_myplan">');
-				var parentHtml = '<h3>${nick } 님의 일정 목록</h3>'
+				var parentHtml = '<h3>나의 일정 목록</h3>'
 						+	'<div class="myplan_list">'
 						+	'<table class="table table-striped">'
 						+	'<thead>'
@@ -196,12 +249,86 @@ $(document).ready(function (){
 				console.log('나의일정 ajax 실패');
 			}
 		})
-	}) //클릭 이벤트 끝
+	}) //나의 일정 클릭 이벤트 끝
+	
+	//북마크 버튼 클릭 이벤트
+	$('#bookmarkBtn').click(function(){
+		console.log("나의 일정 클릭");
+		$.ajax({
+			type: "get"
+			, url: "/bookmark/list"
+			, dataType: "json"
+			, success: function( res ){
+				console.log('북바크 ajax 성공');
+				
+				$('.user_board_content').empty(); //일정 목록이 들어갈 태그의 내용을 비웁니다.
+				
+				var html = ''; //추가할 html 내용을 담을 변수입니다.
+				
+				if(res.bookmarkList.length == 0) {
+					//북마크한 게시글이 없는 경우
+					html = '<h4>북마크한 게시글이 없습니다.</h4>';
+				} else {
+					//북마크한 게시글이 있는 경우
+					html = ''; 
+					
+					for(var bookmark of res.bookmarkList){
+						var eachHtml = '<div class="plan" data-pbno="'+ bookmark.pbno +'">'
+									+	'<div class="plan_img_box"><img src="/getImg?filename='+ bookmark.filename +'"></div>'
+									+	'<div class="plan_info text-center">'
+									+	'<div class="like_views">'
+									+	'<div class="inline pull-left">좋아요:<span id="likeNum">'+ bookmark.likenum +'</span></div>'
+									+	'<div class="inline pull-left">조회수:<span id="views">'+ bookmark.views +'</span></div>'
+									+	'<div class="inline pull-left">작성일:<span id="createDate">'+ getFormatDate(bookmark.cdate) +'</span></div>'
+									+	'</div>'
+									+	'<div class="clearfix"></div>'
+									+	'<div class="nick inline pull-left">'
+									+	'<span id="nick">닉네임: '+ bookmark.nick +'</span>'
+									+	'</div>'
+									+	'<div class="clearfix"></div>'
+									+	'<div class="planboard_title">'
+									+	'<span id="days">['+ bookmark.days +'일]</span>'
+									+	'<span id="planTitle">'+ bookmark.title +'</span>'
+									+	'</div>'
+									+	'</div>'
+									+	'</div>';
+						html += eachHtml;
+					}
+				}
+				//북마크목록 태그 생성
+				var child = $('<div class="list_box">');
+				
+				//child 요소에 html 추가
+				child.html(html);
+				
+				//parent 요소 생성
+				var parent = $('<div class="mypage_bookmark">').html('<h3>북마크 목록</h3>');
+				
+				//parent에 내부 요소를 추가합니다.
+				parent.append(child);
+
+				//원래 있던 내용 틀에 서버에서 받아온 데이터 추가
+				$('.user_board_content').html(parent);
+				
+			}
+			, error: function(){
+				console.log('북마크 ajax 실패');
+			}
+		})
+	})//북마크 버튼 클릭 이벤트 끝
 	
 	//마이페이지 들어왔을 때 나의일정이 보이도록 트리거 설정
 	$('#myplanBtn').trigger('click');
 	
 })
+//북마크 클릭 시 해당 글의 상세보기 페이지로 이동
+$(document).on('click', '.plan', function(){
+	var pbno = $(this).attr('data-pbno');
+	//상세보기 url
+	var url = '/planboard/view?pbNo='+ pbno;
+	//게시글 상세보기 페이지로 이동 
+	$(location).attr("href", url);
+});
 /**
  *  yyyyMMdd 포맷으로 반환
  */
@@ -282,11 +409,39 @@ function getFormatDate(value){
 
 <div class="user_board_btn">
 	<button id="myplanBtn">나의 일정</button>
+	<button id="bookmarkBtn">북마크</button>
 	<button>여행 후기</button>
 	<button>Q & A</button>
 </div>
 
 <div class="user_board_content">
+
+	<div class="mypage_bookmark">
+		<h3>북마크 목록</h3>
+		<div class="list_box">
+		
+		<div class="plan" data-pbno="${planBoard.pbno }">
+			<div class="plan_img_box"><img src="/getImg?filename=${planBoard.filename }"></div>
+			<div class="plan_info text-center">
+				<div class="like_views">
+					<div class="inline pull-left">좋아요:<span id="likeNum">${planBoard.likenum }</span></div>
+					<div class="inline pull-left">조회수:<span id="views">${planBoard.views }</span></div>
+					<div class="inline pull-left">작성일:<span id="createDate"><fmt:formatDate value="${planBoard.cdate }" pattern="yyyy.MM.dd"/></span></div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="nick inline pull-left">
+					<span id="nick">닉네임: ${planBoard.nick }</span>
+				</div>
+				<div class="clearfix"></div>
+				<div class="planboard_title">
+					<span id="days">[${planBoard.days }일]</span>
+					<span id="planTitle">${planBoard.title }</span>
+				</div>
+			</div>
+		</div>
+		
+		</div>
+	</div>
 	
 </div>
 

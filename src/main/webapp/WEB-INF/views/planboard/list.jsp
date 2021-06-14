@@ -28,11 +28,11 @@
 /* 정렬, 검색 부분 */
 select, input {
 	padding: 5px;
-	margin: 0 5px;
 }
 #searchBtn {
 	padding: 0 5px;
-	margin-top: 10px; 
+	height: 33px;
+	background-color: #8bd7d2;
 }
 .search_box {
 	margin: 10px 0;
@@ -41,7 +41,7 @@ select, input {
 .plan {
 	width: 360px;
 	height: 320px;
-	border: 1px solid #ccc;
+	border: 1px solid #dfdfdf;
 	display: inline-block;
 	float: left;
 	margin: 30px 10px;
@@ -323,7 +323,7 @@ function checkForm() {
 				<option value="views">조회순</option>
 			</select>
 			
-			<button class="pull-right" id="searchBtn">검색</button>
+			<button class="pull-right" id="searchBtn"><i class="fas fa-search" style="color : #fff;"></i></button>
 			<input class="pull-right" type="text" placeholder="제목 또는 닉네임" id="searchInput" name="search">
 		</form>
 	</div>
@@ -331,7 +331,7 @@ function checkForm() {
 	<div class="list_box">
 		<c:forEach var="planBoard" items="${list }">
 		<div class="plan" data-pbno="${planBoard.pbno }">
-			<div class="plan_img_box"><img src="/getImg?filename=${planBoard.filename }"></div><!-- 서버에 저장된 파일명으로 바꾸기 -->
+			<div class="plan_img_box"><img src="/getImg?filename=${planBoard.filename }"></div>
 			<div class="plan_info text-center">
 				<div class="like_views">
 					<div class="inline pull-left">좋아요:<span id="likeNum">${planBoard.likenum }</span></div>
