@@ -60,6 +60,14 @@
 			<!-- 인터셉터 클래스 지정 -->
 			<beans:bean class="jeju.interceptor.PlanInterceptor" />
 		</interceptor>
+		
+		<interceptor>
+			<!-- 인터셉터가 적용될 URL -->
+			<mapping path="/notice/**" />
+
+			<!-- 인터셉터 클래스 지정 -->
+			<beans:bean class="jeju.interceptor.NoticeInterceptor" />
+		</interceptor>
 	</interceptors>
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
@@ -97,13 +105,10 @@
 		<beans:property name="order" value="0" />
 	</beans:bean>
 	
-	
 	<!-- GetImageView 클래스를 getImg 이라는 이름의 스프링 빈으로 등록하기 -->
 	<beans:bean id="getImg" class="jeju.view.GetImageView" />
 	
-	
 	<context:component-scan base-package="jeju.controller, jeju.service" />
 	
-	
-	
+
 </beans:beans>
