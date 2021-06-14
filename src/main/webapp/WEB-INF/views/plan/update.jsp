@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>어느 날, 제주</title>
 
 <!-- jQuery 2.2.4 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
@@ -52,7 +52,7 @@ $(document).ready(function(){
 	})
 	//저장&닫기 버튼
 	$("#saveBtn").click(function(){
-		$(location).attr("href", "/mypage/plan");
+		$(location).attr("href", "/member/mypage");
 	})
 	
 	//여행 날짜 클릭
@@ -102,7 +102,7 @@ $(document).ready(function(){
 					}
 					var child2 = $("<div>").addClass("fr place_title").text(res.infoList[i].TITLE)
 					var child3 = $("<div>").addClass("detail_delete_btn").append(
-							$("<button>").attr({type: "button", style: "font-weight:bold"}).text("X"));
+							$("<button>").attr({type: "button", style: "font-weight:bold"}).html('<i class="fas fa-times"></i>'));
 					var child4 = $("<div>").addClass("clearfix");
 					
 					element.append(child1,child2,child3,child4);
@@ -241,7 +241,7 @@ $(document).on("click", ".place_add_button", function(){
 	}
 	var child2 = $("<div>").addClass("fr place_title").text(dataset.title)
 	var child3 = $("<div>").addClass("detail_delete_btn").append(
-			$("<button>").attr({type: "button", style: "font-weight:bold"}).text("X"));
+			$("<button>").attr({type: "button", style: "font-weight:bold"}).html('<i class="fas fa-times"></i>'));
 	var child4 = $("<div>").addClass("clearfix");
 	
 	element.append(child1,child2,child3,child4);
@@ -289,7 +289,7 @@ function searchAjax(url, data){
 				}
 				var child2 = $("<div>").addClass("fr place_title").text(res.placeList[i].title)
 				var child3 = $("<div>").addClass("place_add_button").append(
-						$("<button>").attr({type: "button", style: "font-weight:bold"}).text("+"));
+						$("<button>").attr({type: "button", style: "font-weight:bold"}).html('<i class="fas fa-plus"></i>'));
 				var child4 = $("<div>").addClass("clearfix");
 				
 				element.append(child1,child2,child3,child4);
@@ -416,7 +416,7 @@ function emptyCheck(){
 		<div class="place_list">
 		<div class="on_close_btn"></div>
 			<div class="place_search_box text-center">
-				<input type="text" id="inputSearch" placeholder="장소 검색">
+				<input type="text" id="inputSearch" placeholder="장소 검색" style="width: 265px;">
 				<button type="button" id="searchBtn">검색</button>
 				<div class="category_box text-center">
 					<button class="category_btn touristspot">관광</button>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="jeju.dao.face.AdminPlanBoardDao">
+	
+	<resultMap type="hashmap" id="PlanBoardInfo">
+		<result column="pb_no" property="pbno"/>
+		<result column="pb_title" property="title"/>
+		<result column="pb_c_date" property="cdate"/>
+		<result column="user_id" property="id"/>
+		<result column="user_nick" property="nick"/>
+	</resultMap>
+	
+	<select id="selectCntAll" parameterType="jeju.util.Paging" resultType="int">
+		SELECT count(*) FROM plan_board pb, jejuuser u
+		WHERE pb.user_no = u.user_no
+		<if test='search != null and !"".equals(search)'>
+			AND (pb_title LIKE '%' || #{search} || '%' 
+				OR user_nick LIKE '%' || #{search} || '%'
+				OR user_id LIKE '%' || #{search} || '%'
+				OR pb_no LIKE '%' || #{search} || '%')
+		</if>
+	</select>
+	
+	<select id="selectList" parameterType="jeju.util.Paging" resultMap="PlanBoardInfo">
+		SELECT * FROM (
+	    	(SELECT ROWNUM AS rnum, V.* FROM (
+		        SELECT 
+		        	pb.pb_no, pb_title, pb_c_date, u.user_id, u.user_nick
+		        FROM plan_board pb, jejuuser u
+		        WHERE pb.user_no = u.user_no
+		        	<if test='search != null and !"".equals(search)'>
+					AND (pb_title LIKE '%' || #{search} || '%' 
+						OR user_nick LIKE '%' || #{search} || '%'
+						OR user_id LIKE '%' || #{search} || '%'
+						OR pb_no LIKE '%' || #{search} || '%')
+					</if>
+	        		ORDER BY pb_c_date DESC
+	        	) V))
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
+	<delete id="delete" parameterType="java.util.List">
+		DELETE plan_board
+		WHERE pb_no IN (
+		<foreach collection="list" item="pbNo" separator=",">
+			#{pbNo}
+		</foreach>
+		)
+	</delete>
+</mapper>

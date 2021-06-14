@@ -121,7 +121,7 @@ function sidemenu(){
 	<h3>관리자 페이지</h3>
 		<ul>
 			<li><a href="/admin/user/list">회원관리</a></li>
-			<li><a href="#">일정공유</a></li>
+			<li><a href="/admin/planboard">일정공유</a></li>
 			<li><a href="#">여행후기</a></li>
 			<li><a href="/notice/admin">공지사항</a></li>
 			<li><a href="#">Q & A</a></li>

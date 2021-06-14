@@ -71,7 +71,7 @@
 					AND (pb_title LIKE '%' || #{search} || '%' OR user_nick LIKE '%' || #{search} || '%')
 					</if>
 	        	<choose>
-	        		<when test="condition == null">
+	        		<when test='condition == null or "".equals(condition)'>
 	        		ORDER BY pb_c_date DESC
 	        		</when>
 		        	<when test='condition != null and condition.equals("latest")'>
@@ -91,7 +91,7 @@
 	<select id="selectPlanByUserno" parameterType="int" resultMap="Plan">
 		SELECT * FROM plan
 		WHERE user_no = #{uno}
-		ORDER BY p_no
+		ORDER BY p_no DESC
 	</select>
 	
 	<insert id="insertPlanBoard" parameterType="jeju.dto.PlanBoard">
@@ -261,4 +261,15 @@
 		DELETE plan_board
 		WHERE pb_no = #{pbNo}
 	</delete>
+	
+	<select id="selectBookmarkList" parameterType="int" resultMap="PlanBoardInfo">
+		SELECT pb.pb_no, pb_filename, pb_title, pb_views, pb_c_date, u.user_nick, p_num_days
+		    , (SELECT count(*) FROM plan_like pl WHERE pb.pb_no = pl.pb_no AND pl_status = 1) likenum
+		FROM bookmark b, plan_board pb, jejuuser u, plan p
+		WHERE (b.user_no = ${userNo} AND b.bm_status = 1)
+		    AND b.pb_no = pb.pb_no
+		    AND pb.user_no = u.user_no
+		    AND pb.p_no = p.p_no
+		    ORDER BY pb_c_date DESC
+	</select>
 </mapper>

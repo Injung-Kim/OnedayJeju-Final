@@ -28,11 +28,11 @@
 /* 정렬, 검색 부분 */
 select, input {
 	padding: 5px;
-	margin: 0 5px;
 }
 #searchBtn {
 	padding: 0 5px;
-	margin-top: 10px; 
+	height: 33px;
+	background-color: #8bd7d2;
 }
 .search_box {
 	margin: 10px 0;
@@ -40,8 +40,8 @@ select, input {
 /* 게시글 부분 */
 .plan {
 	width: 360px;
-	height: 300px;
-	border: 1px solid #ccc;
+	height: 320px;
+	border: 1px solid #dfdfdf;
 	display: inline-block;
 	float: left;
 	margin: 30px 10px;
@@ -52,9 +52,12 @@ select, input {
 	height: 220px;
 	
 }
-.like_views, .nick_title{
-	margin: 10px;
-} 
+.like_views, .nick{
+	margin: 7px;
+}
+.plan_info {
+	overflow: hidden;
+}
 .plan_info .like_views span {
 	margin: 10px 10px 10px 3px;
 }
@@ -106,7 +109,7 @@ select, input {
 	height: 40px;
 }
 .modal_plan_list {
-	width: 550px;
+	width: 560px;
 	height: 470px;
 	overflow: auto;
 }
@@ -169,7 +172,10 @@ $(document).ready(function(){
 				console.log("AJAX 성공");
 				console.log(res)
 				console.log(res.planList)
-
+				
+				//리스트 비우기
+				$("#planDataList").empty();
+				
 				//일정 요소 만들어서 테이블에 추가하기
 				for(var i in res.planList) {
 					var element = $('<tr>');
@@ -317,7 +323,7 @@ function checkForm() {
 				<option value="views">조회순</option>
 			</select>
 			
-			<button class="pull-right" id="searchBtn">검색</button>
+			<button class="pull-right" id="searchBtn"><i class="fas fa-search" style="color : #fff;"></i></button>
 			<input class="pull-right" type="text" placeholder="제목 또는 닉네임" id="searchInput" name="search">
 		</form>
 	</div>
@@ -325,7 +331,7 @@ function checkForm() {
 	<div class="list_box">
 		<c:forEach var="planBoard" items="${list }">
 		<div class="plan" data-pbno="${planBoard.pbno }">
-			<div class="plan_img_box"><img src="/getImg?filename=${planBoard.filename }"></div><!-- 서버에 저장된 파일명으로 바꾸기 -->
+			<div class="plan_img_box"><img src="/getImg?filename=${planBoard.filename }"></div>
 			<div class="plan_info text-center">
 				<div class="like_views">
 					<div class="inline pull-left">좋아요:<span id="likeNum">${planBoard.likenum }</span></div>
@@ -333,8 +339,11 @@ function checkForm() {
 					<div class="inline pull-left">작성일:<span id="createDate"><fmt:formatDate value="${planBoard.cdate }" pattern="yyyy.MM.dd"/></span></div>
 				</div>
 				<div class="clearfix"></div>
-				<div class="nick_title inline">
-					<span id="nick">(${planBoard.nick })</span>
+				<div class="nick inline pull-left">
+					<span id="nick">닉네임: ${planBoard.nick }</span>
+				</div>
+				<div class="clearfix"></div>
+				<div class="planboard_title">
 					<span id="days">[${planBoard.days }일]</span>
 					<span id="planTitle">${planBoard.title }</span>
 				</div>

@@ -1,7 +1,6 @@
 package jeju.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import jeju.dto.DetailPlan;
 import jeju.dto.Plan;
@@ -65,7 +65,7 @@ public class PlanController {
 		
 		//세션 처리 (조회한 유저의 일정인지 체크)
 		//session.getAttribute("uno") == null 이부분은 인터셉터 작성되면 삭제
-		if( session.getAttribute("uno") == null || ( plan.getUserNo() != (int)session.getAttribute("uno") ) ) {
+		if( ( plan.getUserNo() != (int)session.getAttribute("uno") ) ) {
 			return "redirect:/";
 		}
 		
@@ -87,13 +87,30 @@ public class PlanController {
 		
 		//session.getAttribute("uno") == null 이부분은 인터셉터 작성되면 삭제
 		//본인이 생성한 일정인지 체크
-		if( session.getAttribute("uno") == null || ( plan.getUserNo() != (int)session.getAttribute("uno") )) {
+		if( ( plan.getUserNo() != (int)session.getAttribute("uno") )) {
 			return "redirect:/";
 		}
 		//일정 삭제
 		planService.remove(inData);
 		
 		//마이페이지 여행일정으로 이동
-		return "redirect:/mypage/plan";
+		return "redirect:/member/mypage";
+	}
+	
+	@RequestMapping(value="/plan/list", method=RequestMethod.GET)
+	public ModelAndView getList(ModelAndView mav, HttpSession session) {
+		logger.info("/plan/list getList() GET 요청");
+		//viewName 지정
+		mav.setViewName("jsonView");
+		
+		//자신의 일정 조회
+		Plan myplan = new Plan();
+		myplan.setUserNo((int)session.getAttribute("uno"));
+		List<Plan> planList = planService.getList(myplan);
+		
+		//모델값 전달
+		mav.addObject("planList", planList);
+		
+		return mav;
 	}
 }

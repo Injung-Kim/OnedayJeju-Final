@@ -228,14 +228,31 @@ public class PlanBoardController {
 		
 		//session.getAttribute("uno") == null 이부분은 인터셉터 작성되면 삭제
 		//본인이 생성한 일정게시글인지 체크
-		if( session.getAttribute("uno") == null || ( planBoard.getUserNo() != (int)session.getAttribute("uno") )) {
+		if( ( planBoard.getUserNo() != (int)session.getAttribute("uno") )) {
 			return "redirect:/";
 		}
 		//공유일정 게시글 삭제
-		planBoardService.remove(inData);
+		planBoardService.remove(planBoard);
 		
 		//마이페이지 일정공유로 이동
-		return "redirect:/mypage/planboard";
+		return "redirect:/planboard/list";
 	}
 	
+	@RequestMapping(value="/bookmark/list", method=RequestMethod.GET)
+	public ModelAndView getBookmark(ModelAndView mav, HttpSession session) {
+		logger.info("/bookmark/list GET getBookmark() 요청");
+		//viewName 설정
+		mav.setViewName("jsonView");
+		
+		//세션에서 유저번호 가져오기
+		int userNo = (int)session.getAttribute("uno");
+		
+		//게시글 데이터 조회
+		List<Map<String, Object>> list = planBoardService.getBookmarkList(userNo);
+		
+		//모델값 전달
+		mav.addObject("bookmarkList", list);
+		
+		return mav;
+	}
 }
