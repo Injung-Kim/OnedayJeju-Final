@@ -53,9 +53,10 @@
 	padding: 15px;
 	text-align: right;
 }
-#like{
+.like{
 	background: transparent;
 	border : none;
+	color : #f25c54;
 }
 
 .answers #ansInfo{
@@ -77,10 +78,20 @@
 }
 /* 답변글 작성 폼 */
 .writeAnswer{
-	width : 80%;
+	width : 50%;
+	padding : 20px;
 	border-radius: 15px;
 	/* background: #00a388; */
 	border : 1px solid #ccc;
+}
+.writeAnswer h4{
+	display : inline-block;
+}
+.filename{
+	min-height : 30px;
+}
+.filename span{
+	padding-right : 15px;
 }
 /* 답변글 수정 폼  */
 .updateAnswer{
@@ -96,18 +107,28 @@ $(document).ready(function(){
 		var confirmDelete = confirm('삭제하시겠습니까?')
 		if(confirmDelete){location.href="/qna/delete/question?qstNo=${QST_NO}"}
 	})
-	/* $('.makeAnswer').click(function(){
-		var login = ${login}
-		if(login){
-			$('writeAnswer').attr('style','display : block;')
-		}else{
-			alert('로그인이 필요합니다')
-			location.href='/member/login'
-		}
-	}) */
+	 $('.makeAnswer').click(function(){
+		 var login = ${sessionScope.login}
+		 console.log(login)
+		 if(login == null){
+			 console.log("로그인 상태 아님")
+			 alert("로그인이 필요합니다")
+			 location.href='/member/login'
+		 } else {
+			 var offset = $('.writeAnswer').offset()
+			 $('html').animate({scrollTop : offset.top},500)
+		 }
+	}) 
 	$('.ansImg').click(function(){
 		$('#ansFiles').click()
 	})
+	$('#ansFiles').change(function(){
+		var files = $(this)[0].files
+		for(var i = 0; i< files.length; i++){
+			$('.filename').append($('<span></span>').html(files[i].name))
+		}
+	})
+	
 	$('#submitAnswer').click(function(){
 		$('#ansCreateForm').submit()
 	})
@@ -116,6 +137,7 @@ $(document).ready(function(){
 		var ansNo = ($(this).parent().attr('id'))
 		if(confirmDelete){location.href='/qna/delete/answer?qstNo=${QST_NO}&ansNo='+ansNo}
 	})
+	
 	$('.updateImg').click(function(){
 		$(this).next().children('.updateFiles').click()
 	})
@@ -127,7 +149,65 @@ $(document).ready(function(){
 	$('.hideForm').click(function(){
 		$(this).parent().fadeOut(500)
 	})
+	
+	$('.updateFiles').change(function(){
+		console.log("업로드 파일 변경됨")
+		$(this).parent().next('.upload').children('span').remove()
+		var files = $(this)[0].files
+		for(var i = 0; i< files.length; i++){
+			$('.upload').append($('<span></span>').html(files[i].name))
+		}
+	})
+	$('.subAns').click(function(){
+		$(this).parent().children('.ansUpdateForm').submit()
+	})
+	
+	
+	
+	const url = new URL(window.location.href)
+	const qrParam = url.searchParams
+	/* 좋아요 ajax  */
+	$('.like').click(function(){
+		//qstNo 파라미터 값 얻어오기
+		var id = $(this).parent().attr("id")
+		var $th = $(this) 
+		var qstNo = qrParam.get('qstNo')
+		  $.ajax({
+			type : "get"
+			, url : "/qna/answer/like"
+			, data : {
+				'ansNo' : id
+				, 'qstNo' : qstNo
+			}
+			, dataType : "json"
+			, success : function(res){
+				console.log("ajax 성공" )
+				console.log(res)
+				if(res.result){
+					$th.children('i').removeClass('far')
+					$th.children('i').addClass('fas')
+								
+				}else{
+					$th.children('i').removeClass('fas')
+					$th.children('i').addClass('far')					
+										
+				}
+				$th.parent().children('.float').children('.cntLikes').html(res.cntLikes)
+			}
+			, error : function(){
+				console.log("ajax실패")
+				
+			}
+			})
+				
+		})
+	
+		
+		
 })
+
+
+
 </script>
 <!-- 질문글 -->
 <div class="qstWrapper">
@@ -172,7 +252,8 @@ $(document).ready(function(){
 	<div class="answers" id="${answer.ansNo}">
 		<div class="float" style="float : right;">
 		<span><i class="fas fa-heart"></i></span>
-		<span style="margin-right : 15px;">${answer.ansLike }</span>
+		<!-- 좋아요수  -->
+		<span style="margin-right : 15px;" class="cntLikes">${answer.ansLikeCnt }</span>
 		<p style="float:right;"><fmt:formatDate value="${answer.ansTime}" pattern="yyyy-MM-dd hh:mm:ss"/> </p>
 		</div>
 		<div id="ansInfo">
@@ -192,18 +273,26 @@ $(document).ready(function(){
 		<button type="button"  class="btn deleteAns">삭제</button>
 		</c:if>
 		<c:if test="${id ne answer.userId}">
-		<button type="button" id="like"><i class="far fa-heart fa-3x"></i></button>
+		
+			<c:if test="${answer.ansLikeCheck eq 0 }">
+			<button type="button" class="like"><i class="far fa-heart fa-3x"></i></button>
+			</c:if>
+			<c:if test="${answer.ansLikeCheck eq 1 }">
+			<button type="button" class="like"><i class="fas fa-heart fa-3x"></i></button>
+			</c:if>
+		
 		</c:if>
 	</div>
 	<!-- 답변글 수정 Form  -->
 	<c:if test="${id eq answer.userId}">
 	<div class="updateAnswer">
 	<h4>답변수정</h4>
-	<img src="/resources/image/image.png" style="width : 56px; height : 56px;" class="updateImg">
-	<form action="/qna/update/answer?ansNo="${answer.ansNo} method="post" id="ansUpdateForm" enctype="multipart/form-data">
+	<img src="/resources/image/image.png" style="width : 45px; height : 45px;" class="updateImg">
+	<form action="/qna/update/answer" method="post" class="ansUpdateForm" enctype="multipart/form-data">
 		<textarea rows="6" name="ansContent" placeholder="내용을 입력하세요" class="form-control">${answer.ansContent}</textarea>
 		<input type="file" name="ansFiles" multiple="multiple" style="display:none;" class="updateFiles">
 		<input type="hidden" name="qstNo" value="${QST_NO}"/>
+		<input type="hidden" name="ansNo" value="${answer.ansNo}"/>
 	</form>
 	<div class="upload">
 	<c:forEach items="${answer.filenames}" var="filenames">
@@ -217,17 +306,20 @@ $(document).ready(function(){
 	</c:forEach>
 	
 	<!--답변글 작성 Form  -->
+	<c:if test="${id ne USER_ID}">
 	<div class="writeAnswer">
 	<h4>답변하기</h4>
-	<img src="/resources/image/image.png" style="width : 56px; height : 56px;" class="ansImg">
+	<img src="/resources/image/image.png" style="width : 45px; height : 45px;" class="ansImg">
 	<form action="/qna/write/answer" method="post" id="ansCreateForm" enctype="multipart/form-data">
-	<textarea rows="6" name="ansContent" placeholder="내용을 입력하세요" class="form-control"></textarea>
+	<textarea rows="6" name="ansContent" placeholder="내용을 입력하세요" class="form-control" style="border : none;"></textarea>
 	<input type="file" name="ansFiles" multiple="multiple" style="display:none;" id="ansFiles">
 	<input type="hidden" name="qstNo" value="${QST_NO}"/>
 	</form>
+	<div class="filename">
+	</div>
 	<button id="submitAnswer" type="button" class="btn btn-lg btn-block">답변하기</button>
 	</div>
-	
+	</c:if>
 	
 </div>
 <c:import url="/WEB-INF/views/qna/qstUpdateModal.jsp"/>

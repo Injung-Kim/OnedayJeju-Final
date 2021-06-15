@@ -153,6 +153,27 @@ public interface QnAService {
 	 * @param ansNo 요청받아 dto 저장한 답변글 번호
 	 */
 	public void deleteAnswer(FileTB ansNo);
+	/**
+	 * 답변글 수정하기
+	 * 
+	 * @param answer 요청받은 수정된 답변글 정보
+	 * @param filetable  새로 추가된 첨부파일 정보
+	 */
+	public void updateAnswer(Answer answer, List<FileTB> filetable);
+	/**
+	 * 답변글 좋아요 수 전체조회
+	 * 
+	 * @param answer 조회할 답변글 정보(질문글, 답변글 번호)
+	 * @return 조회한 좋아요 전체 갯수
+	 */
+	public int getCntAnsLikes(Answer answer);
+	/**
+	 * 답변글별 좋아요 변경하기
+	 * 
+	 * @param answer 좋아요 변경 요청한 답변글 정보(질문글, 답변글, 유저정보)
+	 * @return 좋아요 변경여부(좋아요 등록한 경우 true, 좋아요 취소한 경우 false 반환)
+	 */
+	public boolean modifyLike(Answer answer);
 	
 
 }

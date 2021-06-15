@@ -258,8 +258,8 @@ public class QnAServiceImpl implements QnAService{
 			//첨부파일 DB저장
 			for(FileTB file : filetable) {
 				file.setQstNo(question.getQstNo());
-				qnaDao.insertFiles(file);
 				logger.debug("첨부파일 정보 : {}",file);
+				qnaDao.insertFiles(file);
 			}
 		}
 		
@@ -297,8 +297,44 @@ public class QnAServiceImpl implements QnAService{
 		}
 		logger.debug("answer : {}", answer);
 	}
+	//답변글 삭제하기
 	@Override
 	public void deleteAnswer(FileTB ansNo) {
 		qnaDao.deleteAnswer(ansNo);
+	}
+	//답변글 수정하기
+	@Override
+	public void updateAnswer(Answer answer, List<FileTB> filetable) {
+		//답변글 DB 저장
+		qnaDao.updateAnswer(answer);
+		//변경할 파일이 있는 경우 파일처리
+		if(filetable != null) {
+			//기존 첨부파일 삭제
+			qnaDao.deleteFiles(answer.getAnsNo());
+			//변경된 파일 저장
+			for(FileTB files : filetable) {
+				files.setAnsNo(answer.getAnsNo());
+				qnaDao.insertFiles(files);
+			}
+		}
+	}
+	//좋아요 변경하기
+	@Override
+	public boolean modifyLike(Answer answer) {
+		//좋아요 클릭 여부 조회
+		int num = qnaDao.cntLiked(answer);
+		if(num == 0) {
+			qnaDao.insertLike(answer);
+			return true;
+		}else {
+			qnaDao.deleteLike(answer);
+			return false;
+		}
+				
+	}
+	//게시글 좋아요 갯수 조회
+	@Override
+	public int getCntAnsLikes(Answer answer) {
+		return qnaDao.selectCntLikes(answer);
 	}
 }

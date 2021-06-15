@@ -135,6 +135,8 @@
 	<!-- 답변글 조회 -->
 	<select id="selectAnswers" resultMap="AnswerMap" parameterType="hashmap">
 		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_origin
+			, (SELECT COUNT(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no) ans_like_cnt
+			, (SELECT count(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no AND AL.user_no = #{userNo}) ans_like_check
 		FROM qa_answer A
 		INNER JOIN jejuuser U
 		on U.user_no = A.user_no
@@ -168,7 +170,7 @@
 	<!-- 파일명 추가하기 -->
 	<insert id="insertFiles" parameterType="jeju.dto.qna.FileTB">
 		<choose>
-		<when test="#{qstNo} != null and #{ansNo} == null">
+		<when test="#{qstNo} != null">
 	 	INSERT INTO qst_file(qst_file_no, qst_no, qst_origin, qst_stored) VALUES
 	 	(qst_file_no_seq.nextval, #{qstNo}, #{origin}, #{stored})
 	 	</when>
@@ -206,7 +208,14 @@
 	</update>
 	<!-- 첨부파일 삭제하기 -->
 	<delete id="deleteFiles" parameterType="int">
+		<choose>
+		<when test="#{ansNo} != null">
+		DELETE FROM ans_file WHERE ans_no = #{ansNo}		
+		</when>
+		<otherwise>
 		DELETE FROM qst_file WHERE qst_no = #{qstNo}
+		</otherwise>
+		</choose>
 	</delete>
 	
 	<!-- 태그번호 삭제하기 -->
@@ -223,4 +232,24 @@
 	<delete id="deleteAnswer" parameterType="jeju.dto.qna.FileTB">
 		DELETE FROM qa_answer WHERE ans_no = #{ansNo}
 	</delete>
+	<!-- 답변글 업데이트-->
+	<update id="updateAnswer" parameterType="jeju.dto.qna.Answer">
+		UPDATE qa_answer SET ans_content = #{ansContent}, ans_time = SYSDATE
+		where ans_no =  #{ansNo}
+	</update>
+	<!-- 좋아요 클릭여부 조회 -->
+	<select id="cntLiked" parameterType="jeju.dto.qna.Answer" resultType="int">
+		SELECT count(*) FROM ans_like WHERE user_no = #{userNo} and qst_no = #{qstNo} and ans_no = #{ansNo}
+	</select>
+	<!-- 좋아요 등록하기 -->
+	<insert id="insertLike" parameterType="jeju.dto.qna.Answer">
+		INSERT INTO ans_like(ans_like_no, qst_no, ans_no, user_no) VALUES(ANS_LIKE_NO_SEQ.nextval, #{qstNo}, #{ansNo}, #{userNo})
+	</insert>
+	<!-- 좋아요 취소하기 -->
+	<delete id="deleteLike" parameterType="jeju.dto.qna.Answer">
+		DELETE FROM ans_like where qst_no = #{qstNo} AND ANS_NO = #{ansNo} AND USER_NO = #{userNo}
+	</delete>
+	<select id="selectCntLikes" resultType="int" parameterType="jeju.dto.qna.Answer">
+		SELECT count(*) FROM ans_like WHERE qst_no = #{qstNo} and ans_no = #{ansNo}
+	</select>
 </mapper>

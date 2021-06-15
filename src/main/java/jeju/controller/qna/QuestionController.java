@@ -46,7 +46,7 @@ public class QuestionController {
 	
 	//질문글 상세정보
 	@RequestMapping(value="/view")
-	public void qstView(int qstNo, ModelMap map, Model model, Paging paging) {
+	public void qstView(int qstNo, ModelMap map, Model model, Paging paging, HttpSession session) {
 		//질문글 번호를 통한 상세조회
 		HashMap<String, Object> view =  qnaService.getQuestion(qstNo);
 		
@@ -69,8 +69,10 @@ public class QuestionController {
 		Paging ansPaging = qnaService.getPaging(paging);
 		Map<String, Object> ansParam = new HashMap<String, Object>();
 		ansParam.put("qstNo", qstNo);
+		ansParam.put("userNo", (Integer) session.getAttribute("uno"));
 		ansParam.put("ansPaging", ansPaging);
 		logger.debug("파라미터 hashmap : {}", ansParam);
+		
 		
 		//답변글 정보(페이징 반영)
 		List<HashMap<String, Object>> list = qnaService.getAnswers(ansParam);
