@@ -28,69 +28,59 @@ public class AdminUserController {
 		
 		//페이징 계산
 		Paging paging = adminUserService.getPaging(inData);
-//		paging.setSearch(inData.getSearch());
+		paging.setSearch(inData.getSearch()); //검색어 적용
+		paging.setCondition(inData.getCondition()); //검색조건 적용
 //		logger.info("페이징: {}", paging);
 		
-		//사용자 목록 조회
-		List<JejuUser> userList = adminUserService.getList(paging);
+		List<JejuUser> userList = adminUserService.getList(paging); //목록 조회
 		for(int i=0; i < userList.size(); i++) {
 //			logger.info(userList.get(i).toString());
 		}
-		
-		//모델값 전달
-		model.addAttribute("list", userList);
-		model.addAttribute("paging", paging);
+		model.addAttribute("list", userList); //목록 전달
+		model.addAttribute("paging", paging); //페이징 적용
 	}
 	
 	@RequestMapping(value = "/info")
 	public String getInfo(JejuUser userInfo, Model model) {
-		logger.info("/admin/user/info [GET]");
-		logger.info("userNo : {}", userInfo.toString());
+//		logger.info("/admin/user/info [GET]");
+//		logger.info("userNo : {}", userInfo.toString());
 		
-		//사용자정보 조회
-		userInfo = adminUserService.getInfo(userInfo);
+		userInfo = adminUserService.getInfo(userInfo); //정보 조회
 //		logger.info("사용자정보 : {}", userInfo.toString());
-		
-		//모델값 전달
-		model.addAttribute("info", userInfo);
+		model.addAttribute("info", userInfo); //정보 전달
 		
 		return "admin/user/info";
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public String modify(JejuUser user, Model model) {
-		logger.info("/admin/user/modify [GET]");
-		logger.info("userNo : {}", user.toString());
+//		logger.info("/admin/user/modify [GET]");
+//		logger.info("userNo : {}", user.toString());
 		
-		//조회된 사용자정보
-		user = adminUserService.getInfo(user);
-		logger.info("사용자정보 : {}", user.toString());
-		
-		//사용자정보 전달
-		model.addAttribute("user", user);
+		user = adminUserService.getInfo(user); //정보 조회
+//		logger.info("사용자정보 : {}", user.toString());
+		model.addAttribute("user", user); //정보 전달
 		
 		return "admin/user/modify";
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String modifyProcess(JejuUser user) {
-		logger.info("/admin/user/modify [POST]");
-		logger.info("사용자정보 수정 : {}", user);
+//		logger.info("/admin/user/modify [POST]");
+//		logger.info("사용자정보 수정 : {}", user);
 		
-		//사용자정보 수정
-		adminUserService.modify(user);
+		adminUserService.modify(user); //정보 수정
 		
-		return "redirect:/admin/user/info?userNo="+user.getUserNo();
+		return "redirect:/admin/user/info?userNo="+user.getUserNo(); //해당 사용자의 정보조회 페이지로 이동
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(JejuUser user) {
-		logger.info("/admin/user/delete [GET]");
+//		logger.info("/admin/user/delete [GET]");
 		
-		//사용자계정 삭제
-		adminUserService.delete(user);
+		adminUserService.delete(user); //계정 삭제
 		
-		return "redirect:/admin/user/list";
+		return "redirect:/admin/user/list"; //목록페이지로 이동
 	}
 	
 }

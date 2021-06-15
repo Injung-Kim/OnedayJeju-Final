@@ -1,39 +1,45 @@
 @charset "UTF-8";
 
 /* 전체 */
-.container { max-width: 900px; position: relative; margin: 0 auto 100px; padding-top: 30px; padding-left: 0; padding-right: 0;}
+.container { max-width: 650px; height: 800px; position: relative; margin: 0 auto 100px; padding-top: 10px; padding-left: 0; padding-right: 0; border: 1px solid #D8D5DB; border-radius: 5px; }
 
 /* Page Header */
-.pageHeader h3 { text-align: center; }
-#page { font-weight: bold; }
+.pageHeader h2 { text-align: center; color: #212329; }
 
 /* Page Content */
+.pageContent { padding-top: 10px; }
+
 /* joinAgree */
-#termsForm { width: 80% }
-.terms label { font-size: 16px; }
-.terms .termsBox { height: 200px; border: 1px solid #ccc; overflow: auto; overflow-x: hidden; padding: 5px; }
-#checkbox { box-sizing: content-box; padding-top: 10px; font-size: 14px; }
+#termsForm { width: 70% }
+#required { color: #F84A71; }
+.terms label { font-size: 17px; font-weight: normal; }
+.terms .termsBox { height: 200px; border: 1px solid #dfe0df; border-radius: 4px; overflow: auto; overflow-x: hidden; padding: 5px; font-weight: 400; font-size: 14px; }
+#agreeMsg { font-size: 15px; font-weight: 500; }
+#checkbox1 { box-sizing: border-box; padding-top: 10px; cursor: pointer; }
+#checkbox2 { box-sizing: border-box; padding-top: 10px; cursor: pointer; }
 
 /* joinInfo */
-#infoForm label { font-weight: normal; }
-#infoForm input::placeholder { font-size: 11px; color: #5e5e5e; }
-#required { color: #E74C3C; font-weight: normal; }
-#idCheckMsg { color: #E74C3C; }
-
+#infoForm { width: 90%; }
+#infoForm label { font-size:15px; font-weight: normal; }
+#infoForm input::placeholder { font-size: 12px; color: #5e5e5e; }
+#infotb { padding: 3px; line-height: normal; }
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th { 
+	border: none; border-bottom: none; border-left: none; border-top: none; border-right: none;
+}
 
 /* joinReqAuth */
-.msgBox { width: 85%; height: 600px; margin: 0 auto; margin-top: 50px; text-align: center; vertical-align: middle; background-color: #f7f7f7; box-shadow: 6px 6px 10px #E0E0E0; }
+.msgBox { text-align: center; }
 .msgBox .msg { height: 100%; padding-top: 15%; padding-bottom: 30%; }
-.msgBox h1 { font-size: 50px; color: #00BD9D; }
+.msgBox span { font-size: 60px; font-weight: 500; color: #49C6E5; }
 .msgBox p { font-size: 16px; color: #5e5e5e; }
 
 /* Page Button */
-#btnBack { border-radius:30px; color: #FFFFFF; font-size: 15px; background-color: #D8D5DB; box-shadow: 6px 6px 10px #E0E0E0; }
-#btnNext { border-radius:30px; color: #FFFFFF; font-size: 15px; background-color: #8BD7D2; box-shadow: 6px 6px 10px #E0E0E0; }
-#btnIdCheck { border: 1px solid #00BD9D; color: #00BD9D; background-color: #FFFFFF; }
-#btnNickCheck { border: 1px solid #00BD9D; color: #00BD9D; background-color: #FFFFFF; }
-#btnZipcode { border: 1px solid #00BD9D; color: #00BD9D; background-color: #FFFFFF; }
-#btnClose { text-align: center; background: #00BD9D; color: #FFFFFF; }
-#btnCancle { border-radius:30px; color: #FFFFFF; font-size: 15px; background-color: #D8D5DB; box-shadow: 6px 6px 10px #E0E0E0; }
-#btnJoin { border-radius:30px; color: #FFFFFF; font-size: 15px; background-color: #8BD7D2; box-shadow: 6px 6px 10px #E0E0E0; }
-#btnMain { border-radius:30px; text-align: center; color: #FFFFFF; font-size: 15px; background-color: #8BD7D2; box-shadow: 6px 6px 10px #E0E0E0; }
+#btnGroup1 { padding-top: 15px; padding-bottom: 15px; }
+#btnBack { border-radius:3px; color: #49C6E5; font-size: 18px; background-color: #FFFFFF; box-shadow: 6px 6px 10px #E0E0E0; width: 80px; border: 1px solid #49C6E5; }
+#btnNext { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; box-shadow: 6px 6px 10px #E0E0E0; width: 80px; }
+#btnIdCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 1px solid #49C6E5; box-shadow: 1px 1px #49C6E5; }
+#btnNickCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 1px solid #49C6E5; box-shadow: 1px 1px #49C6E5; }
+#btnZipcode { padding-left: 0; padding-right: 0; text-align:center; border-radius:5px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 1px solid #49C6E5; box-shadow: 1px 1px #49C6E5; }
+#btnGroup2 { padding-top: 20px; padding-bottom: 5px; }
+#btnJoin { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 300px; height: 50px; box-shadow: 6px 6px 6px #E0E0E0; }
+#btnMain { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 300px; height: 50px; box-shadow: 6px 6px 6px #E0E0E0; }

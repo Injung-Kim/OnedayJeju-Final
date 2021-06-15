@@ -45,6 +45,18 @@ public class JoinServiceImpl implements JoinService {
 	}
 	
 	@Override
+	public int checkId(JejuUser user) {
+		//아이디 중복 조회
+		return joinDao.checkUserId(user);
+	}
+	
+	@Override
+	public int checkNick(JejuUser user) {
+		//닉네임 중복 조회
+		return joinDao.checkUserNick(user);
+	}	
+	
+	@Override
 	@Transactional
 	public void join(JejuUser user) {
 				

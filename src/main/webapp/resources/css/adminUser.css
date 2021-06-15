@@ -1,9 +1,11 @@
 @charset "UTF-8";
 
 /* 전체 */
-.container { max-width: 900px; padding: 0px; margin: 0 auto; border-color: red; }
+.container { max-width: 900px; height: 675px; padding: 0px; margin: 0 auto; border: 1px solid red; }
 
 /* Page Header */
+.pageHeader { font-size: large; }
+#page { font-weight: bold; }
 
 /* Page Content */
 /* list */

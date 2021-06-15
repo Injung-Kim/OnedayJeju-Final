@@ -26,6 +26,24 @@
 		<result column="user_grade" property="userGrade"/>
 	</resultMap>
 
+	<sql id="selectUser">
+		SELECT user_no, user_id, user_name, user_nick, user_email, user_join_date, user_mail_auth, user_grade FROM JejuUser 
+	</sql>
+	
+	<sql id="search">
+		<choose>
+			<when test="condition == 'null'">
+				WHERE user_id LIKE '%'||#{search}||'%'
+				OR WHERE user_name LIKE '%'||#{search}||'%'
+				OR WHERE user_nick LIKE '%'||#{search}||'%'
+				OR WHERE user_email LIKE '%'||#{search}||'%'
+			</when>
+			<otherwise>
+				WHERE ${condition} LIKE '%'||#{search}||'%'
+			</otherwise>
+		</choose>
+	</sql>
+
 	<select id="selectCountAll" resultType="int">
 		SELECT COUNT(*) FROM JejuUser
 	</select>
@@ -33,8 +51,9 @@
 	<select id="selectPageList" resultMap="JejuUser" parameterType="jeju.util.Paging">
 		SELECT * FROM (
 			SELECT rownum rnum, J.* FROM (
-				SELECT user_no, user_id, user_name, user_nick, user_email, user_join_date, user_mail_auth, user_grade
-				FROM JejuUser ORDER BY user_no ASC
+				<include refid="selectUser" />
+				<include refid="search" />
+				ORDER BY user_no ASC	
 			) J
 		) R
 		WHERE rnum BETWEEN #{startNo} AND #{endNo}

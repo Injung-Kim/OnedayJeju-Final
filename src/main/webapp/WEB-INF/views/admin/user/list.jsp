@@ -12,7 +12,7 @@
 $(document).ready(function() {
 	//검색버튼 클릭
 	$("#btnSearch").click(function() {
-		location.href="/admin/user/list?search="+$("#search").val();
+		location.href="/admin/user/list?condition="+$("#condition").val()+"&search="+$("#search").val();
 	});
 	
 	//관리자계정생성 버튼 클릭
@@ -24,30 +24,32 @@ $(document).ready(function() {
 
 <div class="container">
 	<div class="pageHeader">
-		<span class="pull-left">회원관리 > <span id="page">전체회원</span></span>
-	<hr>
+		<span class="pull-left"><span id="page">회원관리</span> > 전체회원</span><br>
+		<hr>
 	</div><!-- End pageHeader -->
 	
 	<div class="pageContent">
-		<%-- 총 회원 수 --%>
-		<span class="pull left">( 총 회원 수 : ${paging.totalCount }명 )</span>
-		
-		<%-- 회원 검색 --%>
-		<div class="form-inline pull-right">
-			<select class="form-control">
-				<option value="#">선택</option>
-				<option value="#">아이디</option>
-				<option value="#">이름</option>
-				<option value="#">닉네임</option>
-				<option value="#">이메일</option>
+	
+		<%-- 사용자 검색 --%>
+		<form action="/admin/user/list" method="get">
+			<div class="form-inline pull-right">
+			<select class="form-control" id="condition" name="condition">
+				<option value="null" <c:if test="${condition eq ''}">selected</c:if>>선택</option>
+				<option value="userId" <c:if test="${condition eq 'userId'}">selected</c:if>>아이디</option>
+				<option value="userName" <c:if test="${condition eq 'userName'}">selected</c:if>>이름</option>
+				<option value="userNick" <c:if test="${condition eq 'userNick'}">selected</c:if>>닉네임</option>
+				<option value="userEmail" <c:if test="${condition eq 'userEmail'}">selected</c:if>>이메일</option>
 			</select>
-			<input type="text" id="search" class="form-control" name="search" value="${param.search}">
+			<input type="text" id="search" name="search" class="form-control" value="${param.search}">
 			<button type="button" id="btnSearch" class="btn">검색</button>
-		</div><!-- End search -->
+			</div><!-- End search -->
+		</form>	
 		<br><br>
-				
-		<table class="table table-hover">
+		
+		<%-- 목록 테이블 --%>
+		<table id="userList" class="table table-hover" >
 			<thead>
+				<tr><p class="pull left">( 총 사용자 수 : ${paging.totalCount}명 )</p></tr>
 				<tr>
 					<th>번호</th>
 					<th>아이디</th>
@@ -79,14 +81,15 @@ $(document).ready(function() {
 	</div><!-- End pageContent -->
 	
 	<%-- 관리자계정 생성 버튼 --%>
+	<%-- 최고관리자(userGrade == 0)계정으로 로그인했을 때만 버튼 표시 --%>
 	<c:if test="${grade eq '0'}">
 		<div class="pull-right">
 			<button type="button" class="btn" id="btnCreate">관리자계정 생성</button>
 		</div>
 	</c:if>
 	
-	<%-- 페이징 JSP --%>
-<%-- 	<jsp:include page="/WEB-INF/views/util/adminUserPaging.jsp" /> --%>
+<%-- 페이징 JSP --%>
+<jsp:include page="/WEB-INF/views/util/adminUserPaging.jsp" />
 
 </div><!-- End container -->
 
