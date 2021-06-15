@@ -1,10 +1,11 @@
 @charset "UTF-8";
 
 /* 전체 */
-.container { max-width: 650px; height: 800px; position: relative; margin: 0 auto 100px; padding-top: 10px; padding-left: 0; padding-right: 0; border: 1px solid #D8D5DB; border-radius: 5px; }
+.container { max-width: 650px; height: 800px; position: relative; margin: 0 auto 100px; padding-top: 10px; padding-left: 0; padding-right: 0; border: 1px solid #D8D5DB; border-radius: 5px; box-shadow: 0 0 1em 0 #D8D5DB; }
 
 /* Page Header */
 .pageHeader h2 { text-align: center; color: #212329; }
+.pageHeader h1 { text-align: center; font-size: 60px; font-weight: 500; color: #49C6E5; padding-top: 15%; padding-bottom: 5%; }
 
 /* Page Content */
 .pageContent { padding-top: 10px; }
@@ -17,6 +18,9 @@
 #agreeMsg { font-size: 15px; font-weight: 500; }
 #checkbox1 { box-sizing: border-box; padding-top: 10px; cursor: pointer; }
 #checkbox2 { box-sizing: border-box; padding-top: 10px; cursor: pointer; }
+#btnGroupAgree { padding-top: 15px; padding-bottom: 15px; }
+#btnBack { border-radius:3px; color: #49C6E5; font-size: 18px; background-color: #FFFFFF; box-shadow: 6px 6px 10px #E0E0E0; width: 80px; border: 1px solid #49C6E5; }
+#btnNext { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; box-shadow: 6px 6px 10px #E0E0E0; width: 80px; }
 
 /* joinInfo */
 #infoForm { width: 90%; }
@@ -26,20 +30,14 @@
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th { 
 	border: none; border-bottom: none; border-left: none; border-top: none; border-right: none;
 }
+#btnIdCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
+#btnNickCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
+#btnZipcode { padding-left: 0; padding-right: 0; text-align:center; border-radius:5px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
+#btnGroupInfo { padding-top: 20px; padding-bottom: 5px; }
+#btnJoin { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 300px; height: 50px; box-shadow: 3px 6px 6px #E0E0E0; }
 
-/* joinReqAuth */
-.msgBox { text-align: center; }
-.msgBox .msg { height: 100%; padding-top: 15%; padding-bottom: 30%; }
-.msgBox span { font-size: 60px; font-weight: 500; color: #49C6E5; }
+/* sendMail */
+.msgBox { text-align: center; height: 100%; padding-bottom: 15%; }
+.msgBox .msg { }
 .msgBox p { font-size: 16px; color: #5e5e5e; }
-
-/* Page Button */
-#btnGroup1 { padding-top: 15px; padding-bottom: 15px; }
-#btnBack { border-radius:3px; color: #49C6E5; font-size: 18px; background-color: #FFFFFF; box-shadow: 6px 6px 10px #E0E0E0; width: 80px; border: 1px solid #49C6E5; }
-#btnNext { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; box-shadow: 6px 6px 10px #E0E0E0; width: 80px; }
-#btnIdCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 1px solid #49C6E5; box-shadow: 1px 1px #49C6E5; }
-#btnNickCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 1px solid #49C6E5; box-shadow: 1px 1px #49C6E5; }
-#btnZipcode { padding-left: 0; padding-right: 0; text-align:center; border-radius:5px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 1px solid #49C6E5; box-shadow: 1px 1px #49C6E5; }
-#btnGroup2 { padding-top: 20px; padding-bottom: 5px; }
-#btnJoin { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 300px; height: 50px; box-shadow: 6px 6px 6px #E0E0E0; }
-#btnMain { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 300px; height: 50px; box-shadow: 6px 6px 6px #E0E0E0; }
+#btnMain { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 300px; height: 50px; box-shadow: 5px 6px 5px #E0E0E0; }

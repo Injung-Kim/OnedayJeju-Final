@@ -89,7 +89,7 @@ $(document).ready(function() {
 			
 			<br><br>
 
-			<div id="btnGroup1" align="center">
+			<div id="btnGroupAgree" align="center">
 				<button type="reset" class="btn" id="btnBack" onclick="location.href='/'">이전</button>&ensp;&ensp;&ensp;&ensp;
 				<button type="button" class="btn" id="btnNext">다음</button>
 			</div><!-- End btn -->

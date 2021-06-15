@@ -18,31 +18,41 @@ public class AdminUserServiceImpl implements AdminUserService {
 
 	@Override
 	public Paging getPaging(Paging inData) {
-		int totalCount = adminUserDao.selectCountAll(); //총 사용자 수 조회
-		Paging paging = new Paging(totalCount, inData.getCurPage()); //페이징 계산
-		return paging; //페이징 결과값 리턴
+		
+		//총 사용자 수 조회
+		int totalCount = adminUserDao.selectCountAll(inData);
+		
+		//페이징 계산
+		Paging paging = new Paging(totalCount, inData.getCurPage());
+		
+		//페이징 결과값 리턴
+		return paging;
 	}
 
 	@Override
 	public List<JejuUser> getList(Paging paging) {
-		return adminUserDao.selectPageList(paging); //페이징 적용된 목록 조회 결과값 리턴
+		//페이징 적용된 목록 조회 결과값 리턴
+		return adminUserDao.selectPageList(paging);
 	}
 
 	@Override
 	public JejuUser getInfo(JejuUser userInfo) {
-		return adminUserDao.selectInfo(userInfo); //정보 조회 결과값 리턴
+		//정보 조회 결과값 리턴
+		return adminUserDao.selectInfo(userInfo);
 	}
 
 	@Override
 	@Transactional
 	public void modify(JejuUser user) {
-		adminUserDao.update(user); //정보 수정
+		//정보 수정
+		adminUserDao.update(user);
 	}
 	
 	@Override
 	@Transactional
 	public void delete(JejuUser user) {
-		adminUserDao.delete(user); //계정 삭제
+		//계정 삭제
+		adminUserDao.delete(user);
 	}
 
 }

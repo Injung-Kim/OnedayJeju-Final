@@ -24,20 +24,25 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/list")
 	public void getList(Paging inData, Model model) {
-		logger.info("/admin/user/list [GET]");
+//		logger.info("/admin/user/list [GET]");
 		
 		//페이징 계산
-		Paging paging = adminUserService.getPaging(inData);
-		paging.setSearch(inData.getSearch()); //검색어 적용
-		paging.setCondition(inData.getCondition()); //검색조건 적용
-//		logger.info("페이징: {}", paging);
+		Paging paging = adminUserService.getPaging(inData);	
+		//검색조건 적용
+		paging.setCondition(inData.getCondition());
+		//검색어 적용
+		paging.setSearch(inData.getSearch());
+//		logger.info("페이징: {}", paging);		
 		
-		List<JejuUser> userList = adminUserService.getList(paging); //목록 조회
+		//목록 조회
+		List<JejuUser> userList = adminUserService.getList(paging);
 		for(int i=0; i < userList.size(); i++) {
 //			logger.info(userList.get(i).toString());
 		}
-		model.addAttribute("list", userList); //목록 전달
-		model.addAttribute("paging", paging); //페이징 적용
+		//목록 전달
+		model.addAttribute("list", userList);
+		//페이징 적용
+		model.addAttribute("paging", paging);
 	}
 	
 	@RequestMapping(value = "/info")
@@ -45,9 +50,12 @@ public class AdminUserController {
 //		logger.info("/admin/user/info [GET]");
 //		logger.info("userNo : {}", userInfo.toString());
 		
-		userInfo = adminUserService.getInfo(userInfo); //정보 조회
+		//정보 조회
+		userInfo = adminUserService.getInfo(userInfo);
 //		logger.info("사용자정보 : {}", userInfo.toString());
-		model.addAttribute("info", userInfo); //정보 전달
+		
+		//정보 전달
+		model.addAttribute("info", userInfo);
 		
 		return "admin/user/info";
 	}
@@ -57,9 +65,12 @@ public class AdminUserController {
 //		logger.info("/admin/user/modify [GET]");
 //		logger.info("userNo : {}", user.toString());
 		
-		user = adminUserService.getInfo(user); //정보 조회
+		//정보 조회
+		user = adminUserService.getInfo(user);
 //		logger.info("사용자정보 : {}", user.toString());
-		model.addAttribute("user", user); //정보 전달
+		
+		//정보 전달
+		model.addAttribute("user", user);
 		
 		return "admin/user/modify";
 	}
@@ -69,18 +80,22 @@ public class AdminUserController {
 //		logger.info("/admin/user/modify [POST]");
 //		logger.info("사용자정보 수정 : {}", user);
 		
+		//정보 수정
 		adminUserService.modify(user); //정보 수정
 		
-		return "redirect:/admin/user/info?userNo="+user.getUserNo(); //해당 사용자의 정보조회 페이지로 이동
+		//정보조회 페이지로 이동
+		return "redirect:/admin/user/info?userNo="+user.getUserNo();
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(JejuUser user) {
 //		logger.info("/admin/user/delete [GET]");
 		
-		adminUserService.delete(user); //계정 삭제
+		//계정 삭제
+		adminUserService.delete(user);
 		
-		return "redirect:/admin/user/list"; //목록페이지로 이동
+		//목록 페이지로 이동
+		return "redirect:/admin/user/list";
 	}
 	
 }

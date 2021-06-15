@@ -12,7 +12,7 @@ public interface AdminUserDao {
 	 * 
 	 * @return 총 사용자 수
 	 */
-	public int selectCountAll();
+	public int selectCountAll(Paging inData);
 
 	/**
 	 * 페이징 적용한 사용자 목록 조회

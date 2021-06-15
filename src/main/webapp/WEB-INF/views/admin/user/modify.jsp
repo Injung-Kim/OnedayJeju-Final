@@ -25,21 +25,23 @@ $(document).ready(function() {
 
 <div class="container">
 	<div class="pageHeader">
-		<span class="pull-left">회원관리 > 회원정보 > <span id="page">정보수정</span></span>
-		<hr>
+		<span class="pull-left">회원정보 > <span id="page">정보수정</span></span><br>
 	</div><!-- End pageHeader -->
 	
 	<div class="pageContent">
-		<form id="modifyInfo" role="form" action="/admin/user/modify" method="post">
-		<input type="hidden" name="userNo" value="${user.userNo}">
-			<table id="tbInfo" class="table table-bordered table-hover">
+		<%-- 정보 수정 폼 --%>
+		<form id="ModifyInfoForm" role="form" action="/admin/user/modify" method="post">
+			<input type="hidden" name="userNo" value="${user.userNo}">
+			
+			<%-- 정보 테이블 --%>
+			<table id="tbInfoModify" class="table">
 				<tr>
 					<th>아이디</th>
 					<td><input type="text" class="form-control" id="userId" name="userId" value="${user.userId}"> </td>
 				</tr>
 				<tr>
 					<th>비밀번호</th>
-					<td><input type="password" class="form-control" id="userPw" name="userPw" placeholder="비밀번호 수정만 가능"></td>
+					<td><input type="password" class="form-control" id="userPw" name="userPw" placeholder="비밀번호를 입력해주세요"></td>
 				</tr>
 				<tr>
 					<th>이름</th>
@@ -64,18 +66,19 @@ $(document).ready(function() {
 				<tr>
 					<th>주소</th>
 					<td>
-						<input type="text" class="form-control" id="userAddress" name="userAddress" value="${user.userAddress}">
+						<input type="text" class="form-control" id="userAddress" name="userAddress" value="${user.userAddress}"><br>
 						<input type="text" class="form-control" id="userAddressDetail" name="userAddressDetail" value="${user.userAddressDetail}">
 					</td>
 				</tr>
 			</table>
 		
-			<div align="center">
-				<button type="submit" class="btn" id="btnUpdate">등록</button>
+			<div id="btnGroupInfoModify" align="center">
+				<button type="submit" class="btn" id="btnUpdate">등록</button>&ensp;&ensp;
 				<button type="button" class="btn" id="btnCancle">취소</button>	
 			</div><!-- End btn -->
-		</form><!-- End modifyInfo -->
+		</form><!-- End ModifyInfoForm -->
 	</div><!-- End pageContent -->
+	
 </div><!-- End container -->
 
 <c:import url="/WEB-INF/views/layout/adminFooter.jsp" />

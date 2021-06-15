@@ -13,10 +13,8 @@
 $(document).ready(function() {
 	//아이디 중복확인
 	$("#btnIdCheck").click(function() {
-	
-	
 	});
-
+});
 //비밀번호 확인
 $(document).ready(function() {
 	$("#checkPwMsg1").hide();
@@ -156,7 +154,7 @@ function openDaumPostcode(){
 				</tbody>
 			</table>
 			
-			<div id="btnGroup2" align="center">
+			<div id="btnGroupInfo" align="center">
 				<button type="submit" class="btn" id="btnJoin">가입하기</button>
 			</div><!-- End btn -->
 		</form><!-- End inputForm -->

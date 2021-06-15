@@ -5,15 +5,15 @@
 
 <link rel="stylesheet" type="text/css" href="/resources/css/adminUser.css" />
 
-<c:if test="${not empty param.condition}">
-	<c:set var="conditionParam" value="&condition=${param.condition}" />
+<c:if test="${not empty param.condition }">
+	<c:set var="conditionParam" value="&condition=${param.condition }" />
 </c:if>
 
-<c:if test="${not empty param.search}">
-	<c:set var="searchParam" value="&search=${param.search}" />
+<c:if test="${not empty param.search }">
+	<c:set var="searchParam" value="&search=${param.search }" />
 </c:if>
 
-<div class="paging" align="center">
+<div class="paging">
 	<ul class="pagination">
 
 		<%-- 처음 페이지 버튼, 첫 페이지가 아닐 때 버튼 표시 --%>	
