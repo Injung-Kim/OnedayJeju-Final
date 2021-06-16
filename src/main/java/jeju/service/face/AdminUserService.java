@@ -45,4 +45,27 @@ public interface AdminUserService {
 	 */
 	public void delete(JejuUser user);
 
+	/**
+	 * 전달 받은 아이디 중복값 조회하기
+	 * 
+	 * @param userId - 전달 받은 아이디
+	 * @return 중복조회된 값
+	 */
+	public int checkId(String userId);
+	
+	/**
+	 * 전달 받은 닉네임 중복값 조회하기
+	 * 
+	 * @param userNick - 전달 받은 닉네임
+	 * @return 중복조회된 값
+	 */
+	public int checkNick(String userNick);
+	
+	/**
+	 * 관리자계정 생성 처리
+	 * 
+	 * @param user - 생성할 관리자계정 정보
+	 */
+	public void createAdmin(JejuUser user);
+
 }

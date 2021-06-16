@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	//목록 버튼 클릭
+	//이전 버튼 클릭
 	$("#btnList").click(function() {
 		location.href='list';
 	})
@@ -22,20 +22,21 @@ $(document).ready(function() {
 	$("#btnDelete").click(function() {
 		var result = confirm('계정을 삭제하시겠습니까? 삭제된 계정은 복원할 수 없습니다.');
 		if(result){
-			location.href='delete?userNo='+${info.userNo}; //확인버튼 클릭하면 삭제
+			//확인버튼 클릭하면 삭제
+			location.href='delete?userNo='+${info.userNo};
 		} else { } //취소
 	})
-})
+});
 </script>
 
 <div class="container">
 	<div class="pageHeader">
-		<span class="pull-left">회원관리 > <span id="page">회원정보</span></span>
-		<hr>
+		<span class="pull-left">회원관리 > <span id="page">회원정보</span></span><br>
 	</div><!-- End pageHeader -->
 	
 	<div class="pageContent">
-		<table id="tbInfo" class="table table-bordered table-hover">
+		<%-- 정보 테이블 --%>
+		<table id="tbInfo" class="table">
 			<tr>
 				<th>번호</th>
 				<td><input type="text" class="form-control" id="userNo" name="userNo" value="${info.userNo}" readonly></td>
@@ -67,18 +68,18 @@ $(document).ready(function() {
 			<tr>
 				<th>주소</th>
 				<td>
-					<input type="text" class="form-control" id="userAddress" name="userAddress" value="${info.userAddress}" readonly>
+					<input type="text" class="form-control" id="userAddress" name="userAddress" value="${info.userAddress}" readonly><br>
 					<input type="text" class="form-control" id="userAddressDetail" name="userAddressDetail" value="${info.userAddressDetail}" readonly>
 				</td>
 			</tr>
 		</table>
+		
+		<div id="btnGroupInfo" align="center">
+			<button type="button" class="btn" id="btnList">이전</button>
+			<button type="button" class="btn" id="btnModify">수정</button>
+			<button type="button" class="btn" id="btnDelete">삭제</button>
+		</div><!-- End btn -->
 	</div><!-- End pageContent -->
-	
-	<div align="center">
-		<button type="button" class="btn" id="btnList">이전</button>
-		<button type="button" class="btn" id="btnModify">수정</button>
-		<button type="button" class="btn" id="btnDelete">삭제</button>
-	</div><!-- End btn -->
 
 </div><!-- End container -->
 

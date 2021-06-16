@@ -64,7 +64,7 @@
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
 		<property name="username" value="onedayjeju@gmail.com" />
-		<property name="password" value="jejutest" />
+		<property name="password" value="jejuadmin" />
 		<property name="defaultEncoding" value="utf-8"></property>
 		<property name="javaMailProperties">
 			<props>
