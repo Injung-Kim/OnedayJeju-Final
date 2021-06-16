@@ -3,12 +3,14 @@ package jeju.service.impl;
 import java.util.List;
 
 
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +21,7 @@ import jeju.dto.Review;
 import jeju.dto.RvComment;
 import jeju.service.face.ReviewService;
 import jeju.util.Paging;
+import jeju.util.RvPaging;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
@@ -28,19 +31,19 @@ public class ReviewServiceImpl implements ReviewService{
 	@Autowired private RvCommentDao rvcommentDao;
 
 	@Override
-	public Paging getPaging(Paging inData) {
+	public RvPaging getPaging(RvPaging inData) {
 		
 		//총 게시글 수 조회
 		int totalCount = reviewDao.selectCntAll(inData);
 		
 		//페이징 계산
-		Paging paging = new Paging(totalCount, inData.getCurPage());
+		RvPaging paging = new RvPaging(totalCount, inData.getCurPage());
 		
 		return paging;
 	}
 
 	@Override
-	public List<Review> list(Paging paging) {
+	public List<Review> list(RvPaging paging) {
 		
 		
 		return reviewDao.selectPageList(paging);
@@ -74,9 +77,39 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 
 	@Override
-	public void insertComment(RvComment rvcomment) {
-		rvcommentDao.insertComment(rvcomment);
+	public void insert(RvComment rvcomment) {
+		rvcommentDao.insert(rvcomment);
 	}
+
+	@Override
+	public void commentUpdateCommit(RvComment rvcomment) {
+		rvcommentDao.commentUpdateCommit(rvcomment);
+	}
+
+	@Override
+	public void commentCancel(RvComment rvcomment) {
+		rvcommentDao.commentCancel(rvcomment);
+	}
+
+	@Override
+	public void update(Review review, MultipartFile file) {
+
+		if( "".equals(review.getRvTitle()) ) {
+			review.setRvTitle("(제목없음)");
+		}
+		reviewDao.update(review);
+
+		
+	}
+
+	@Override
+	@Transactional
+	public void delete(Review review) {
+		reviewDao.delete(review);
+		
+	}
+
+
 
 	
 	

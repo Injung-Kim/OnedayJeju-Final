@@ -45,6 +45,18 @@ public class JoinServiceImpl implements JoinService {
 	}
 	
 	@Override
+	public int checkId(String userId) {
+		//아이디 중복 조회
+		return joinDao.selectCountId(userId);
+	}
+	
+	@Override
+	public int checkNick(String userNick) {
+		//닉네임 중복 조회
+		return joinDao.selectCountNick(userNick);
+	}	
+	
+	@Override
 	@Transactional
 	public void join(JejuUser user) {
 				
@@ -64,9 +76,9 @@ public class JoinServiceImpl implements JoinService {
 			sendAuthMail.setSubject("[어느 날, 제주] 회원가입 인증 이메일");
 			sendAuthMail.setText(new StringBuffer().append("<h1>회원가입 이메일 인증</h1>")
 								.append("<p>아래의 인증 링크를 클릭하셔서 회원가입을 완료해주세요.</p>")
-								.append("<a href=http://localhost:8090/user/confirmMail?authkey=")
+								.append("<a href=http://localhost:8088/user/confirmMail?authkey=")
 								.append(authkey)
-								.append("' target='_blank'>이메일 인증 확인</a>")
+								.append(" target='_blank'>이메일 인증 확인</a>")
 								.toString());
 			sendAuthMail.setFrom("onedayjeju@gmail.com", "관리자");
 			sendAuthMail.setTo(user.getUserEmail());

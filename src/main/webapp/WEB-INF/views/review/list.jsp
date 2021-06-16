@@ -24,6 +24,7 @@ $(document).ready(function() {
 </script>
 
 <style type="text/css">
+
 .textBox{text-align:center; padding:50px 0;}
 
 table {
@@ -32,6 +33,20 @@ table {
 
 table, th, td {
 	text-align: center;
+}
+
+.rvWr{
+	width:60px; 
+	height:30px; 
+	line-height:30px;
+	border:none;
+	background-color:#54DEFD;
+	border-radius:10px;
+	color:#fff;
+	font-size:14px;
+	box-shadow : 3px 3px 3px #ccc;
+	float:right;	
+	margin:20px 30px 20px 0;
 }
 
 </style>
@@ -66,9 +81,9 @@ table, th, td {
 </tbody>
 </table>
 
+<button id="btnWrite" class="rvWr">글쓰기</button>
 <span class="pull-left">total : ${paging.totalCount }</span>
 
-<button id="btnWrite" class="btn btn-primary pull-right">글쓰기</button>
 
 <div class="clearfix"></div>
 

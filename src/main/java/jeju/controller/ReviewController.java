@@ -2,6 +2,8 @@ package jeju.controller;
 
 import java.util.List;
 
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -9,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jeju.dto.Review;
 import jeju.dto.RvComment;
 import jeju.service.face.ReviewService;
-import jeju.util.Paging;
+import jeju.util.RvPaging;
 
 @Controller
 @RequestMapping(value="/review")
@@ -29,11 +32,11 @@ public class ReviewController {
 	private ReviewService reviewService;
 	
 	@RequestMapping(value="/list")
-	public void list(Paging inData, Model model) {
+	public void list(RvPaging inData, Model model) {
 		logger.info("/Review/list [GET]");
 		
 		//페이징계산
-		Paging paging = reviewService.getPaging( inData );
+		RvPaging paging = reviewService.getPaging( inData );
 		paging.setSearch( inData.getSearch() );
 		
 		
@@ -68,10 +71,9 @@ public class ReviewController {
 		logger.debug("상세보기 : {}", viewReview.toString());
 		model.addAttribute("view", viewReview);
 		
-		//댓글리스트 전달
-		RvComment comment = new RvComment();
-		List<RvComment> commentList = reviewService.getCommentList(viewReview);
-		model.addAttribute("commentList", commentList);
+//		//댓글리스트 전달
+//		List<RvComment> commentList = reviewService.getCommentList(viewReview);
+//		model.addAttribute("commentList", commentList);
 		
 		return "review/view";
 	}
@@ -90,6 +92,49 @@ public class ReviewController {
 		logger.info("글쓰기 : {}", review);
 		
 		reviewService.write(review, file);
+		
+		return "redirect:/review/list";
+	}
+	
+	@RequestMapping(value="/update", method=RequestMethod.GET)
+	public String update(Review review, Model model) {
+		logger.debug("rvNo : {}", review.toString());
+		
+		// 게시글 번호가 1보다 작으면 목록으로 보내기
+		if(review.getRvNo() < 1) {
+			return "redirect:/review/list";
+		}
+		
+		// 게시글 상세 정보 전달
+		review = reviewService.view(review);
+		logger.debug("상세보기 : {}", review.toString());
+		model.addAttribute("view", review);
+		
+		
+		return "review/update";
+	}
+
+	@RequestMapping(value="/update", method=RequestMethod.POST)
+	public String updateProcess(Review review, MultipartFile file, HttpSession session) {
+		logger.debug("글수정 : {}", file);
+		
+		System.out.println("aaaaaaaaaaaaa");
+		
+		//작성자 ID, NICK 추가 - 세션
+		review.setUserId((String) session.getAttribute("id"));
+		
+		logger.debug("글수정 : {}", review);
+		
+		reviewService.update(review, file);
+		
+		return "redirect:/review/view?rvNo="+review.getRvNo();
+	}
+	
+	@RequestMapping(value="delete")
+	public String deleteProc(Review review) {
+		reviewService.delete(review);
+		
+		System.out.println("test");
 		
 		return "redirect:/review/list";
 	}
