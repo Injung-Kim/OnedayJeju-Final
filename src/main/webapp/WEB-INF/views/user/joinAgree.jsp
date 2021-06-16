@@ -26,14 +26,12 @@ $(document).ready(function() {
 </script>
 
 
-<div class="container">
+<div class="container" id="joinAgreecontainer">
 	<div class="pageHeader">
 		<h2>약관동의</h2>
 	</div><!-- End pageHeader -->
 	
 	<div class="pageContent">
-		<span></span>
-		<br><br>
 		<form id="termsForm" name="agreement" role="form" onsubmit="return send(this)">
 			<div class="terms">
 				<label>이용약관 <span id="required">(필수)</span></label>
@@ -90,7 +88,7 @@ $(document).ready(function() {
 			<br><br>
 
 			<div id="btnGroupAgree" align="center">
-				<button type="reset" class="btn" id="btnBack" onclick="location.href='/'">이전</button>&ensp;&ensp;&ensp;&ensp;
+				<button type="reset" class="btn" id="btnBack" onclick="location.href='/'">이전</button>
 				<button type="button" class="btn" id="btnNext">다음</button>
 			</div><!-- End btn -->
 		</form><!-- End termsForm -->

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -98,4 +99,20 @@ public class AdminUserController {
 		return "redirect:/admin/user/list";
 	}
 	
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public void create() {
+//		logger.info("/admin/user/create [GET]");
+	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String createProcess(JejuUser user) {
+//		logger.info("/admin/user/create [POST]");
+//		logger.info("생성할 관리자계정 정보 : {}", user.toString());
+	
+		//관리자 계정 생성
+		adminUserService.createAdmin(user);
+		
+		//정보조회 페이지로 이동
+		return "redirect:/admin/user/list";
+	}
 }

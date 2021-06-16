@@ -70,10 +70,12 @@ $(document).ready(function() {
 					<td>${list.userEmail}</td>
 					<td><fmt:formatDate value="${list.userJoinDate}" pattern="yyyy-MM-dd"/></td>
 					<td>
+						<c:if test="${list.userMailAuth eq null || list.userMailAuth eq ''}">-</c:if>
 						<c:if test="${list.userMailAuth == 0}">미인증</c:if>
 						<c:if test="${list.userMailAuth == 1}">인증</c:if>
 					</td>
 					<td>
+						<c:if test="${list.userGrade eq null || list.userGrade eq ''}">-</c:if>
 						<c:if test="${list.userGrade == 0}">최고관리자</c:if>
 						<c:if test="${list.userGrade == 1}">관리자</c:if>
 						<c:if test="${list.userGrade == 2}">회원</c:if>

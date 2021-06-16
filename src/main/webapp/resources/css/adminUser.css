@@ -27,16 +27,22 @@ article { border: none; }
 #tbInfo th { width: 20%; background-color: #f7f7f7; }
 #tbInfo td input { width: 80%; background-color: #FFFFFF; }
 #btnGroupInfo { padding-top: 20px; padding-bottom: 5px; }
-#btnList { border-radius: 2px; color: #00BD9D; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 1.5px solid #8BD7D2; }
-#btnModify { border-radius: 2px; color: #FFFFFF; font-size: 14px; background-color: #00BD9D; width: 80px; }
-#btnDelete { border-radius: 2px; color: #F84A71; font-size: 14px; background-color: #FFFFFF; border: 1.5px solid #F84A71; width: 80px; }
+#btnList { border-radius: 100px; color: #00BD9D; font-size: 14px; background-color: #FFFFFF; width: 90px; border: 1.5px solid #8BD7D2; margin-right: 2%; }
+#btnModify { border-radius: 100px; color: #FFFFFF; font-size: 14px; background-color: #00BD9D; width: 90px; margin-right: 2%; }
+#btnDelete { border-radius: 100px; color: #F84A71; font-size: 14px; background-color: #FFFFFF; border: 1.5px solid #F84A71; width: 90px; }
 
 /* modify */
 #tbInfoModify { width: 60%; padding-top: 40%; }
 #tbInfoModify th { width: 20%; background-color: #f7f7f7; }
 #tbInfoModify td input { width: 80%; background-color: #FFFFFF; }
-#btnGroupInfoModify { padding-top: 20px; padding-bottom: 5px; }
-#btnUpdate { border-radius: 2px; color: #FFFFFF; font-size: 14px; background-color: #00BD9D; width: 80px; }
-#btnCancle { border-radius: 2px; color: #00BD9D; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 1.5px solid #00BD9D; }
+#btnGroupInfoModify { padding-top: 15px; padding-bottom: 5px; }
+#btnUpdate { border-radius: 100px; color: #FFFFFF; font-size: 14px; background-color: #00BD9D; width: 100px; margin-right: 3%; }
+#btnCancle { border-radius: 200px; color: #00BD9D; font-size: 14px; background-color: #FFFFFF; width: 100px; border: 1.5px solid #00BD9D; }
 
 /* create */
+#tbCreate { width: 50%; margin-top: 4%; }
+#tbCreate th { width: 30%; background-color: #f7f7f7; }
+#tbCreate td input { width: 100%; background-color: #FFFFFF; }
+#btnGroupCreate { padding-top: 10px; padding-bottom: 5px; }
+#btnInsert { border-radius: 2px; color: #FFFFFF; font-size: 14px; background-color: #00BD9D; width: 120px; margin-right: 5%; }
+#btnCancleCreate { border-radius: 2px; color: #00BD9D; font-size: 14px; background-color: #FFFFFF; width: 120px; border: 1.5px solid #00BD9D; }

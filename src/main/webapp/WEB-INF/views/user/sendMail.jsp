@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" type="text/css" href="/resources/css/join.css" />
 
-<div class="container">
+<div class="container" id="sendMailcontainer">
 	<div class="pageHeader">
 		<h1>Welcome!</h1>
 	</div><!-- End pageHeader -->

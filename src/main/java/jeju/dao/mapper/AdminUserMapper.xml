@@ -96,5 +96,11 @@
 	<delete id="delete" parameterType="jeju.dto.JejuUser">
 		DELETE JejuUser WHERE user_no = #{userNo}
 	</delete>
+	
+	<!-- 관리자계정 등록 -->
+	<insert id="insert" parameterType="jeju.dto.JejuUser">
+		INSERT INTO JejuUser(user_no, user_id, user_pw, user_name, user_nick, user_email, user_grade)
+		VALUES (user_no_seq.nextval, #{userId}, #{userPw}, #{userName}, #{userNick}, #{userEmail}, '1')
+	</insert>
 
 </mapper>

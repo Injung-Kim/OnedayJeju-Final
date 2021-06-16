@@ -86,7 +86,7 @@ function openDaumPostcode(){
 }
 </script>
 
-<div class="container">
+<div class="container" id="joinInfocontainer">
 	<div class="pageHeader">
 		<h2>회원가입</h2>
 	</div><!-- End pageHeader -->

@@ -55,4 +55,10 @@ public class AdminUserServiceImpl implements AdminUserService {
 		adminUserDao.delete(user);
 	}
 
+	@Override
+	public void createAdmin(JejuUser user) {
+		//계정 생성
+		adminUserDao.insert(user);
+	}
+
 }

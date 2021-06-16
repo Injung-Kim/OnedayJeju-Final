@@ -1,16 +1,14 @@
 @charset "UTF-8";
 
-/* 전체 */
-.container { max-width: 650px; height: 800px; position: relative; margin: 0 auto 100px; padding-top: 10px; padding-left: 0; padding-right: 0; border: 1px solid #D8D5DB; border-radius: 5px; box-shadow: 0 0 1em 0 #D8D5DB; }
-
 /* Page Header */
-.pageHeader h2 { text-align: center; color: #212329; }
+.pageHeader h2 { text-align: center; color: #212329; padding-top: 3%; padding-bottom: 3%;}
 .pageHeader h1 { text-align: center; font-size: 60px; font-weight: 500; color: #49C6E5; padding-top: 15%; padding-bottom: 5%; }
 
 /* Page Content */
-.pageContent { padding-top: 10px; }
+.pageContent { padding-top: 5px; }
 
 /* joinAgree */
+#joinAgreecontainer { max-width: 650px; height: 800px; position: relative; margin: 0 auto 100px; padding-top: 10px; padding-left: 0; padding-right: 0; border: 1px solid #D8D5DB; border-radius: 5px; box-shadow: 0 0 1em 0 #D8D5DB; }
 #termsForm { width: 70% }
 #required { color: #F84A71; }
 .terms label { font-size: 17px; font-weight: normal; }
@@ -19,10 +17,11 @@
 #checkbox1 { box-sizing: border-box; padding-top: 10px; cursor: pointer; }
 #checkbox2 { box-sizing: border-box; padding-top: 10px; cursor: pointer; }
 #btnGroupAgree { padding-top: 15px; padding-bottom: 15px; }
-#btnBack { border-radius:3px; color: #49C6E5; font-size: 18px; background-color: #FFFFFF; box-shadow: 6px 6px 10px #E0E0E0; width: 80px; border: 1px solid #49C6E5; }
-#btnNext { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; box-shadow: 6px 6px 10px #E0E0E0; width: 80px; }
+#btnBack { border-radius:3px; color: #49C6E5; font-size: 18px; background-color: #FFFFFF; width: 80px; border: 1px solid #49C6E5; margin-right: 10%; box-shadow: 4px 5px 5px #E0E0E0; }
+#btnNext { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 80px; box-shadow: 4px 5px 5px #E0E0E0; }
 
 /* joinInfo */
+#joinInfocontainer { max-width: 650px; height: 900px; position: relative; margin: 0 auto 100px; padding-top: 10px; padding-left: 0; padding-right: 0; border: 1px solid #D8D5DB; border-radius: 5px; box-shadow: 0 0 1em 0 #D8D5DB; }
 #infoForm { width: 90%; }
 #infoForm label { font-size:15px; font-weight: normal; }
 #infoForm input::placeholder { font-size: 12px; color: #5e5e5e; }
@@ -33,10 +32,11 @@
 #btnIdCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
 #btnNickCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
 #btnZipcode { padding-left: 0; padding-right: 0; text-align:center; border-radius:5px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
-#btnGroupInfo { padding-top: 20px; padding-bottom: 5px; }
-#btnJoin { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 300px; height: 50px; box-shadow: 3px 6px 6px #E0E0E0; }
+#btnGroupInfo { padding-top: 5px; padding-bottom: 5px; }
+#btnJoin { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 60%; height: 40px; box-shadow: 3px 6px 6px #E0E0E0; }
 
 /* sendMail */
+#sendMailcontainer { max-width: 70%; height: 700px; position: relative; margin-top: 5%; padding-left: 0; padding-right: 0; border: 1px solid #D8D5DB; border-radius: 5px; box-shadow: 0 0 1em 0 #D8D5DB; }
 .msgBox { text-align: center; height: 100%; padding-bottom: 15%; }
 .msgBox .msg { }
 .msgBox p { font-size: 16px; color: #5e5e5e; }

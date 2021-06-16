@@ -45,4 +45,11 @@ public interface AdminUserService {
 	 */
 	public void delete(JejuUser user);
 
+	/**
+	 * 관리자계정 생성 처리
+	 * 
+	 * @param user - 생성할 관리자계정 정보
+	 */
+	public void createAdmin(JejuUser user);
+
 }

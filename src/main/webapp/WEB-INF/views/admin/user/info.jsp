@@ -75,8 +75,8 @@ $(document).ready(function() {
 		</table>
 		
 		<div id="btnGroupInfo" align="center">
-			<button type="button" class="btn" id="btnList">이전</button>&ensp;&ensp;
-			<button type="button" class="btn" id="btnModify">수정</button>&ensp;&ensp;
+			<button type="button" class="btn" id="btnList">이전</button>
+			<button type="button" class="btn" id="btnModify">수정</button>
 			<button type="button" class="btn" id="btnDelete">삭제</button>
 		</div><!-- End btn -->
 	</div><!-- End pageContent -->

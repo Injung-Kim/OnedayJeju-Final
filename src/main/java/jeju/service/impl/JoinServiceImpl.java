@@ -78,7 +78,7 @@ public class JoinServiceImpl implements JoinService {
 								.append("<p>아래의 인증 링크를 클릭하셔서 회원가입을 완료해주세요.</p>")
 								.append("<a href=http://localhost:8088/user/confirmMail?authkey=")
 								.append(authkey)
-								.append("' target='_blank'>이메일 인증 확인</a>")
+								.append(" target='_blank'>이메일 인증 확인</a>")
 								.toString());
 			sendAuthMail.setFrom("onedayjeju@gmail.com", "관리자");
 			sendAuthMail.setTo(user.getUserEmail());

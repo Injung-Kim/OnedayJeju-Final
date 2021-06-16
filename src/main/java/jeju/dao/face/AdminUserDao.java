@@ -43,5 +43,12 @@ public interface AdminUserDao {
 	 * @param user - 삭제할 사용자계정
 	 */
 	public void delete(JejuUser user);
+
+	/**
+	 * 관리자계정 등록
+	 * 
+	 * @param user
+	 */
+	public void insert(JejuUser user);
 	
 }
