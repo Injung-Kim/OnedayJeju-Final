@@ -49,16 +49,29 @@
 	<select id="selectReviewByrvNo" parameterType="jeju.dto.Review" resultMap="Review">
 		SELECT
 			rv_no, rv_title, rv_content, user_id
-			, rv_hit, rv_create_date, rv_link, rv_budjet
+			, rv_hit
 		FROM Review
 		WHERE rv_no = #{rvNo}
 	</select>
+	
+	
 	
 	<insert id="insert" parameterType="jeju.dto.Review">
 		<selectKey order="BEFORE" resultType="int" keyProperty="rvNo">
 			SELECT review_seq.nextval FROM dual
 		</selectKey>
-		INSERT INTO review( rv_no, rv_title, rv_content, user_id, rv_link, rv_budjet)
-		VALUES( #{rvNo}, #{rvTitle}, #{rvContent}, #{userId}, #{rvLink}, #{rvBudjet})
+		INSERT INTO review( rv_no, rv_title, rv_content, user_id)
+		VALUES( #{rvNo}, #{rvTitle}, #{rvContent}, #{userId})
 	</insert>
+	
+	<update id="update" parameterType="jeju.dto.Review">
+		UPDATE Review
+		SET rv_title = #{rvTitle }, rv_content = #{rvContent }
+		WHERE rv_no = #{rvNo }
+	</update>
+	
+	<delete id="delete" parameterType="jeju.dto.Review">
+		DELETE review
+		WHERE rv_no = #{rvNo}
+	</delete>
 </mapper>

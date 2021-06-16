@@ -9,7 +9,12 @@ public interface RvCommentDao {
 
 	public List<RvComment> selectComment(Review review);
 
-	public void insertComment(RvComment rvcomment);
+	public void insert(RvComment rvcomment);
+
+
+	public void commentUpdateCommit(RvComment rvcomment);
+
+	public void commentCancel(RvComment rvcomment);
 
 	
 }
