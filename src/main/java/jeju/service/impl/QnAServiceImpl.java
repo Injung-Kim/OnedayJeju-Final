@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -18,8 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jeju.dao.face.QnADao;
+import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
+import jeju.dto.qna.Question;
 import jeju.dto.qna.Question_original;
 import jeju.service.face.QnAService;
 import jeju.util.Paging;
@@ -89,7 +92,9 @@ public class QnAServiceImpl implements QnAService{
 	//질문글 첨부파일 정보
 	@Override
 	public List<HashMap<String, Object>> getFiles(int qstNo) {
-		List<HashMap<String, Object>> files = qnaDao.selectFiles(qstNo);
+		FileTB fileno = new FileTB();
+		fileno.setQstNo(qstNo);
+		List<HashMap<String, Object>> files = qnaDao.selectFiles(fileno);
 		return files;
 	}
 	// 답변글 갯수 조회하기
@@ -101,7 +106,10 @@ public class QnAServiceImpl implements QnAService{
 	//답변글 리스트 불러오기
 	@Override
 	public List<HashMap<String, Object>> getAnswers(Map<String, Object> ansParam) {
-		return qnaDao.selectAnswers(ansParam);
+		//답변글 리스트 조회하기
+		List<HashMap<String, Object>> answers = qnaDao.selectAnswers(ansParam);
+		
+		return answers;
 	}
 	//해시태그 문자열 존재여부 검사
 	@Override
@@ -207,31 +215,38 @@ public class QnAServiceImpl implements QnAService{
 	}
 	//질문글에 등록된 파일 삭제
 	@Override
-	public void removeFiles(int qstNo) {
+	public void removeFiles(FileTB fileno) {
 		//질문글에 등록된 파일 정보 가져오기
-		List<HashMap<String, Object>> files = qnaDao.selectFiles(qstNo);
+		List<HashMap<String, Object>> files = qnaDao.selectFiles(fileno);
+		String storedName="";
+		if(fileno.getQstNo()>0) {
+			storedName += "QST_STORED";
+		}else if(fileno.getAnsNo()>0) {
+			storedName += "ANS_STORED";
+		}
 		//파일이 저장된 경로 가져오기
 		String storedPath = context.getRealPath("/qna");
 		File file;
 		for(HashMap<String, Object> stored : files) {
-			logger.info("등록된 파일이름  : {}", stored.get("QST_STORED"));
+			logger.debug("등록된 파일이름  : {}", stored.get(storedName));
 			// 등록된 이름으로 파일 생성
-			file = new File(storedPath+"/"+stored.get("QST_STORED"));
+			file = new File(storedPath+"/"+stored.get(storedName));
 			
 			// 수정 전 파일이 경로에 존재할 경우 파일 삭제
 			if(file.exists()) {
-				logger.info("저장된 파일 존재 : {}", stored.get("QST_STORED"));
+				logger.info("저장된 파일 존재 : {}", stored.get(storedName));
 				file.delete();
 			}else {
 				logger.info("파일 없음 ");
 			}
 		}
 	}
+	//질문글 전체 삭제하기
 	@Override
 	public void deleteQuestion(int qstNo) {
-		//질문글 전체 삭제하기
 		qnaDao.deleteQuestion(qstNo);
 	}
+	//질문글 수정하기
 	@Override
 	public void updateQuestion(Question_original question, List<FileTB> filetable, int[] tagNo) {
 		//작성한 질문글 DB 저장
@@ -244,8 +259,8 @@ public class QnAServiceImpl implements QnAService{
 			//첨부파일 DB저장
 			for(FileTB file : filetable) {
 				file.setQstNo(question.getQstNo());
-				qnaDao.insertFiles(file);
 				logger.debug("첨부파일 정보 : {}",file);
+				qnaDao.insertFiles(file);
 			}
 		}
 		
@@ -259,7 +274,112 @@ public class QnAServiceImpl implements QnAService{
 				map.put("qstNo", question.getQstNo());
 				map.put("tagNo", tagNum);
 				qnaDao.insertTagIntoQustion(map);
+			}//for tagnum end
+		}//if != null end
+	}//updateQuestion end
+	// 답변글 생성
+	@Override
+	public void createAnswer(List<FileTB> list, HttpSession session, Answer answer) {
+
+		//로그인 유저 정보 저장
+		answer.setUserNo((int)session.getAttribute("uno"));
+		
+		//작성한 답변글 DB 저장
+		qnaDao.insertAnswer(answer);
+		
+		logger.info("answer : {}", answer);
+		//첨부파일 DB저장
+		if(list != null) {
+			for(FileTB file : list) {
+				file.setAnsNo(answer.getAnsNo());
+				qnaDao.insertFiles(file);
+				logger.debug("첨부파일 정보 : {}",file);
 			}
 		}
+		logger.debug("answer : {}", answer);
+	}
+	//답변글 삭제하기
+	@Override
+	public void deleteAnswer(FileTB ansNo) {
+		qnaDao.deleteAnswer(ansNo);
+	}
+	//답변글 수정하기
+	@Override
+	public void updateAnswer(Answer answer, List<FileTB> filetable) {
+		//답변글 DB 저장
+		qnaDao.updateAnswer(answer);
+		//변경할 파일이 있는 경우 파일처리
+		if(filetable != null) {
+			//기존 첨부파일 삭제
+			qnaDao.deleteFiles(answer.getAnsNo());
+			//변경된 파일 저장
+			for(FileTB files : filetable) {
+				files.setAnsNo(answer.getAnsNo());
+				qnaDao.insertFiles(files);
+			}
+		}
+	}
+	//좋아요 변경하기
+	@Override
+	public boolean modifyLike(Answer answer) {
+		//좋아요 클릭 여부 조회
+		int num = qnaDao.cntLiked(answer);
+		if(num == 0) {
+			qnaDao.insertLike(answer);
+			return true;
+		}else {
+			qnaDao.deleteLike(answer);
+			return false;
+		}
+				
+	}
+	//게시글 좋아요 갯수 조회
+	@Override
+	public int getCntAnsLikes(Answer answer) {
+		return qnaDao.selectCntLikes(answer);
+	}
+	//유저가 작성한 질문글 게시글 수 조회
+	@Override
+	public int selectCntQustionByuno(Question question) {
+		return qnaDao.selectCntQuestionByuno(question);
+	}
+	//마이페이지 질문글 리스트 조회
+	@Override
+	public List<HashMap<String, Object>> getQstListByUserno(Paging listPaging, Question question) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("paging", listPaging);
+		map.put("question", question);
+		//유저가 작성한 질문글 조회
+		return qnaDao.selectQuetionsByuno(map);
+	}
+	//유저가 작성한 답변글 게시글 수 조회
+	@Override
+	public int selectCntAnswerByuno(Answer answer) {
+		return qnaDao.selectCntAnswerByuno(answer);
+	}
+	//마이페이지 답변글 리스트 조회
+	@Override
+	public List<HashMap<String, Object>> getansListByUserno(Paging listPaging, Answer answer) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("paging", listPaging);
+		map.put("answer", answer);
+		
+		//유저가 작성한 답변글 조회
+		return qnaDao.selectAnswersByuno(map);
+	}
+	//마이페이지 유저가 누른 좋아요 갯수 조회
+	@Override
+	public int getCntAnsLikedByuno(Answer answer) {
+		return qnaDao.selectCntAnsLikedByuno(answer);
+	}
+	//마이페이지 유저가 누른 좋아요 조회
+	@Override
+	public List<HashMap<String, Object>> getansLikedListByUno(Paging listPaging, Answer answer) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("paging", listPaging);
+		map.put("answer", answer);
+		
+		return qnaDao.selectAnswersLikedByuno(map);
 	}
 }

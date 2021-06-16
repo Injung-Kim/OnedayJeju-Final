@@ -1,0 +1,97 @@
+@charset "UTF-8";
+/*질문글 css*/
+.qstWrapper{
+	width : 1000px;
+	border-top : 3px solid #49c6e5;
+	border-bottom : 3px solid #49c6e5;
+	border-radius : 25px;
+	background: #fffbfa;
+}
+.question{
+	width : 80%;
+	text-align: right;
+	padding : 15px;
+}
+.question .qstInfo{
+	float : right;
+	margin : 0 0 0 40px;
+}
+.question #content{
+	text-align : left;
+	line-height :  27px;
+}
+.question .qstInfo #qstCnt{
+	margin-right : 18px;
+	color : #00a388;
+}
+.question .tag span{
+	line-height : 85px;
+}
+.makeAnswer{
+	background: #00bd9d;
+	color : #fffbfa;
+}
+/*답변글 css  */
+.ansWrapper{
+	width : 100%;
+	margin-top : 20px;
+}
+.ansWrapper > div{
+	margin-bottom: 25px;
+}
+
+.answers{
+	width : 80%;
+	border : 1px solid #49c6e5;
+	height : 350px;
+	border-radius: 15px;
+	padding: 15px;
+	text-align: right;
+}
+.like{
+	background: transparent;
+	border : none;
+	color : #f25c54;
+}
+
+.answers #ansInfo{
+	text-align: left;
+}
+.answers #userid{
+	line-height: 56px;
+   	vertical-align: text-top;
+   	font-size: 23px;
+}
+
+.answers #divider{
+	margin-top : 5px;
+	margin-bottom : 20px;
+}
+.ansContent{
+	height : 53%;
+	text-align: left;
+}
+/* 답변글 작성 폼 */
+.writeAnswer{
+	width : 50%;
+	padding : 20px;
+	border-radius: 15px;
+	/* background: #00a388; */
+	border : 1px solid #ccc;
+}
+.writeAnswer h4{
+	display : inline-block;
+}
+.filename{
+	min-height : 30px;
+}
+.filename span{
+	padding-right : 15px;
+}
+/* 답변글 수정 폼  */
+.updateAnswer{
+	 width : 80%;
+	 display : none; 
+	 border : 1px solid #ccc;
+	 border-radius : 15px;
+}

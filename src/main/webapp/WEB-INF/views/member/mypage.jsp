@@ -342,7 +342,7 @@ function getFormatDate(value){
     return  year + '.' + month + '.' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
 }
 </script>
-
+<script type="text/javascript" src="/resources/js/mypageQnA.js"></script>
 <div class="container">
 
 <div class="sub_title">${nick} 님 마이페이지</div>
@@ -411,7 +411,7 @@ function getFormatDate(value){
 	<button id="myplanBtn">나의 일정</button>
 	<button id="bookmarkBtn">북마크</button>
 	<button>여행 후기</button>
-	<button>Q & A</button>
+	<button id="qnaBtn">Q & A</button>
 </div>
 
 <div class="user_board_content">
@@ -444,7 +444,6 @@ function getFormatDate(value){
 	</div>
 	
 </div>
-
 
 
 
