@@ -24,13 +24,24 @@
 					, rv_create_date
 				FROM rv_comment
 				WHERE rv_no = #{rvNo}
-				ORDER BY rv_create_date
+				
 			) R
-		)
+		)ORDER BY rv_cmtno DESC
 	</select>
 	
-	<insert id="insertComment" parameterType="jeju.dto.RvComment">
+	<insert id="insert" parameterType="jeju.dto.RvComment">
 		INSERT INTO rv_comment (rv_cmtno, rv_no, user_id, rv_content)
 		VALUES (rv_comment_seq.nextval, #{rvNo}, #{userId}, #{rvContent})
 	</insert>
+	
+	<update id="commentUpdateCommit" parameterType="jeju.dto.RvComment">
+		UPDATE rv_comment
+		SET rv_content = #{rvContent}, rv_create_Date = SYSDATE
+		WHERE rv_cmtno = #{rvCmtNo}
+	</update>
+	
+	<delete id="commentCancel" parameterType="jeju.dto.RvComment">
+		DELETE rv_comment
+		WHERE rv_cmtno = #{rvCmtNo}
+	</delete>
 </mapper>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import jeju.dto.Review;
 import jeju.util.Paging;
+import jeju.util.RvPaging;
 
 public interface ReviewDao {
 	
@@ -12,7 +13,7 @@ public interface ReviewDao {
 	 * 
 	 * @return 총 게시글 수
 	 */
-	public int selectCntAll(Paging inData);
+	public int selectCntAll(RvPaging inData);
 	
 	
 	/**
@@ -21,7 +22,7 @@ public interface ReviewDao {
 	 * @param paging - 페이징 정보객체
 	 * @return - 페이징이 적용된 게시글 목록
 	 */
-	public List<Review> selectPageList(Paging paging);
+	public List<Review> selectPageList(RvPaging paging);
 
 	/**
 	 * 게시글 조회수 1 증가
@@ -34,5 +35,11 @@ public interface ReviewDao {
 
 
 	public void insert(Review review);
+
+
+	public void update(Review review);
+
+
+	public void delete(Review review);
 
 }
