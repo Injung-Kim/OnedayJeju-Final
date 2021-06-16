@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import jeju.dto.qna.FileTB;
+import jeju.dto.qna.Question;
 import jeju.dto.qna.Question_original;
 import jeju.service.face.QnAService;
 import jeju.util.Paging;
@@ -156,4 +158,29 @@ public class QuestionController {
 		
 		return "redirect:/qna/list";
 	}
+	@RequestMapping(value="/mypage/question", method = RequestMethod.GET)
+	public ModelAndView mypage(
+			HttpSession session
+			, Paging paging
+			, ModelAndView mav
+			) {
+		int userNo = (int)session.getAttribute("uno");
+		Question question = new Question();
+		question.setUserNo(userNo);
+		
+		//유저가 작성한 질문글 갯수 조회
+		paging.setTotalCount(qnaService.selectCntQustionByuno(question));
+		//페이지 생성
+		Paging listPaging = new Paging(paging.getTotalCount(), paging.getCurPage());
+				
+		//로그인한 유저가 작성한 질문글 리스트 불러오기
+		List<HashMap<String, Object>> list = qnaService.getQstListByUserno(listPaging, question);
+		logger.info("qnaList : {}", list);
+		mav.addObject("paging", listPaging);
+		mav.addObject("result", list);
+		mav.setViewName("/qna/qstbyUno");
+		
+		return mav;
+	}
+	
 }

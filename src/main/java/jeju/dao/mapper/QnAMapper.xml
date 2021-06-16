@@ -23,21 +23,11 @@
 	<!-- 답변글 리스트 ResultMap  -->
 	<resultMap type="jeju.dto.qna.Answer" id="AnswerMap">
 		<id column="ans_no" property="ansNo"/>
+		<result column="title" property="qstTitle"/>
 		<collection column="{ans_no=ans_no}" property="filenames" ofType="hashmap" select="selectFilenames">
 		</collection>
 	</resultMap>
-	
-<!-- 	<select id="selectQ" resultMap="QuestionMap" parameterType="hashmap">
-		SELECT QA.* FROM qa_question QA 
-		WHERE qst_no IN ( 
-		    SELECT qst_no from question_tag 
-		    WHERE tag_no IN (
-		        SELECT tag_no FROM qa_hashtag
-				WHERE tag_name LIKE '%' || #{tag_name, jdbcType=VARCHAR} ||'%'
-		    )
-		)
-		ORDER BY qst_no DESC
-	</select> -->
+
 	<!-- 질문글 리스트 조회, 태그명 해시맵 추가 -->
 	<select id="selectQ" resultMap="QuestionMap" parameterType="hashmap">
 		SELECT * FROM
@@ -75,25 +65,33 @@
     		)
 		)
 	</select>
-	<!-- 질문글 조회 -->
-	<select id="selectQuestions" resultType="hashmap" parameterType="hashmap">
-		SELECT * FROM 
-		(SELECT ROWNUM rnum, Q.* FROM
-		(SELECT Q.qst_no, Q.title, Q.qst_content, Q.qst_cnt, Q.qst_time, U.user_id, h.tag_name
-		FROM qa_question Q
-		INNER JOIN jejuuser U
-		ON U.user_no = Q.user_no
-		LEFT JOIN question_tag QT
-		ON QT.qst_no = Q.qst_no
-		LEFT JOIN qa_hashtag H
-		ON H.tag_no = QT.tag_no
-		<if test='tagName != null and tagName != ""'>
-		WHERE H.tag_name like '%'|| #{tagName} ||'%'
-		</if>
-		ORDER BY Q.qst_no DESC
-		) Q)NUM
-		WHERE rnum BETWEEN #{paging.startNo} AND #{paging.endNo}
+	
+	<!-- 유저별 작성한 질문글 갯수 조회 -->
+	<select id="selectCntQuestionByuno" resultType="int" parameterType="jeju.dto.qna.Question">
+		SELECT COUNT(*) FROM qa_question QA
+		WHERE qst_no IN ( 
+    		SELECT qst_no from question_tag 
+    		WHERE tag_no IN (
+        		SELECT tag_no FROM qa_hashtag
+    		)
+		) and QA.user_no = #{userNo}
 	</select>
+	<!-- 유저별 작성한 질문글 리스트 조회 -->
+	<select id="selectQuetionsByuno" resultMap="QuestionMap" parameterType="hashmap">
+		SELECT * FROM
+		(SELECT rownum rnum, qst.* FROM
+		(SELECT QA.* FROM qa_question QA 
+		WHERE qst_no IN ( 
+		    SELECT qst_no from question_tag 
+		    WHERE tag_no IN (
+		        SELECT tag_no FROM qa_hashtag
+		    )
+		) and user_no = #{question.userNo}
+		ORDER BY qst_no DESC
+		)QST
+		)WHERE rnum between #{paging.startNo} and #{paging.endNo}
+	</select>
+	
 	<!-- 질문글 상세조회  -->
 	<select id="selectQuestionByqstNo" resultType="hashmap" parameterType="int">
 		SELECT Q.qst_no, Q.title, Q.qst_content, Q.qst_cnt, Q.qst_time, U.user_id, U.user_origin 
@@ -120,18 +118,7 @@
 		SELECT count(*) FROM qa_answer 
 		WHERE qst_no = ${qstNo}
 	</select>
-	<!-- 답변글 조회 -->
-	<!-- <select id="selectAnswers" resultType="hashmap" parameterType="hashmap">
-		SELECT * FROM(
-		SELECT ROWNUM rnum, ANSWER.* FROM(
-		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_origin 
-		FROM qa_answer A
-		INNER JOIN jejuuser U
-		on U.user_no = A.user_no
-		WHERE qst_no = ${qstNo}
-		ORDER BY ans_time DESC) ANSWER)
-		WHERE RNUM BETWEEN ${ansPaging.startNo} AND ${ansPaging.endNo}
-	</select> -->
+	
 	<!-- 답변글 조회 -->
 	<select id="selectAnswers" resultMap="AnswerMap" parameterType="hashmap">
 		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_origin
@@ -147,6 +134,30 @@
 		SELECT ans_origin, ans_stored FROM ans_file ANF
 		WHERE ANF.ans_no = #{ans_no}
 	</select>
+	
+	<!-- 유저가 작성한 답변글 수 조회 -->
+	<select id="selectCntAnswerByuno" parameterType="int" resultType="int">
+		SELECT count(*) FROM qa_answer 
+		WHERE user_no = #{userNo}
+	</select>
+	<!-- 유저가 작성한 답변글 리스트 조회 -->
+	<select id="selectAnswersByuno" parameterType="hashmap" resultMap="AnswerMap">
+		SELECT * FROM(
+	        SELECT ROWNUM RNUM, ans_list.*FROM
+		        (SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time,U.user_id, QS.title
+					, 
+					(SELECT COUNT(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no) ans_like_cnt
+				FROM qa_answer A
+				INNER JOIN jejuuser U
+				on U.user_no = A.user_no
+				INNER JOIN qa_question QS
+        		on QS.qst_no = A.qst_no
+		        WHERE A.user_no = #{answer.userNo}
+			ORDER BY A.ans_time DESC) ans_list)
+        WHERE RNUM BETWEEN #{paging.startNo} AND #{paging.endNo}
+	</select>
+	
+	
 	<!-- 해시태그 검색 갯수 조회  -->
 	<select id="cntTags" parameterType="String" resultType="int">
 		SELECT count(*) FROM qa_hashtag
@@ -170,11 +181,11 @@
 	<!-- 파일명 추가하기 -->
 	<insert id="insertFiles" parameterType="jeju.dto.qna.FileTB">
 		<choose>
-		<when test="#{qstNo} != null">
+		<when test="#{ansNo} == null">
 	 	INSERT INTO qst_file(qst_file_no, qst_no, qst_origin, qst_stored) VALUES
 	 	(qst_file_no_seq.nextval, #{qstNo}, #{origin}, #{stored})
 	 	</when>
-	 	<when test="#{ansNo} != null">
+	 	<when test="#{ansNo} != null and #{qstNo} != null">
 	 	INSERT INTO ans_file(ans_file_no, ans_no, ans_origin, ans_stored) VALUES	 	
 	 	(ans_file_no_seq.nextval, #{ansNo}, #{origin}, #{stored})
 	 	</when>
@@ -249,7 +260,31 @@
 	<delete id="deleteLike" parameterType="jeju.dto.qna.Answer">
 		DELETE FROM ans_like where qst_no = #{qstNo} AND ANS_NO = #{ansNo} AND USER_NO = #{userNo}
 	</delete>
+	<!-- 좋아요 수 조회하기 -->
 	<select id="selectCntLikes" resultType="int" parameterType="jeju.dto.qna.Answer">
 		SELECT count(*) FROM ans_like WHERE qst_no = #{qstNo} and ans_no = #{ansNo}
 	</select>
+	
+	<!-- 유저가 누른 좋아요 수 조회하기 -->
+	<select id="selectCntAnsLikedByuno" parameterType="jeju.dto.qna.Answer" resultType="int">
+		SELECT count(*) FROM ans_like AL
+		inner JOIN qa_answer A
+		on a.ans_no = al.ans_no
+		WHERE AL.user_no = #{userNo}
+	</select>
+	<!-- 유저가 좋아요 누른 답변글 리스트 조회하기 -->
+	<select id="selectAnswersLikedByuno" parameterType="hashmap" resultMap="AnswerMap">
+		SELECT * FROM
+		(SELECT ROWNUM RNUM, ANS_LIKED.* FROM
+		(SELECT A.ans_no, A.qst_no, qa.title, A.ans_time, A.ans_content,(SELECT COUNT(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no) ans_like_cnt FROM ans_like AL
+		inner JOIN qa_answer A
+		on a.ans_no = al.ans_no
+		inner JOIN qa_question QA
+		on QA.qst_no = al.qst_no
+		WHERE AL.user_no = #{answer.userNo}
+		ORDER BY al.ans_like_no DESC
+		) ANS_LIKED
+		) WHERE RNUM BETWEEN #{paging.startNo} AND #{paging.endNo}
+	</select>
+	
 </mapper>

@@ -16,7 +16,7 @@ public class MainController {
 	}
 	@RequestMapping(value="/admin")
 	public String admin() {
-		return "admin";
+		return "redirect:/admin/user/list";
 	}
 	@RequestMapping(value="/admin/fail")
 	public String adminFail() {

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.service.face.QnAService;
+import jeju.util.Paging;
 
 @Controller
 @RequestMapping(value="/qna")
@@ -72,7 +73,7 @@ public class AnswerController {
 		
 		return "redirect:/qna/view?qstNo="+answer.getQstNo();
 	}
-	
+	//좋아요 ajax 
 	@RequestMapping(value="/answer/like", method = RequestMethod.GET)
 	public ModelAndView inputLikes(
 			Answer answer
@@ -89,6 +90,56 @@ public class AnswerController {
 		mav.addObject("result", result);
 		mav.addObject("cntLikes", cntLikes);
 		mav.setViewName("jsonView");
+		return mav;
+	}
+	//마이페이지 답변글 조회
+	@RequestMapping(value="/mypage/answer", method=RequestMethod.GET)
+	public ModelAndView mypage(
+			HttpSession session
+			, Paging paging
+			, ModelAndView mav
+			) {
+		int userNo = (int)session.getAttribute("uno");
+		Answer answer = new Answer();
+		answer.setUserNo(userNo);
+		
+		//유저가 작성한 답변글 갯수 조회
+		paging.setTotalCount(qnaService.selectCntAnswerByuno(answer));
+		//페이지 생성
+		Paging listPaging = new Paging(paging.getTotalCount(), paging.getCurPage());
+		//로그인한 유저가 작성한 답변글 리스트 불러오기
+		List<HashMap<String, Object>> list = qnaService.getansListByUserno(listPaging, answer);
+		logger.info("anslist : {}", list);
+		
+		mav.addObject("paging", paging);
+		mav.addObject("result", list);
+		mav.setViewName("/qna/ansbyUno");
+		
+		return mav;
+	}
+	//마이페이지 좋아요한 답변글 조회
+	@RequestMapping(value="/mypage/like", method = RequestMethod.GET)
+	public ModelAndView mypageLike(
+			HttpSession session
+			, Paging paging
+			, ModelAndView mav
+			) {
+		int userNo = (int)session.getAttribute("uno");
+		Answer answer = new Answer();
+		answer.setUserNo(userNo);
+		
+		//유저가 좋아요를 누른 답변글 갯수 조회
+		paging.setTotalCount(qnaService.getCntAnsLikedByuno(answer));
+		//페이지 생성
+		Paging listPaging = new Paging(paging.getTotalCount(), paging.getCurPage());		
+		//로그인한 유저가 좋아요를 누른 답변글 리스트 불러오기
+		List<HashMap<String, Object>> list = qnaService.getansLikedListByUno(listPaging, answer);
+		
+		logger.debug("LIkedList : {}", list);
+		mav.addObject("paging", paging);
+		mav.addObject("result", list);
+		mav.setViewName("/qna/ansLikedbyUno");
+		
 		return mav;
 	}
 }

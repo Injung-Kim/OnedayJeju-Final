@@ -7,6 +7,7 @@ import java.util.Map;
 import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
+import jeju.dto.qna.Question;
 import jeju.dto.qna.Question_original;
 import jeju.dto.qna.QuestionTag;
 
@@ -186,6 +187,48 @@ public interface QnADao {
 	 * @param answer 좋아요 취소할 게시글 정보
 	 */
 	public void deleteLike(Answer answer);
-
+	/**
+	 * 로그인한 유저가 작성한 질문글 갯수 조회하기
+	 * 
+	 * @param question 로그인한 유저 번호가 담긴 dto 객체
+	 * @return 조회한 전체 질문글 갯수
+	 */
+	public int selectCntQuestionByuno(Question question);
+	/**
+	 * 로그인한 유저가 작성한 질문글 정보 조회하기
+	 * 
+	 * @param map 현재 로그인한 유저번호, 페이징 정보
+	 * @return 조회한 질문글 리스트
+	 */
+	public List<HashMap<String, Object>> selectQuetionsByuno(HashMap<String, Object> map);
+	/**
+	 * 로그인한 유저가 작성한 답변글 갯수 조회하기
+	 * 
+	 * @param question 로그인한 유저 번호가 담긴 dto 객체
+	 * @return 조회한 전체 답변글 갯수
+	 */
+	public int selectCntAnswerByuno(Answer answer);
+	/**
+	 * 로그인한 유저가 작성한 답변글 정보 조회하기
+	 * 
+	 * @param map 현재 로그인한 유저번호, 페이징 정보
+	 * @return 조회한 답변글 리스트
+	 */
+	public List<HashMap<String, Object>> selectAnswersByuno(HashMap<String, Object> map);
+	/**
+	 * 로그인한 유저가 좋아요를 누른 답변글 갯수 조회하기
+	 * 
+	 * @param answer 로그인한 유저 번호가 담긴 dto 객체
+	 * @return 조회한 전체 답변글 갯수
+	 */
+	public int selectCntAnsLikedByuno(Answer answer);
+	/**
+	 * 로그인한 유저가 좋아요를 누른 답변글 조회하기
+	 * 
+	 * @param map 로그인한 유저 번호, 페이징 정보
+	 * @return 조회한 답변글 리스트
+	 */
+	public List<HashMap<String, Object>> selectAnswersLikedByuno(HashMap<String, Object> map);
+	
 	
 }

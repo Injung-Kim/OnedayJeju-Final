@@ -49,13 +49,13 @@
 	
 	
 	<!-- Error -->
-	<!-- <error-page>
+	<error-page>
 		<error-code>404</error-code>
 		<location>/error/no-resource</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
 		<location>/error/server-error</location>
-	</error-page>	 -->
+	</error-page>	
 
 </web-app>

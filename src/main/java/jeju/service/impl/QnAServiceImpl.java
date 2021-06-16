@@ -22,6 +22,7 @@ import jeju.dao.face.QnADao;
 import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
+import jeju.dto.qna.Question;
 import jeju.dto.qna.Question_original;
 import jeju.service.face.QnAService;
 import jeju.util.Paging;
@@ -336,5 +337,49 @@ public class QnAServiceImpl implements QnAService{
 	@Override
 	public int getCntAnsLikes(Answer answer) {
 		return qnaDao.selectCntLikes(answer);
+	}
+	//유저가 작성한 질문글 게시글 수 조회
+	@Override
+	public int selectCntQustionByuno(Question question) {
+		return qnaDao.selectCntQuestionByuno(question);
+	}
+	//마이페이지 질문글 리스트 조회
+	@Override
+	public List<HashMap<String, Object>> getQstListByUserno(Paging listPaging, Question question) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("paging", listPaging);
+		map.put("question", question);
+		//유저가 작성한 질문글 조회
+		return qnaDao.selectQuetionsByuno(map);
+	}
+	//유저가 작성한 답변글 게시글 수 조회
+	@Override
+	public int selectCntAnswerByuno(Answer answer) {
+		return qnaDao.selectCntAnswerByuno(answer);
+	}
+	//마이페이지 답변글 리스트 조회
+	@Override
+	public List<HashMap<String, Object>> getansListByUserno(Paging listPaging, Answer answer) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("paging", listPaging);
+		map.put("answer", answer);
+		
+		//유저가 작성한 답변글 조회
+		return qnaDao.selectAnswersByuno(map);
+	}
+	//마이페이지 유저가 누른 좋아요 갯수 조회
+	@Override
+	public int getCntAnsLikedByuno(Answer answer) {
+		return qnaDao.selectCntAnsLikedByuno(answer);
+	}
+	//마이페이지 유저가 누른 좋아요 조회
+	@Override
+	public List<HashMap<String, Object>> getansLikedListByUno(Paging listPaging, Answer answer) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("paging", listPaging);
+		map.put("answer", answer);
+		
+		return qnaDao.selectAnswersLikedByuno(map);
 	}
 }

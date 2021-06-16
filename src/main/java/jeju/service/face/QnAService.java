@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
+import jeju.dto.qna.Question;
 import jeju.dto.qna.Question_original;
 import jeju.util.Paging;
 
@@ -174,6 +175,52 @@ public interface QnAService {
 	 * @return 좋아요 변경여부(좋아요 등록한 경우 true, 좋아요 취소한 경우 false 반환)
 	 */
 	public boolean modifyLike(Answer answer);
+	/**
+	 * 로그인한 유저가 작성한 질문글 갯수 조회하기
+	 * 
+	 * @param question 로그인한 유저 번호가 담긴 dto 객체
+	 * @return 조회한 전체 질문글 갯수
+	 */
+	public int selectCntQustionByuno(Question question);
+	/**
+	 * 마이페이지 qna 조회
+	 * 로그인한 유저가 작성한 질문글 리스트 조회하기
+	 * 
+	 * @param listPaging 현재 페이지 번호가 담긴 Paging 객체
+	 * @param question 유저번호가 담긴 dto 객체
+	 * @return 조회한 질문글 리스트
+	 */
+	public List<HashMap<String, Object>> getQstListByUserno(Paging listPaging, Question question);
+	/**
+	 *  로그인한 유저가 작성한 답변글 갯수 조회하기
+	 * 
+	 * @param answer 로그인한 유저 번호가 담긴 dto 객체
+	 * @return 조회한 전체 답변글 갯수
+	 */
+	public int selectCntAnswerByuno(Answer answer);
+	/**
+	 * 마이페이지 qna 조회
+	 * 로그인한 유저가 작성한 질문글 리스트 조회하기
+	 * 
+	 * @param listPaging 현재 페이지 번호가 담긴 Paging 객체
+	 * @param answer 유저번호가 담긴 dto 객체
+	 * @return 조회한 질문글 리스트
+	 */
+	public List<HashMap<String, Object>> getansListByUserno(Paging listPaging, Answer answer);
+	/**
+	 * 유저가 좋아요를 누른 답변글 갯수 조회
+	 * 
+	 * @param answer 유저번호가 담긴 dto 객체
+	 * @return 조회한 좋아요를 누른 답변글 갯수
+	 */
+	public int getCntAnsLikedByuno(Answer answer);
+	/**
+	 * 유저가 좋아요를 누른 답변글 리스트 조회
+	 * 
+	 * @param listPaging 현재 페이지 번호가 담긴 Paging 객체
+	 * @param answer 유저번호가 담긴 dto 객체
+	 * @return 조회한 좋아요를 누른 답변글 리스트
+	 */
+	public List<HashMap<String, Object>> getansLikedListByUno(Paging listPaging, Answer answer);
 	
-
 }
