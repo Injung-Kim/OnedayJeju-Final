@@ -56,6 +56,18 @@ public class AdminUserServiceImpl implements AdminUserService {
 	}
 
 	@Override
+	public int checkId(String userId) {
+		//아이디 중복 조회
+		return adminUserDao.selectCountId(userId);
+	}
+
+	@Override
+	public int checkNick(String userNick) {
+		//닉네임 중복 조회
+		return adminUserDao.selectCountNick(userNick);
+	}
+	
+	@Override
 	public void createAdmin(JejuUser user) {
 		//계정 생성
 		adminUserDao.insert(user);

@@ -22,16 +22,17 @@
 
 /* joinInfo */
 #joinInfocontainer { max-width: 650px; height: 900px; position: relative; margin: 0 auto 100px; padding-top: 10px; padding-left: 0; padding-right: 0; border: 1px solid #D8D5DB; border-radius: 5px; box-shadow: 0 0 1em 0 #D8D5DB; }
-#infoForm { width: 90%; }
-#infoForm label { font-size:15px; font-weight: normal; }
+#infoForm { width: 70%; }
+#infoForm th { font-size:15px; font-weight: normal; }
 #infoForm input::placeholder { font-size: 12px; color: #5e5e5e; }
-#infotb { padding: 3px; line-height: normal; }
+#tbInfo { padding: 3px; line-height: normal; }
+#userZipcode { width: 40%; float: left; }
+.msg { padding-left: 5px; color: #F84A71; font-size: 12px; }
+#msgChkPw2 { padding-left: 5px; color: blue; font-size: 12px; }
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th { 
 	border: none; border-bottom: none; border-left: none; border-top: none; border-right: none;
 }
-#btnIdCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
-#btnNickCheck { padding-left: 0; padding-right: 0; text-align:center; border-radius:3px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
-#btnZipcode { padding-left: 0; padding-right: 0; text-align:center; border-radius:5px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
+#btnZipcode { margin-left: 15px; padding-left: 0; padding-right: 0; text-align:center; border-radius:5px; color: #49C6E5; font-size: 14px; background-color: #FFFFFF; width: 80px; border: 2px solid #49C6E5; }
 #btnGroupInfo { padding-top: 5px; padding-bottom: 5px; }
 #btnJoin { border-radius:3px; color: #FFFFFF; font-size: 18px; background-color: #49C6E5; width: 60%; height: 40px; box-shadow: 3px 6px 6px #E0E0E0; }
 

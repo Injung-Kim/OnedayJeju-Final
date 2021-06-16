@@ -8,18 +8,18 @@ public interface JoinService {
 	/**
 	 * 전달 받은 아이디 중복값 조회하기
 	 * 
-	 * @param user - 아이디 정보를 가진 객체
+	 * @param userId - 전달 받은 아이디
 	 * @return 중복조회된 값
 	 */
-	public int checkId(JejuUser user);
+	public int checkId(String userId);
 	
 	/**
 	 * 전달 받은 닉네임 중복값 조회하기
 	 * 
-	 * @param user - 닉네임 정보를 가진 객체
+	 * @param userNick - 전달 받은 닉네임
 	 * @return 중복조회된 값
 	 */
-	public int checkNick(JejuUser user);
+	public int checkNick(String userNick);
 	
 	/**
 	 * 신규 회원가입 처리

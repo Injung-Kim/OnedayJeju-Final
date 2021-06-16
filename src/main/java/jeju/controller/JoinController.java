@@ -35,24 +35,18 @@ public class JoinController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/joinInfo/checkId", method = RequestMethod.GET)
-	public int checkId(JejuUser user) {
+	public int checkId(@RequestParam("id") String userId) {
 		
-		//아이디 중복 조회
-		int resId = joinService.checkId(user);
-		
-		//중복조회 결과값 전달
-		return resId;
+		//아이디 중복조회 결과값 전달
+		return joinService.checkId(userId);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/joinInfo/checkNick", method = RequestMethod.GET)
-	public int checkNick(JejuUser user) {
+	public int checkNick(@RequestParam("nick") String userNick) {
 		
-		//닉네임 중복 조회
-		int resNick = joinService.checkNick(user);
-		
-		//중복조회 결과값 전달
-		return resNick;
+		//닉네임 중복조회 결과값 전달
+		return joinService.checkNick(userNick);
 	}
 	
 	@RequestMapping(value = "/joinInfo", method = RequestMethod.POST)
@@ -60,15 +54,15 @@ public class JoinController {
 //		logger.info("/user/joinInfo [POST]");
 //		logger.info("Info : {}", user);
 		
-		int resId = joinService.checkId(user);
-		int resNick = joinService.checkNick(user);
+//		int resId = joinService.checkId(userId);
+//		int resNick = joinService.checkNick(userNick);
 		
-		if(resId == 1 || resNick == 1 ) {
-			return "/user/joinInfo";
-		} else if(resId == 0 && resNick == 0 ) {
+//		if(resId >= 1 || resNick >= 1 ) {
+//			return "/user/joinInfo";
+//		} else if(resId == 0 && resNick == 0 ) {
 			//회원가입 처리
 			joinService.join(user);
-		}
+//		}
 
 		model.addAttribute("userId", user.getUserId());
 		model.addAttribute("userEmail", user.getUserEmail());

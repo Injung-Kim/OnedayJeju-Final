@@ -10,6 +10,16 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+	
+	//검색어 입력칸에서 엔터키 누르면 검색버튼 클릭되는 효과
+	$("input[name='search']").keydown(function(e) {
+//		console.log('test')
+		if( e.keyCode == 13 ) {
+//			console.log("enterkey")
+			$("#btnSearch").click()
+		}
+	});
+	
 	//검색버튼 클릭
 	$("#btnSearch").click(function() {
 		location.href="/admin/user/list?condition="+$("#condition").val()+"&search="+$("#search").val();

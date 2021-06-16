@@ -20,6 +20,7 @@ $(document).ready(function() {
 	
 		} else { //체크박스 하나라도 체크 안 된 경우
 			alert("이용약관 및 개인정보 수집 및 이용에 대한 안내 모두 동의해주세요.");
+			$("#btnNext").prop("disabled", true);
 		}
 	})
 })

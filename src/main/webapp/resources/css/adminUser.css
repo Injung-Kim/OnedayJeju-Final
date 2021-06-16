@@ -43,6 +43,8 @@ article { border: none; }
 #tbCreate { width: 50%; margin-top: 4%; }
 #tbCreate th { width: 30%; background-color: #f7f7f7; }
 #tbCreate td input { width: 100%; background-color: #FFFFFF; }
+.msg { padding-left: 5px; color: #F84A71; font-size: 12px; }
+#msgChkPw2 { padding-left: 5px; color: blue; font-size: 12px; }
 #btnGroupCreate { padding-top: 10px; padding-bottom: 5px; }
 #btnInsert { border-radius: 2px; color: #FFFFFF; font-size: 14px; background-color: #00BD9D; width: 120px; margin-right: 5%; }
 #btnCancleCreate { border-radius: 2px; color: #00BD9D; font-size: 14px; background-color: #FFFFFF; width: 120px; border: 1.5px solid #00BD9D; }

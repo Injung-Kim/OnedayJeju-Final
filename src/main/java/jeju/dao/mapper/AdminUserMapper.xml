@@ -97,6 +97,16 @@
 		DELETE JejuUser WHERE user_no = #{userNo}
 	</delete>
 	
+	<!-- 아이디 중복조회 -->
+	<select id="selectCountId" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM JejuUser WHERE user_id = #{userId}
+	</select>
+	
+	<!-- 닉네임 중복조회 -->
+	<select id="selectCountNick" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM JejuUser WHERE user_nick = #{userNick}
+	</select>
+		
 	<!-- 관리자계정 등록 -->
 	<insert id="insert" parameterType="jeju.dto.JejuUser">
 		INSERT INTO JejuUser(user_no, user_id, user_pw, user_name, user_nick, user_email, user_grade)

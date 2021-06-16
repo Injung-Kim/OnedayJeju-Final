@@ -23,13 +23,13 @@
 		<result column="user_grade" property="userGrade"/>
 	</resultMap>
 	
-	<!-- 아이디 중복확인 -->
-	<select id="selectCountId" resultType="int">
+	<!-- 아이디 중복조회 -->
+	<select id="selectCountId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM JejuUser WHERE user_id = #{userId}
 	</select>
 	
-	<!-- 닉네임 중복확인 -->
-	<select id="selectCountNick" resultType="int">
+	<!-- 닉네임 중복조회 -->
+	<select id="selectCountNick" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM JejuUser WHERE user_nick = #{userNick}
 	</select>
 	

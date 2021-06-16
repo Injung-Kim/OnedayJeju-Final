@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jeju.dto.JejuUser;
 import jeju.service.face.AdminUserService;
@@ -102,6 +104,22 @@ public class AdminUserController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public void create() {
 //		logger.info("/admin/user/create [GET]");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/create/checkId", method = RequestMethod.GET)
+	public int checkId(@RequestParam("id") String userId) {
+		
+		//아이디 중복조회 결과값 전달
+		return adminUserService.checkId(userId);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/create/checkNick", method = RequestMethod.GET)
+	public int checkNick(@RequestParam("nick") String userNick) {
+		
+		//닉네임 중복조회 결과값 전달
+		return adminUserService.checkNick(userNick);
 	}
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
