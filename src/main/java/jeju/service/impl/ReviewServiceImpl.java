@@ -19,6 +19,7 @@ import jeju.dao.face.ReviewDao;
 import jeju.dao.face.RvCommentDao;
 import jeju.dto.Review;
 import jeju.dto.RvComment;
+import jeju.dto.RvLike;
 import jeju.service.face.ReviewService;
 import jeju.util.Paging;
 import jeju.util.RvPaging;
@@ -103,11 +104,42 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 
 	@Override
-	@Transactional
 	public void delete(Review review) {
 		reviewDao.delete(review);
 		
 	}
+	
+	@Override
+	public boolean isRvLike(RvLike rvlike) {
+		int cnt = reviewDao.selectCntRecommend(rvlike);
+		
+		if(cnt > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean recommend(RvLike rvlike) {
+		if( isRvLike(rvlike) ) {
+			reviewDao.deleteRecommend(rvlike);
+			
+			return false;
+		} else {
+			reviewDao.insertRecommend(rvlike);
+		return true;
+		
+		}
+	}
+
+
+	@Override
+	public int getTotalCntRecommend(RvLike rvlike) {
+		return reviewDao.selectTotalCntRecommend(rvlike);
+	}
+
+
 
 
 

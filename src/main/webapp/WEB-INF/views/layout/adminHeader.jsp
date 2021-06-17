@@ -106,7 +106,7 @@ article{
 		<ul>
 			<li><a href="/admin/user/list">회원관리</a></li>
 			<li><a href="/admin/planboard">일정공유</a></li>
-			<li><a href="#">여행후기</a></li>
+			<li><a href="/admin/reviewboard">여행후기</a></li>
 			<li><a href="/notice/admin">공지사항</a></li>
 			<li><a href="/admin/qna/list">Q & A</a></li>
 		</ul>
