@@ -24,7 +24,7 @@
 }
 /* 북마크 부분 */
 .plan {
-	width: 360px;
+	width: 359px;
 	height: 320px;
 	border: 1px solid #dfdfdf;
 	display: inline-block;
@@ -64,6 +64,7 @@
 	height: 600px;
 	margin-top: 20px;
 	overflow: auto;
+	border: 1px solid #ccc;
 }
 </style>
 
@@ -318,7 +319,17 @@ $(document).ready(function (){
 	})//북마크 버튼 클릭 이벤트 끝
 	
 	//마이페이지 들어왔을 때 나의일정이 보이도록 트리거 설정
+	$('#myplanBtn').css('background-color', '#8bd7d2');
 	$('#myplanBtn').trigger('click');
+	
+	//버튼 클릭 -> 배경색 변경
+	$('.user_board_btn > button').click(function(){
+		$('.user_board_btn > button').each(function(i, e){
+			$(this).css('background-color', '#ddd');
+		})
+		$(event.target).css('background-color', '#8bd7d2');
+	})
+	
 	
 })
 //북마크 클릭 시 해당 글의 상세보기 페이지로 이동
@@ -484,33 +495,6 @@ $(document).ready(function (){
 </div>
 
 <div class="user_board_content">
-
-	<div class="mypage_bookmark">
-		<h3>북마크 목록</h3>
-		<div class="list_box">
-		
-		<div class="plan" data-pbno="${planBoard.pbno }">
-			<div class="plan_img_box"><img src="/getImg?filename=${planBoard.filename }"></div>
-			<div class="plan_info text-center">
-				<div class="like_views">
-					<div class="inline pull-left">좋아요:<span id="likeNum">${planBoard.likenum }</span></div>
-					<div class="inline pull-left">조회수:<span id="views">${planBoard.views }</span></div>
-					<div class="inline pull-left">작성일:<span id="createDate"><fmt:formatDate value="${planBoard.cdate }" pattern="yyyy.MM.dd"/></span></div>
-				</div>
-				<div class="clearfix"></div>
-				<div class="nick inline pull-left">
-					<span id="nick">닉네임: ${planBoard.nick }</span>
-				</div>
-				<div class="clearfix"></div>
-				<div class="planboard_title">
-					<span id="days">[${planBoard.days }일]</span>
-					<span id="planTitle">${planBoard.title }</span>
-				</div>
-			</div>
-		</div>
-		
-		</div>
-	</div>
 	
 </div>
 

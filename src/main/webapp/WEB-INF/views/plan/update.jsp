@@ -605,7 +605,9 @@ function createMarker(){
          	// 마커에 클릭이벤트를 등록합니다
             kakao.maps.event.addListener(marker, 'click', function(e) {
             	var index = marker.index;
-                $('.list_box').scrollTop($('.search_place').outerHeight() * index);
+            	var pos = $('.search_place').outerHeight() * index;
+//                 $('.list_box').scrollTop($('.search_place').outerHeight() * index);
+				$('.list_box').animate({scrollTop: pos}, 400);
             });
          
             itemEl.onmouseover =  function () {
