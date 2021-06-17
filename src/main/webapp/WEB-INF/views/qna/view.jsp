@@ -227,15 +227,20 @@ $(document).ready(function(){
 		</c:forEach>
 	</div>
 	<!-- 작성자와 로그인한 아이디 비교하여 버튼 구분하기  -->
-	<c:choose>
-		<c:when test="${id eq USER_ID}">
+		<c:if test="${id eq USER_ID}">
+		<c:choose>
+		<c:when test="${TITLE ne '이 글은 관리자에 의해 삭제되었습니다'}">
 		<button type="button" class="btn updateQst" data-toggle="modal" data-target="#updateQstModal" id="updateQst">수정</button>
 		<button type="button" class="btn deleteQst">삭제</button>
 		</c:when>
-		<c:otherwise>
+		<c:when test="${TITLE eq '이 글은 관리자에 의해 삭제되었습니다'}">
+		<button type="button" class="btn deleteQst">삭제</button>		
+		</c:when>
+		</c:choose>
+		</c:if>
+		<c:if test="${id ne USER_ID}">
 		<button type="button" class="btn btn-lg makeAnswer">답변하기</button>
-		</c:otherwise>
-	</c:choose>
+		</c:if>
 </div>
 </div>
 <div class="ansWrapper">
@@ -263,8 +268,15 @@ $(document).ready(function(){
 		</c:forEach>
 		</div>
 		<c:if test="${id eq answer.userId}">
+		<c:choose>
+		<c:when test="${answer.ansContent ne '관리자에 의해 삭제된 글입니다'}">
 		<button type="button"  class="btn updateAns">수정</button>
 		<button type="button"  class="btn deleteAns">삭제</button>
+		</c:when>
+		<c:when test="${answer.ansContent eq '관리자에 의해 삭제된 글입니다'}">		
+		<button type="button"  class="btn deleteAns">삭제</button>
+		</c:when>		
+		</c:choose>
 		</c:if>
 		<c:if test="${id ne answer.userId}">
 		

@@ -248,7 +248,7 @@ public class QnAServiceImpl implements QnAService{
 	}
 	//질문글 수정하기
 	@Override
-	public void updateQuestion(Question_original question, List<FileTB> filetable, int[] tagNo) {
+	public void updateQuestion(Question question, List<FileTB> filetable, int[] tagNo) {
 		//작성한 질문글 DB 저장
 		qnaDao.updateQuestion(question);
 		//변경할 파일이 있는 경우

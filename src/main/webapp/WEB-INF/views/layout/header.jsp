@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>어느 날, 제주</title>
-
+<link rel="shortcut icon" href="/resources/image/MAuJqhWr.ico">
 <!-- jQuery 2.2.4 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 

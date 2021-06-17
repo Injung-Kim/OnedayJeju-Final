@@ -136,7 +136,7 @@ public interface QnAService {
 	 * @param filetable 새로 첨부한 파일 정보
 	 * @param tagNo 변경한 태그번호 
 	 */
-	public void updateQuestion(Question_original question, List<FileTB> filetable, int[] tagNo);
+	public void updateQuestion(Question question, List<FileTB> filetable, int[] tagNo);
 	/**
 	 * 답변글 추가하기
 	 * 질문글 상세보기에서 답변글 생성 폼을 통해 답변글 값 요청받기

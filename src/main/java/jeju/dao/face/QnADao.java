@@ -120,7 +120,7 @@ public interface QnADao {
 	 * 
 	 * @param question 수정하여 요청받은 질문글
 	 */
-	public void updateQuestion(Question_original question);
+	public void updateQuestion(Question question);
 	/**
 	 * 기존에 등록된 파일 정보 삭제
 	 * 

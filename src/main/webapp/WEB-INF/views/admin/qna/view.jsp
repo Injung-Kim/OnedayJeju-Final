@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!-- 관리자페이지 질문글 상세보기 -->
 <c:import url="/WEB-INF/views/layout/adminHeader.jsp"/>
 <!-- 상세정보 css  -->
 <link rel="stylesheet" href="/resources/css/qnaView.css" type="text/css"/>
@@ -45,7 +46,7 @@ $(document).ready(function(){
 	$('.deleteAns').click(function(){
 		var confirmDelete = confirm('답변을 삭제하시겠습니까?')
 		var ansNo = ($(this).parent().attr('id'))
-		if(confirmDelete){location.href='/qna/delete/answer?qstNo=${QST_NO}&ansNo='+ansNo}
+		if(confirmDelete){location.href='/admin/qna/deleteAns?qstNo=${QST_NO}&ansNo='+ansNo}
 	})
 	
 	$('.updateImg').click(function(){
@@ -71,46 +72,12 @@ $(document).ready(function(){
 	$('.subAns').click(function(){
 		$(this).parent().children('.ansUpdateForm').submit()
 	})
+	$('.blockAns').click(function(){
+		var confirmDelete = confirm('답변을 차단하시겠습니까?')
+		var ansNo = ($(this).parent().attr('id'))
+		if(confirmDelete){location.href='/admin/qna/blockAns?qstNo=${QST_NO}&ansNo='+ansNo}
+	})
 	
-	
-	
-	const url = new URL(window.location.href)
-	const qrParam = url.searchParams
-	/* 좋아요 ajax  */
-	$('.like').click(function(){
-		//qstNo 파라미터 값 얻어오기
-		var id = $(this).parent().attr("id")
-		var $th = $(this) 
-		var qstNo = qrParam.get('qstNo')
-		  $.ajax({
-			type : "get"
-			, url : "/qna/answer/like"
-			, data : {
-				'ansNo' : id
-				, 'qstNo' : qstNo
-			}
-			, dataType : "json"
-			, success : function(res){
-				console.log("ajax 성공" )
-				console.log(res)
-				if(res.result){
-					$th.children('i').removeClass('far')
-					$th.children('i').addClass('fas')
-								
-				}else{
-					$th.children('i').removeClass('fas')
-					$th.children('i').addClass('far')					
-										
-				}
-				$th.parent().children('.float').children('.cntLikes').html(res.cntLikes)
-			}
-			, error : function(){
-				console.log("ajax실패")
-				
-			}
-			})
-				
-		})
 })
 </script>
 <!-- 질문글 -->
@@ -172,11 +139,7 @@ $(document).ready(function(){
 		<img src="/qna/${filenames.ANS_STORED}" style="width : 110px; height : 110px;"/>
 		</c:forEach>
 		</div>
-		<c:if test="${id eq answer.userId}">
-		<button type="button"  class="btn updateAns">수정</button>
-		<button type="button"  class="btn deleteAns">삭제</button>
-		</c:if>
-		<c:if test="${id ne answer.userId}">
+		<%-- <c:if test="${id ne answer.userId}">
 		
 			<c:if test="${answer.ansLikeCheck eq 0 }">
 			<button type="button" class="like"><i class="far fa-heart fa-3x"></i></button>
@@ -185,14 +148,23 @@ $(document).ready(function(){
 			<button type="button" class="like"><i class="fas fa-heart fa-3x"></i></button>
 			</c:if>
 		
-		</c:if>
+		</c:if> --%>
+		<c:choose>
+		<c:when test="${id eq answer.userId}">
+		<button type="button"  class="btn updateAns btn-default">수정</button>
+		<button type="button"  class="btn deleteAns btn-default">삭제</button>
+		</c:when>
+		<c:when test='${answer.ansContent ne "관리자에 의해 삭제된 글입니다"}'>
+		<button type="button"  class="btn blockAns ">차단</button>
+		</c:when>
+		</c:choose>
 	</div>
 	<!-- 답변글 수정 Form  -->
 	<c:if test="${id eq answer.userId}">
 	<div class="updateAnswer">
 	<h4>답변수정</h4>
 	<img src="/resources/image/image.png" style="width : 45px; height : 45px;" class="updateImg">
-	<form action="/qna/update/answer" method="post" class="ansUpdateForm" enctype="multipart/form-data">
+	<form action="/admin/qna/updateAns" method="post" class="ansUpdateForm" enctype="multipart/form-data">
 		<textarea rows="6" name="ansContent" placeholder="내용을 입력하세요" class="form-control">${answer.ansContent}</textarea>
 		<input type="file" name="ansFiles" multiple="multiple" style="display:none;" class="updateFiles">
 		<input type="hidden" name="qstNo" value="${QST_NO}"/>
@@ -214,7 +186,7 @@ $(document).ready(function(){
 	<div class="writeAnswer">
 	<h4>답변하기</h4>
 	<img src="/resources/image/image.png" style="width : 45px; height : 45px;" class="ansImg">
-	<form action="/qna/write/answer" method="post" id="ansCreateForm" enctype="multipart/form-data">
+	<form action="/admin/qna/writeAns" method="post" id="ansCreateForm" enctype="multipart/form-data">
 	<textarea rows="6" name="ansContent" placeholder="내용을 입력하세요" class="form-control" style="border : none;"></textarea>
 	<input type="file" name="ansFiles" multiple="multiple" style="display:none;" id="ansFiles">
 	<input type="hidden" name="qstNo" value="${QST_NO}"/>

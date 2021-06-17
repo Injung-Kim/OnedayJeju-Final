@@ -59,7 +59,7 @@
      		<form action="/qna/write/question" method="post" id="qstForm" enctype="multipart/form-data">
      		<div class="form-group">
      		<label for="title" class="sr-only">제목</label>
-       		<input type="text" placeholder="제목을 입력하세요" name="title"  class="form-control" style="width : 80%; display: inline-block; margin-right : 10px;">
+       		<input type="text" placeholder="제목을 입력하세요" maxlength="66" name="title"  class="form-control" style="width : 80%; display: inline-block; margin-right : 10px;">
 			<img src="/resources/image/image.png" alt="업로드 이미지" id="btnImg" style="width : 35px; height : 35px; cursor : pointer;"/><br>
 			</div>
 			<div class="form-group">

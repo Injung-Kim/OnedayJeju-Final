@@ -95,3 +95,8 @@
 	 border : 1px solid #ccc;
 	 border-radius : 15px;
 }
+.blockAns{
+	background: transparent;
+	border : 1px solid #f25c54;
+	color : #f25c54;
+}
