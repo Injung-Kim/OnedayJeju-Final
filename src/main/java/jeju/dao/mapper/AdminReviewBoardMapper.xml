@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="jeju.dao.face.AdminReviewBoardDao">
+	
+	<resultMap type="hashmap" id="ReviewBoard">
+		<result column="rv_no" property="rvNo"/>
+		<result column="rv_title" property="rvTitle"/>
+		<result column="rv_create_date" property="rvCreateDate"/>
+		<result column="user_id" property="userId"/>
+	</resultMap>
+	
+	<select id="selectCntAll" parameterType="jeju.util.Paging" resultType="int">
+		SELECT count(*) FROM review
+	</select>
+	
+	<select id="selectList" parameterType="jeju.util.Paging" resultMap="ReviewBoard">
+		SELECT * FROM (
+	    	(SELECT ROWNUM AS rnum, V.* FROM (
+		        SELECT 
+		        	*
+		        FROM review
+	        	ORDER BY rv_create_date DESC
+	        	) V))
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
+	<delete id="delete" parameterType="java.util.List">
+		DELETE review
+		WHERE rv_no IN (
+		<foreach collection="list" item="rvNo" separator=",">
+			#{rvNo}
+		</foreach>
+		)
+	</delete>
+</mapper>
