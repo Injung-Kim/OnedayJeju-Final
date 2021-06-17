@@ -22,8 +22,8 @@ footer {
 
 article {
 	margin: 0 auto;
-	min-height: 1500px;
-	border : 1px solid #ccc;
+	min-height: 1000px;
+	/* border : 1px solid #ccc; */
 }
 .logo img{
 	all : unset;

@@ -3,12 +3,288 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jeju.dao.face.QnADao">
+	<!-- 파일처리 ResultMap -->
+	<resultMap type="jeju.dto.qna.FileTB" id="FileTable">
+		<result column="qst_file_no" property="fileNo"/>
+		<result column="qst_no" property="qstNo"/>
+		<result column="qst_origin" property="origin"/>
+		<result column="qst_stored" property="stored"/>
+		<result column="ans_file_no" property="fileNo"/>
+		<result column="ans_no" property="ansNo"/>
+		<result column="ans_origin" property="origin"/>
+		<result column="ans_stored" property="stored"/>
+	</resultMap>
+	<!-- 질문글 리스트 ResultMap -->
+	<resultMap type="jeju.dto.qna.Question" id="QuestionMap">
+		<id column="qst_no" property="qstNo"/>
+		<collection column="{qst_no=qst_no}" property="qtags" ofType="hashmap" select="selectQtag" >
+		</collection>
+	</resultMap>
+	<!-- 답변글 리스트 ResultMap  -->
+	<resultMap type="jeju.dto.qna.Answer" id="AnswerMap">
+		<id column="ans_no" property="ansNo"/>
+		<result column="title" property="qstTitle"/>
+		<collection column="{ans_no=ans_no}" property="filenames" ofType="hashmap" select="selectFilenames">
+		</collection>
+	</resultMap>
+
+	<!-- 질문글 리스트 조회, 태그명 해시맵 추가 -->
+	<select id="selectQ" resultMap="QuestionMap" parameterType="hashmap">
+		SELECT * FROM
+		(SELECT rownum rnum, qst.* FROM
+		(SELECT QA.*, U.user_id FROM qa_question QA 
+		JOIN jejuuser U ON QA.user_no = U.user_no
+		WHERE qst_no IN ( 
+		    SELECT qst_no from question_tag 
+		    WHERE tag_no IN (
+		        SELECT tag_no FROM qa_hashtag
+				WHERE tag_name LIKE '%' || #{tag_name, jdbcType=VARCHAR} ||'%'
+		    )
+		)
+		ORDER BY qst_no DESC
+		)QST
+		)WHERE rnum between #{paging.startNo, jdbcType=INTEGER} and #{paging.endNo, jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectQtag" resultType="hashmap" parameterType="hashmap">
+		SELECT QT.tag_no, HT.tag_name FROM question_tag QT
+		JOIN qa_hashtag HT ON QT.tag_no = HT.tag_no
+		WHERE QT.qst_no = #{qst_no }
+	</select>
+	
 	<!--질문글 수 조회  -->
-	<select id="selectCntQustion" resultType="int">
-		SELECT count(*) FROM qa_question
+	<select id="selectCntQustion" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM qa_question QA
+		WHERE qst_no IN ( 
+    		SELECT qst_no from question_tag 
+    		WHERE tag_no IN (
+        		SELECT tag_no FROM qa_hashtag
+        <if test='#{tagName} != null and #{tagName}.equals("")'> 
+        		WHERE tag_name LIKE '%' || #{tagName} || '%'
+        </if>
+    		)
+		)
 	</select>
-	<!-- 질문글 조회 -->
-	<select id="selectQuestions" resultType="jeju.dto.QnAQuestion">
-		SELECT qst_no, title, user_no, qst_content, qst_time, qst_cnt FROM qa_question
+	
+	<!-- 유저별 작성한 질문글 갯수 조회 -->
+	<select id="selectCntQuestionByuno" resultType="int" parameterType="jeju.dto.qna.Question">
+		SELECT COUNT(*) FROM qa_question QA
+		WHERE qst_no IN ( 
+    		SELECT qst_no from question_tag 
+    		WHERE tag_no IN (
+        		SELECT tag_no FROM qa_hashtag
+    		)
+		) and QA.user_no = #{userNo}
 	</select>
+	<!-- 유저별 작성한 질문글 리스트 조회 -->
+	<select id="selectQuetionsByuno" resultMap="QuestionMap" parameterType="hashmap">
+		SELECT * FROM
+		(SELECT rownum rnum, qst.* FROM
+		(SELECT QA.* FROM qa_question QA 
+		WHERE qst_no IN ( 
+		    SELECT qst_no from question_tag 
+		    WHERE tag_no IN (
+		        SELECT tag_no FROM qa_hashtag
+		    )
+		) and user_no = #{question.userNo}
+		ORDER BY qst_no DESC
+		)QST
+		)WHERE rnum between #{paging.startNo} and #{paging.endNo}
+	</select>
+	
+	<!-- 질문글 상세조회  -->
+	<select id="selectQuestionByqstNo" resultType="hashmap" parameterType="int">
+		SELECT Q.qst_no, Q.title, Q.qst_content, Q.qst_cnt, Q.qst_time, U.user_id, U.user_origin 
+		FROM qa_question Q
+		INNER JOIN jejuuser U
+		ON U.user_no = q.user_no
+		WHERE Q.qst_no = ${qstNo}
+	</select>
+	<update id="updateCntQuestion" parameterType="int">
+		UPDATE qa_question SET qst_cnt = qst_cnt + 1
+		WHERE qst_no = ${qstNo}
+	</update>
+	<!-- 해시태그 조회  -->
+	<select id="selectHashTagByqstNo" resultType="hashmap" parameterType="int">
+		SELECT tag_name,H.tag_no from qa_hashtag H
+		INNER JOIN question_tag QT
+		ON QT.TAG_NO = H.TAG_no
+		INNER JOIN qa_question Q
+		ON Q.qst_no = QT.qst_no
+		WHERE Q.qst_no = ${qstNo}
+	</select>
+	<!-- 답변글 갯수 조회  -->
+	<select id="selectCntAnswer" resultType="int" parameterType="int">
+		SELECT count(*) FROM qa_answer 
+		WHERE qst_no = ${qstNo}
+	</select>
+	
+	<!-- 답변글 조회 -->
+	<select id="selectAnswers" resultMap="AnswerMap" parameterType="hashmap">
+		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_origin
+			, (SELECT COUNT(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no) ans_like_cnt
+			, (SELECT count(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no AND AL.user_no = #{userNo}) ans_like_check
+		FROM qa_answer A
+		INNER JOIN jejuuser U
+		on U.user_no = A.user_no
+		WHERE qst_no = #{qstNo}
+		ORDER BY ans_time DESC
+	</select>
+	<select id="selectFilenames" resultType="hashmap" parameterType="hashmap">
+		SELECT ans_origin, ans_stored FROM ans_file ANF
+		WHERE ANF.ans_no = #{ans_no}
+	</select>
+	
+	<!-- 유저가 작성한 답변글 수 조회 -->
+	<select id="selectCntAnswerByuno" parameterType="int" resultType="int">
+		SELECT count(*) FROM qa_answer 
+		WHERE user_no = #{userNo}
+	</select>
+	<!-- 유저가 작성한 답변글 리스트 조회 -->
+	<select id="selectAnswersByuno" parameterType="hashmap" resultMap="AnswerMap">
+		SELECT * FROM(
+	        SELECT ROWNUM RNUM, ans_list.*FROM
+		        (SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time,U.user_id, QS.title
+					, 
+					(SELECT COUNT(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no) ans_like_cnt
+				FROM qa_answer A
+				INNER JOIN jejuuser U
+				on U.user_no = A.user_no
+				INNER JOIN qa_question QS
+        		on QS.qst_no = A.qst_no
+		        WHERE A.user_no = #{answer.userNo}
+			ORDER BY A.ans_time DESC) ans_list)
+        WHERE RNUM BETWEEN #{paging.startNo} AND #{paging.endNo}
+	</select>
+	
+	
+	<!-- 해시태그 검색 갯수 조회  -->
+	<select id="cntTags" parameterType="String" resultType="int">
+		SELECT count(*) FROM qa_hashtag
+		WHERE tag_name = #{tagName}		
+	</select>
+	<!-- 해시태그 등록하기 -->
+	<insert id="insertTag" parameterType="String">
+		INSERT INTO qa_hashtag(tag_no, tag_name) VALUES(tag_no_seq.nextval, #{tagName})
+	</insert>
+	<!-- 해시태그 조회하기  -->
+	<select id="selectTag" parameterType="String" resultType="jeju.dto.qna.Hashtag">
+		SELECT tag_no, tag_name FROM qa_hashtag
+		WHERE tag_name = #{tagName}
+	</select>
+	<!-- 질문글 추가하기 -->
+	<insert id="insertQuestion" parameterType="jeju.dto.qna.Question">
+		<selectKey resultType="int" keyProperty="qstNo" order="BEFORE">SELECT qst_no_seq.nextval FROM dual</selectKey>
+		INSERT INTO qa_question(qst_no, title, user_no, qst_content) 
+		VALUES(#{qstNo}, #{title}, ${userNo}, #{qstContent})
+	</insert>
+	<!-- 파일명 추가하기 -->
+	<insert id="insertFiles" parameterType="jeju.dto.qna.FileTB">
+		<choose>
+		<when test="#{ansNo} == null">
+	 	INSERT INTO qst_file(qst_file_no, qst_no, qst_origin, qst_stored) VALUES
+	 	(qst_file_no_seq.nextval, #{qstNo}, #{origin}, #{stored})
+	 	</when>
+	 	<when test="#{ansNo} != null and #{qstNo} != null">
+	 	INSERT INTO ans_file(ans_file_no, ans_no, ans_origin, ans_stored) VALUES	 	
+	 	(ans_file_no_seq.nextval, #{ansNo}, #{origin}, #{stored})
+	 	</when>
+	 	</choose>
+	</insert>
+	<!-- 질문글에 태그 추가하기  -->
+	<insert id="insertTagIntoQustion" parameterType="hashmap">
+		INSERT INTO question_tag(quta_no, qst_no, tag_no)
+		VALUES (quta_no_seq.nextval, #{qstNo}, #{tagNo})
+	</insert>
+	<!-- 질문글 번호별 파일 정보 조회하기  -->
+	<select id="selectFiles" resultType="hashmap" parameterType="jeju.dto.qna.FileTB">
+		<choose>
+		<when test="#{qstNo} != null">
+		SELECT * FROM qst_file WHERE qst_no = #{qstNo}
+		</when>
+		<when test="#{ansNo} != null">
+		SELECT * FROM ans_file WHERE ans_no = #{ansNo}
+		</when>
+		</choose>
+	</select>
+	<!-- 질문글 삭제하기 -->
+	<delete id="deleteQuestion" parameterType="int">
+		DELETE FROM qa_question WHERE qst_no = #{qstNo}
+	</delete>
+	<!-- 질문글 업데이트 -->
+	<update id="updateQuestion" parameterType="jeju.dto.qna.Question">
+		
+		UPDATE qa_question SET title = #{title}, qst_content = #{qstContent}
+		WHERE qst_no = #{qstNo}
+	</update>
+	<!-- 첨부파일 삭제하기 -->
+	<delete id="deleteFiles" parameterType="int">
+		<choose>
+		<when test="#{ansNo} != null">
+		DELETE FROM ans_file WHERE ans_no = #{ansNo}		
+		</when>
+		<otherwise>
+		DELETE FROM qst_file WHERE qst_no = #{qstNo}
+		</otherwise>
+		</choose>
+	</delete>
+	
+	<!-- 태그번호 삭제하기 -->
+	<delete id="deleteTags" parameterType="int">
+		DELETE FROM question_tag WHERE qst_no = #{qstNo}
+	</delete>
+	<!-- 답변글 생성하기 -->
+	<insert id="insertAnswer" parameterType="jeju.dto.qna.Answer">
+	<selectKey resultType="int" keyProperty="ansNo" order="BEFORE">SELECT ans_no_seq.nextval FROM dual</selectKey>
+		INSERT INTO qa_answer(ans_no, qst_no, user_no, ans_content)
+		VALUES(#{ansNo}, #{qstNo}, #{userNo}, #{ansContent})
+	</insert>
+	<!-- 답변글 삭제하기-->
+	<delete id="deleteAnswer" parameterType="jeju.dto.qna.FileTB">
+		DELETE FROM qa_answer WHERE ans_no = #{ansNo}
+	</delete>
+	<!-- 답변글 업데이트-->
+	<update id="updateAnswer" parameterType="jeju.dto.qna.Answer">
+		UPDATE qa_answer SET ans_content = #{ansContent}, ans_time = SYSDATE
+		where ans_no =  #{ansNo}
+	</update>
+	<!-- 좋아요 클릭여부 조회 -->
+	<select id="cntLiked" parameterType="jeju.dto.qna.Answer" resultType="int">
+		SELECT count(*) FROM ans_like WHERE user_no = #{userNo} and qst_no = #{qstNo} and ans_no = #{ansNo}
+	</select>
+	<!-- 좋아요 등록하기 -->
+	<insert id="insertLike" parameterType="jeju.dto.qna.Answer">
+		INSERT INTO ans_like(ans_like_no, qst_no, ans_no, user_no) VALUES(ANS_LIKE_NO_SEQ.nextval, #{qstNo}, #{ansNo}, #{userNo})
+	</insert>
+	<!-- 좋아요 취소하기 -->
+	<delete id="deleteLike" parameterType="jeju.dto.qna.Answer">
+		DELETE FROM ans_like where qst_no = #{qstNo} AND ANS_NO = #{ansNo} AND USER_NO = #{userNo}
+	</delete>
+	<!-- 좋아요 수 조회하기 -->
+	<select id="selectCntLikes" resultType="int" parameterType="jeju.dto.qna.Answer">
+		SELECT count(*) FROM ans_like WHERE qst_no = #{qstNo} and ans_no = #{ansNo}
+	</select>
+	
+	<!-- 유저가 누른 좋아요 수 조회하기 -->
+	<select id="selectCntAnsLikedByuno" parameterType="jeju.dto.qna.Answer" resultType="int">
+		SELECT count(*) FROM ans_like AL
+		inner JOIN qa_answer A
+		on a.ans_no = al.ans_no
+		WHERE AL.user_no = #{userNo}
+	</select>
+	<!-- 유저가 좋아요 누른 답변글 리스트 조회하기 -->
+	<select id="selectAnswersLikedByuno" parameterType="hashmap" resultMap="AnswerMap">
+		SELECT * FROM
+		(SELECT ROWNUM RNUM, ANS_LIKED.* FROM
+		(SELECT A.ans_no, A.qst_no, qa.title, A.ans_time, A.ans_content,(SELECT COUNT(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no) ans_like_cnt FROM ans_like AL
+		inner JOIN qa_answer A
+		on a.ans_no = al.ans_no
+		inner JOIN qa_question QA
+		on QA.qst_no = al.qst_no
+		WHERE AL.user_no = #{answer.userNo}
+		ORDER BY al.ans_like_no DESC
+		) ANS_LIKED
+		) WHERE RNUM BETWEEN #{paging.startNo} AND #{paging.endNo}
+	</select>
+	
 </mapper>

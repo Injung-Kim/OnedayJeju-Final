@@ -2,6 +2,7 @@ package jeju.service.impl;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,5 +63,12 @@ public class PlanServiceImpl implements PlanService {
 		logger.info("remove() 호출");
 		//일정 삭제
 		planDao.deletePlanByPno(inData);
+	}
+	
+	@Override
+	public List<Plan> getList(Plan myplan) {
+		logger.info("getList() 호출");
+		//일정 목록 조회 후 반환
+		return planDao.selectAll(myplan);
 	}
 }

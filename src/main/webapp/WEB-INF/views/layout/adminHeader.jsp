@@ -68,7 +68,6 @@ header{
 	color : white;
 }
 article{
-	border : 1px solid #ccc;
 	max-width : 1002px;
 	padding : 15px;
 	float : left;	
@@ -120,11 +119,11 @@ function sidemenu(){
 	<div class="section">
 	<h3>관리자 페이지</h3>
 		<ul>
-			<li><a href="#">회원관리</a></li>
-			<li><a href="#">일정공유</a></li>
+			<li><a href="/admin/user/list">회원관리</a></li>
+			<li><a href="/admin/planboard">일정공유</a></li>
 			<li><a href="#">여행후기</a></li>
-			<li><a href="#">공지사항</a></li>
-			<li><a href="#">Q & A</a></li>
+			<li><a href="/notice/admin">공지사항</a></li>
+			<li><a href="/admin/qna/list">Q & A</a></li>
 		</ul>
 	</div>
 	</div>

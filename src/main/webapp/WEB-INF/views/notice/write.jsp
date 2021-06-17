@@ -20,6 +20,8 @@ $(document).ready(function(){
 	
 	//파일네임 추출
 	$("#file").change(function(e){
+		
+		$(".upload_name").remove();
 
 		var files = e.target.files;
 		
@@ -49,7 +51,7 @@ $(document).ready(function(){
 		for(var i=0; i<files.length; i++) {
 			
 			$("<input>").attr({
-				class : "upload-name"
+				class : "upload_name"
 				, type : "text"
 				, readonly : "readonly"
 			}).appendTo($(".file_box")).val( i+1 + ". " + files[i].name );
@@ -61,13 +63,19 @@ $(document).ready(function(){
 	//스마트에디터
 	$("#btnWrite").click(function() {
 
+		//스마트에디터의 내용을 <textare>에 적용하기
+		submitContents( $("#btnWrite") );
+
+		var ntContent = $("#ntContent").val();
+		
 		if( ""== $("#ntTitle").val() ) {
 			alert("제목을 작성해주세요");	
 			$("#ntTitle").focus();
 			
 			return false;
 		}
-		if( ""== $("#ntContent").val() ) {
+		
+		if( ntContent == ""  || ntContent == null || ntContent == '&nbsp;' || ntContent == '<p>&nbsp;</p>' || ntContent == '<p><br></p>' ) {
 			alert("내용을 작성해주세요");	
 			oEditors.getById["ntContent"].exec("FOCUS");
 			
@@ -75,8 +83,6 @@ $(document).ready(function(){
 		}
 		
 		
-		//스마트에디터의 내용을 <textare>에 적용하기
-		submitContents( $("#btnWrite") );
 		
 		//form submit 수행하기
 		$("form").submit();
@@ -121,7 +127,9 @@ $(document).ready(function(){
 			</div>
 			
 			<div class="con"><textarea rows="10" style="width: 100%" id="ntContent" name="ntContent"></textarea></div>
-		
+			<hr style="margin-top: 5px; margin-bottom:0;">
+			<p class="count ntContent_cnt"><span>0</span> / 3800</p>
+
 		</div>
 		
 		<div class="rel mid">
@@ -130,7 +138,6 @@ $(document).ready(function(){
 	 			 <label class="box_shadow bor_rad_ten" for="file">업로드</label> 
 	 			 <input multiple="multiple" type="file" id="file" name="file"/> 
 			</div>
-			
 			<input type="submit" class="abs update_btn box_shadow bor_rad_ten" id="btnWrite" value="등록" />
 			<input type="button" class="abs delete_btn box_shadow bor_rad_ten" onclick="history.go(-1)" value="취소" />
 	
@@ -138,6 +145,8 @@ $(document).ready(function(){
 		</div>
 		
 	</form>
+	
+	
 
 	
 <!-- container -->
@@ -153,6 +162,55 @@ $(document).ready(function(){
 		fCreator: "createSEditor2"
 
 	})
+	
+	setTimeout(function() { 
+		var ctntarea = document.querySelector("iframe").contentWindow.document.querySelector("iframe").contentWindow.document.querySelector(".se2_inputarea");
+		
+		ctntarea.addEventListener("keyup", function(e) { 
+			
+			var text = this.innerHTML; 
+			text = text.replace(/<br>/ig, ""); // br 제거
+			text = text.replace(/&nbsp;/ig, "");// 공백 제거
+			text = text.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, ""); // html 제거
+			console.log( text.charAt(0) )
+			
+			var maxByte = 3800;
+			var rbyte = 0;
+			var rlen = 0;
+			var one_char = "";
+			var text2
+			var len = text.length;
+			
+			for (var i=0; i<len; i++) {
+				one_char = text.charAt(i);
+				
+				if (escape(one_char).length > 4) {
+					rbyte +=3;//한글
+				} else {
+					rbyte++//영어
+				}
+				
+				if(rbyte <= maxByte) {
+					rlen = i +1; //return할 문자열 갯수				
+				}
+			}
+			
+			
+			
+			console.log(text);
+			if(rbyte > maxByte) {
+				
+				text2 = text.substr(0, rlen);
+				this.innerHTML = text2;
+				$('.count span').html("3800");
+				
+			} else {
+				document.querySelector(".count span").innerHTML = rbyte;
+				
+			}
+		});
+	}, 1000)
+
 
 	// <form>태그가 submit되면 스마트에디터에 작성된 내용이 <textarea>에
 	//적용되도록 하는 코드
@@ -165,6 +223,7 @@ $(document).ready(function(){
 		} catch(e) { }
 	
 	}
+	
 </script>
 
 	

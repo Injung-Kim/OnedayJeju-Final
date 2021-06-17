@@ -15,11 +15,6 @@
 		<level value="info" />
 	</logger>
 	
-	<logger name="jeju">
-		<level value="warn" />
-	</logger>
-	
-	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />

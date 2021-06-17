@@ -53,7 +53,7 @@ $(document).ready(function(){
 		<div class="nologin" style="right: 40px; position : absolute">
 			<a href="/member/login">로그인</a>
 			| 
-			<a href="#">회원가입</a>
+			<a href="/user/joinAgree">회원가입</a>
 		</div>
 	</c:if>
 	<c:if test="${login}">
@@ -99,7 +99,7 @@ $(document).ready(function(){
 		<ul class="nav_second">
 			<li><a href="/planboard/list">일정 공유</a></li>
 			<li class="devide">|</li>
-			<li><a href="#">여행 후기</a></li>
+			<li><a href="/review/list">여행 후기</a></li>
 			<li class="devide">|</li>
 			<li><a href="/notice/list">공지사항</a></li>
 			<li class="devide">|</li>

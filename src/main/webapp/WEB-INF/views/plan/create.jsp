@@ -31,18 +31,21 @@ label, input {
 	font-weight: bold;
 }
 #myplanBtn {
-	padding: 10px 15px;
+	padding: 5px 10px;
 	background-color: #00BD9D;
 	border-radius: 10px;
 	border: 1px solid #ccc;
 	color: #FFFBFA;
+}
+label {
+	font-size: 16px;
 }
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
 	//나의 일정보기 버튼
 	$("#myplanBtn").click(function(){
-		$(location).attr("href", "/mypage/plan")
+		$(location).attr("href", "/member/mypage")
 	})
 	//생성 버튼
 	$("#submitBtn").click(function(){

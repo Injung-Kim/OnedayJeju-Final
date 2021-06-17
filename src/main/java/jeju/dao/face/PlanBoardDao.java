@@ -181,5 +181,12 @@ public interface PlanBoardDao {
 	 * @param inData - 게시글번호
 	 */
 	public void deletePlanBoardByPbno(PlanBoard inData);
+	
+	/**
+	 * 로그인한 유저가 북마크한 일정공유게시글을 모두 조회한다.
+	 * @param userNo - 로그인한 유저의 유저번호
+	 * @return 북마크한 일정공유게시글 정보
+	 */
+	public List<Map<String, Object>> selectBookmarkList(int userNo);
 
 }
