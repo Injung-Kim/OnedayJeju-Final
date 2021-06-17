@@ -67,5 +67,14 @@ public interface LoginService {
 	 * @return id, mail이 일치하는 회원 객체
 	 */
 	public String getSearchPw(String id, String email);
+
+
+	/**
+	 * 메일인증여부 확인
+	 * 
+	 * @param auth - 메일인증여부 컬럼 값을 담은 객체
+	 * @return 1: 인증완료 0: 인증미완료
+	 */
+	public boolean mailAuth(JejuUser login);
 	
 }

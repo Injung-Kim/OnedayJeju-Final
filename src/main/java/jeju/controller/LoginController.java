@@ -48,8 +48,13 @@ public class LoginController {
 		
 		logger.info("/member/login [POST]");
 		
-		boolean isLogin = loginService.login(login);
 		ModelAndView mav = new ModelAndView();
+
+		//로그인 확인
+		boolean isLogin = loginService.login(login);
+		
+		//메일 인증여부 확인
+		boolean isMail = loginService.mailAuth(login);
 		
 		
 
@@ -59,7 +64,7 @@ public class LoginController {
 		
 		
 		//세션 설정
-		if (isLogin == true) { //로그인 성공
+		if (isLogin == true && isMail == true) { //로그인 성공
 			
 			mav.setViewName("redirect:/");
 			
@@ -72,6 +77,11 @@ public class LoginController {
 			
 			idCookie.setMaxAge(60*60*24*7); //쿠키 유지 기간을 7일로 지정
 			
+			
+		} else if (isLogin == true && isMail == false) {
+			
+			mav.setViewName("member/login");
+			mav.addObject("msg", "mailfail");
 			
 		} else {
 			mav.setViewName("member/login");
