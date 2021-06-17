@@ -36,6 +36,13 @@
 	font-size: 12px;
 	margin : 0px;
 }
+.qstTitle{
+	text-align : left;
+	width : 70%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
 /* 내용 간략히 */
 .content{
 	overflow: hidden;
@@ -56,7 +63,7 @@
 	padding : 0px 0px 0px 10px;
 }
 .searchTag{
-	width : 15%;
+	width : 35%;
 	height : 51px;
 	margin-bottom : 12px;
 }
