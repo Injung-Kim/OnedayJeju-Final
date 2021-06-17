@@ -54,7 +54,7 @@ public class LoginController {
 		
 
 		//쿠키 생성 및 설정
-		Cookie idCookie = new Cookie("userInputId", login.getUserId()); //쿠키이름을 cId로 생성
+		Cookie idCookie = new Cookie("userInputId", login.getUserId()); //쿠키이름을 userInputId로 생성
 		idCookie.setPath("/");
 		
 		
