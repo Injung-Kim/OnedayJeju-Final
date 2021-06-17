@@ -421,7 +421,7 @@ function getFormatDate(value){
 <div class="user_board_btn">
 	<button id="myplanBtn">나의 일정</button>
 	<button id="bookmarkBtn">북마크</button>
-	<button>여행 후기</button>
+	<button id="rvmyBtn">여행 후기</button>
 	<button id="qnaBtn">Q & A</button>
 </div>
 
