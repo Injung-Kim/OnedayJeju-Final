@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jeju.dto.qna.Answer;
 import jeju.dto.qna.FileTB;
 import jeju.dto.qna.Hashtag;
+import jeju.dto.qna.Question;
 import jeju.dto.qna.Question_original;
 import jeju.dto.qna.QuestionTag;
 
@@ -102,10 +104,10 @@ public interface QnADao {
 	/**
 	 * 질문글에 등록된 파일 정보 가져오기
 	 * 
-	 * @param qstNo 요청받은 질문글 번호
+	 * @param file 요청받은 게시글 번호
 	 * @return 질문글 번호로 저장된 파일 정보
 	 */
-	public List<HashMap<String, Object>> selectFiles(int qstNo);
+	public List<HashMap<String, Object>> selectFiles(FileTB file);
 	/**
 	 * 질문글 관련 정보 삭제
 	 * 
@@ -139,6 +141,94 @@ public interface QnADao {
 	 * @param qstNo 상제 조회할 질문글 번호
 	 */
 	public void updateCntQuestion(int qstNo);
-
+	/**
+	 * 답변글 생성하기
+	 * 
+	 * 
+	 * @param answer 요청받은 답변글 정보
+	 */
+	public void insertAnswer(Answer answer);
+	/**
+	 * 답변글 삭제하기
+	 * 
+	 * @param ansNo 요청받은 답변글 번호
+	 */
+	public void deleteAnswer(FileTB ansNo);
+	/**
+	 * 답변글 수정하기
+	 * 
+	 * @param answer 변경된 답변글 정보
+	 */
+	public void updateAnswer(Answer answer);
+	
+	/**
+	 * 답변글별 전체 좋아요 수 조회하기
+	 * 
+	 * @param answer 조회할 답변글 번호
+	 * @return 조회한 좋아요 수
+	 */
+	public int selectCntLikes(Answer answer);
+	/**
+	 * 특정 답변글 좋아요 누른 여부 조회
+	 * 좋아요 눌렀을 경우 1 반환, 누르지 않았을 경우 0 반환
+	 * @param answer 조회할 답변글 정보
+	 * @return 조회된 갯수 반환
+	 */
+	public int cntLiked(Answer answer);
+	/**
+	 * 좋아요 등록하기
+	 * 
+	 * @param answer 좋아요 등록할 게시글 정보
+	 */
+	public void insertLike(Answer answer);
+	/**
+	 * 좋아요 취소하기
+	 * 
+	 * @param answer 좋아요 취소할 게시글 정보
+	 */
+	public void deleteLike(Answer answer);
+	/**
+	 * 로그인한 유저가 작성한 질문글 갯수 조회하기
+	 * 
+	 * @param question 로그인한 유저 번호가 담긴 dto 객체
+	 * @return 조회한 전체 질문글 갯수
+	 */
+	public int selectCntQuestionByuno(Question question);
+	/**
+	 * 로그인한 유저가 작성한 질문글 정보 조회하기
+	 * 
+	 * @param map 현재 로그인한 유저번호, 페이징 정보
+	 * @return 조회한 질문글 리스트
+	 */
+	public List<HashMap<String, Object>> selectQuetionsByuno(HashMap<String, Object> map);
+	/**
+	 * 로그인한 유저가 작성한 답변글 갯수 조회하기
+	 * 
+	 * @param question 로그인한 유저 번호가 담긴 dto 객체
+	 * @return 조회한 전체 답변글 갯수
+	 */
+	public int selectCntAnswerByuno(Answer answer);
+	/**
+	 * 로그인한 유저가 작성한 답변글 정보 조회하기
+	 * 
+	 * @param map 현재 로그인한 유저번호, 페이징 정보
+	 * @return 조회한 답변글 리스트
+	 */
+	public List<HashMap<String, Object>> selectAnswersByuno(HashMap<String, Object> map);
+	/**
+	 * 로그인한 유저가 좋아요를 누른 답변글 갯수 조회하기
+	 * 
+	 * @param answer 로그인한 유저 번호가 담긴 dto 객체
+	 * @return 조회한 전체 답변글 갯수
+	 */
+	public int selectCntAnsLikedByuno(Answer answer);
+	/**
+	 * 로그인한 유저가 좋아요를 누른 답변글 조회하기
+	 * 
+	 * @param map 로그인한 유저 번호, 페이징 정보
+	 * @return 조회한 답변글 리스트
+	 */
+	public List<HashMap<String, Object>> selectAnswersLikedByuno(HashMap<String, Object> map);
+	
 	
 }

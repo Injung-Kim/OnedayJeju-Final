@@ -2,111 +2,17 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:import url="/WEB-INF/views/layout/header.jsp"/>
-<style type="text/css">
-/*질문글 css*/
-.qstWrapper{
-	width : 100%;
-	border-top : 3px solid #49c6e5;
-	border-bottom : 3px solid #49c6e5;
-	border-radius : 25px;
-	background: #fffbfa;
-}
-.question{
-	width : 80%;
-	text-align: right;
-	padding : 15px;
-}
-.question .qstInfo{
-	float : right;
-	margin : 0 0 0 40px;
-}
-.question #content{
-	text-align : left;
-	line-height :  27px;
-}
-.question .qstInfo #qstCnt{
-	margin-right : 18px;
-	color : #00a388;
-}
-.question .tag span{
-	line-height : 85px;
-}
-.makeAnswer{
-	background: #00bd9d;
-	color : #fffbfa;
-}
-/*답변글 css  */
-.ansWrapper{
-	width : 100%;
-	margin-top : 20px;
-}
-.ansWrapper > div{
-	margin-bottom: 25px;
-}
-
-.answers{
-	width : 80%;
-	border : 1px solid #49c6e5;
-	height : 350px;
-	border-radius: 15px;
-	padding: 15px;
-	text-align: right;
-}
-.like{
-	background: transparent;
-	border : none;
-	color : #f25c54;
-}
-
-.answers #ansInfo{
-	text-align: left;
-}
-.answers #userid{
-	line-height: 56px;
-   	vertical-align: text-top;
-   	font-size: 23px;
-}
-
-.answers #divider{
-	margin-top : 5px;
-	margin-bottom : 20px;
-}
-.ansContent{
-	height : 53%;
-	text-align: left;
-}
-/* 답변글 작성 폼 */
-.writeAnswer{
-	width : 50%;
-	padding : 20px;
-	border-radius: 15px;
-	/* background: #00a388; */
-	border : 1px solid #ccc;
-}
-.writeAnswer h4{
-	display : inline-block;
-}
-.filename{
-	min-height : 30px;
-}
-.filename span{
-	padding-right : 15px;
-}
-/* 답변글 수정 폼  */
-.updateAnswer{
-	 width : 80%;
-	 display : none; 
-	 border : 1px solid #ccc;
-	 border-radius : 15px;
-}
-</style>
+<c:import url="/WEB-INF/views/layout/adminHeader.jsp"/>
+<!-- 상세정보 css  -->
+<link rel="stylesheet" href="/resources/css/qnaView.css" type="text/css"/>
 <script type="text/javascript">
 $(document).ready(function(){
+	//질문글 삭제
 	$('.deleteQst').click(function(){
 		var confirmDelete = confirm('삭제하시겠습니까?')
 		if(confirmDelete){location.href="/qna/delete/question?qstNo=${QST_NO}"}
 	})
+	//답변글 작성폼 이동
 	 $('.makeAnswer').click(function(){
 		 var login = ${sessionScope.login}
 		 console.log(login)
@@ -119,19 +25,23 @@ $(document).ready(function(){
 			 $('html').animate({scrollTop : offset.top},500)
 		 }
 	}) 
+	//이미지 클릭시 파일 업로드창 열기
 	$('.ansImg').click(function(){
 		$('#ansFiles').click()
 	})
+	
+	//업로드시 파일명 보여주기
 	$('#ansFiles').change(function(){
 		var files = $(this)[0].files
 		for(var i = 0; i< files.length; i++){
 			$('.filename').append($('<span></span>').html(files[i].name))
 		}
 	})
-	
+	//답변글 생성 전송
 	$('#submitAnswer').click(function(){
 		$('#ansCreateForm').submit()
 	})
+	//답변글 삭제
 	$('.deleteAns').click(function(){
 		var confirmDelete = confirm('답변을 삭제하시겠습니까?')
 		var ansNo = ($(this).parent().attr('id'))
@@ -317,4 +227,4 @@ $(document).ready(function(){
 	
 </div>
 <c:import url="/WEB-INF/views/qna/qstUpdateModal.jsp"/>
-<c:import url="/WEB-INF/views/layout/footer.jsp"/>
+<c:import url="/WEB-INF/views/layout/adminFooter.jsp"/>

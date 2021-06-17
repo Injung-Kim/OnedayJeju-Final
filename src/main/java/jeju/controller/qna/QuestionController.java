@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import jeju.dto.qna.FileTB;
+import jeju.dto.qna.Question;
 import jeju.dto.qna.Question_original;
 import jeju.service.face.QnAService;
 import jeju.util.Paging;
@@ -46,7 +48,7 @@ public class QuestionController {
 	
 	//질문글 상세정보
 	@RequestMapping(value="/view")
-	public void qstView(int qstNo, ModelMap map, Model model, Paging paging) {
+	public void qstView(int qstNo, ModelMap map, Model model, Paging paging, HttpSession session) {
 		//질문글 번호를 통한 상세조회
 		HashMap<String, Object> view =  qnaService.getQuestion(qstNo);
 		
@@ -69,8 +71,10 @@ public class QuestionController {
 		Paging ansPaging = qnaService.getPaging(paging);
 		Map<String, Object> ansParam = new HashMap<String, Object>();
 		ansParam.put("qstNo", qstNo);
+		ansParam.put("userNo", (Integer) session.getAttribute("uno"));
 		ansParam.put("ansPaging", ansPaging);
 		logger.debug("파라미터 hashmap : {}", ansParam);
+		
 		
 		//답변글 정보(페이징 반영)
 		List<HashMap<String, Object>> list = qnaService.getAnswers(ansParam);
@@ -123,11 +127,11 @@ public class QuestionController {
 	//질문글 삭제하기
 	@RequestMapping(value="/delete/question", method = RequestMethod.GET)
 	@Transactional
-	public String deleteQuestion(int qstNo) {
+	public String deleteQuestion(FileTB qstNo) {
 		//1. 저장한 첨부파일 삭제
 		qnaService.removeFiles(qstNo);
 		//2. 질문글 삭제 -  답변글, 태그명, 첨부파일 모두 삭제됨
-		qnaService.deleteQuestion(qstNo);
+		qnaService.deleteQuestion(qstNo.getQstNo());
 		
 		return "redirect:/qna/list";
 	}
@@ -142,7 +146,8 @@ public class QuestionController {
 			) {
 		logger.info("수정하기 요청성공");
 		// 저장한 첨부파일 업데이트
-		int qstNo = question.getQstNo();
+		FileTB qstNo = new FileTB();
+		qstNo.setQstNo(question.getQstNo());
 		qnaService.removeFiles(qstNo);
 		//첨부파일 생성
 		List<FileTB> filetable = qnaService.createFile(file);
@@ -153,7 +158,29 @@ public class QuestionController {
 		
 		return "redirect:/qna/list";
 	}
-	
-	
+	@RequestMapping(value="/mypage/question", method = RequestMethod.GET)
+	public ModelAndView mypage(
+			HttpSession session
+			, Paging paging
+			, ModelAndView mav
+			) {
+		int userNo = (int)session.getAttribute("uno");
+		Question question = new Question();
+		question.setUserNo(userNo);
+		
+		//유저가 작성한 질문글 갯수 조회
+		paging.setTotalCount(qnaService.selectCntQustionByuno(question));
+		//페이지 생성
+		Paging listPaging = new Paging(paging.getTotalCount(), paging.getCurPage());
+				
+		//로그인한 유저가 작성한 질문글 리스트 불러오기
+		List<HashMap<String, Object>> list = qnaService.getQstListByUserno(listPaging, question);
+		logger.info("qnaList : {}", list);
+		mav.addObject("paging", listPaging);
+		mav.addObject("result", list);
+		mav.setViewName("/qna/qstbyUno");
+		
+		return mav;
+	}
 	
 }
