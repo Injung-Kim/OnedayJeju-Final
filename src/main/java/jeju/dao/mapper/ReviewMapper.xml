@@ -15,6 +15,7 @@
 		<result column="rv_hit" property="rvHit"/>
 		<result column="rv_link" property="rvLink"/>
 		<result column="rv_budjet" property="rvBudjet"/>
+		<result column="user_no" property="userNo"/>
 	</resultMap>
 	
 	<sql id="selectreview">
@@ -60,8 +61,8 @@
 		<selectKey order="BEFORE" resultType="int" keyProperty="rvNo">
 			SELECT review_seq.nextval FROM dual
 		</selectKey>
-		INSERT INTO review( rv_no, rv_title, rv_content, user_id)
-		VALUES( #{rvNo}, #{rvTitle}, #{rvContent}, #{userId})
+		INSERT INTO review( rv_no, user_no, rv_title, rv_content, user_id)
+		VALUES( #{rvNo}, #{userNo}, #{rvTitle}, #{rvContent}, #{userId})
 	</insert>
 	
 	<update id="update" parameterType="jeju.dto.Review">

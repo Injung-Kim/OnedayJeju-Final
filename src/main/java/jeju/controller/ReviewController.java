@@ -92,6 +92,8 @@ public class ReviewController {
 		
 		//작성자 ID 추가 세션
 		review.setUserId((String) session.getAttribute("id"));
+		review.setUserNo((int) session.getAttribute("uno"));
+
 		
 		logger.info("글쓰기 : {}", review);
 		

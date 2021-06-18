@@ -22,8 +22,10 @@ $(document).ready(function() {
 	$("#cancel").click(function() {
 		history.go(-1);
 	})
+	
+	
 })
-</script>
+</script>s
 
 <div class="container">
 

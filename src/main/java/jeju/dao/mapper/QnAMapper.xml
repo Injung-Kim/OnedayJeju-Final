@@ -94,7 +94,7 @@
 	
 	<!-- 질문글 상세조회  -->
 	<select id="selectQuestionByqstNo" resultType="hashmap" parameterType="int">
-		SELECT Q.qst_no, Q.title, Q.qst_content, Q.qst_cnt, Q.qst_time, U.user_id, U.user_origin 
+		SELECT Q.qst_no, Q.title, Q.qst_content, Q.qst_cnt, Q.qst_time, U.user_id, U.user_stored 
 		FROM qa_question Q
 		INNER JOIN jejuuser U
 		ON U.user_no = q.user_no
@@ -121,7 +121,7 @@
 	
 	<!-- 답변글 조회 -->
 	<select id="selectAnswers" resultMap="AnswerMap" parameterType="hashmap">
-		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_origin
+		SELECT A.ans_no, A.qst_no, A.ans_content, A.ans_time, A.ans_like, U.user_id, U.user_stored
 			, (SELECT COUNT(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no) ans_like_cnt
 			, (SELECT count(*) FROM ans_like AL WHERE AL.ans_no = A.ans_no AND AL.user_no = #{userNo}) ans_like_check
 		FROM qa_answer A
