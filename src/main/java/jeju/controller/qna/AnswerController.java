@@ -4,6 +4,7 @@ package jeju.controller.qna;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import jeju.util.Paging;
 public class AnswerController {
 	@Autowired QnAService qnaService;
 	private Logger logger = LoggerFactory.getLogger(AnswerController.class);
+	//답변글 생성하기
 	@RequestMapping(value="/write/answer", method = RequestMethod.POST)
 	@Transactional
 	public String writeAnswer(
@@ -42,7 +44,7 @@ public class AnswerController {
 		
 		return "redirect:/qna/view?qstNo=" + answer.getQstNo();
 	}
-	
+	// 답변글 삭제하기
 	@RequestMapping(value="/delete/answer", method = RequestMethod.GET)
 	@Transactional
 	public String deleteAnswer(FileTB ansNo, int qstNo) {
@@ -54,6 +56,7 @@ public class AnswerController {
 		
 		return "redirect:/qna/view?qstNo="+ qstNo;
 	}
+	//답변글 수정하기
 	@RequestMapping(value="/update/answer", method = RequestMethod.POST)
 	@Transactional
 	public String updateAnswer(
@@ -109,7 +112,7 @@ public class AnswerController {
 		Paging listPaging = new Paging(paging.getTotalCount(), paging.getCurPage());
 		//로그인한 유저가 작성한 답변글 리스트 불러오기
 		List<HashMap<String, Object>> list = qnaService.getansListByUserno(listPaging, answer);
-		logger.info("anslist : {}", list);
+		logger.info("anslist : {}", list.size());
 		
 		mav.addObject("paging", paging);
 		mav.addObject("result", list);
@@ -142,4 +145,6 @@ public class AnswerController {
 		
 		return mav;
 	}
+	
+	
 }

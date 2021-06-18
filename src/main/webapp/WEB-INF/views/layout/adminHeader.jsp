@@ -4,7 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>어느 날, 제주</title>
+<link rel="shortcut icon" href="/resources/image/MAuJqhWr.ico">
 <!-- jQuery 2.2.4 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 
@@ -36,17 +37,27 @@ a { text-decoration:none !important }
 a:hover { text-decoration:none !important }
 header{
 	height : 100px;
+	margin-bottom : 20px;
+}
+.pageName{
+	float : right;
+}
+section{
+	width : 1200px;
+	height : 100%;
+}
+aside{
+	float : left;
 }
 .menu{
-	position: absolute;
+	position : absolute;
+	top : 140px;
 	background: rgba(139, 215, 210, 0.5);
 	width : 180px;
-	height : 100%;
+	/* height :100%; */
 	margin : 0px;
 	text-align: center;
 	padding : 20px;
-	float : left;
-	left : -160px;
 }
 .adminpage{
 	border-bottom : 1px solid black;
@@ -68,60 +79,34 @@ header{
 	color : white;
 }
 article{
+	position : relative;
 	max-width : 1002px;
+	margin : 0px;
 	padding : 15px;
-	float : left;	
+	float : right;
+	margin-left : 200px;	
 }
 </style>
-<script type="text/javascript">
-$(document).ready(function(){
-	$('#aside').click(function(){
-		sidemenu();
-	})
-	$('.menu').mouseleave(function(){
-		sidemenu();
-	})
-})
-// 사이드바 메뉴 (on : 활성화 , off : 비활성화)
-function sidemenu(){
-	if($('.asideicon').hasClass("off")){
-		$('.asideicon').toggleClass("on")
-		$('.asideicon').removeClass("off")		
-		$('.menu').css('position', 'relative');
-		$('.menu').animate({
-			left : 0
-		}, 1000)
-	}else if($('.asideicon').hasClass("on")){
-		$('.asideicon').removeClass("on")		
-		$('.asideicon').toggleClass("off")
-	 	$('.menu').css('position', 'absolute'); 
-		$('.menu').animate({
-		left : -160
-	}, 1000)	
-	}
-}
-</script>
-</head>
 
+</head>
 <body>
 <header>
 <a href="/"><img src="/resources/image/logo2.png" alt="어느 날, 제주 로고" style="height: 100px;"></a>
+<div style="float:right;"><h2>Admin Page</h2></div>
 </header>
-<label for="aside" class="asideicon off"><i class="fas fa-bars"></i></label>
-<input type="button" value="Menu" id="aside">
+<section>
 <aside>
 	<div class="menu">
 	<div class="adminpage">
-		<img alt="프로필" src="/resources/image/admin.png" style="width : 100px; height : 100px;" id="profile">
+		<!-- <img alt="프로필" src="/resources/image/admin.png" style="width : 100px; height : 100px;" id="profile"> -->
 		<p style="line-height : 50px;"><strong>${nick}</strong> 님</p>
 		<button type="button" class="btn" onclick="location.href='/member/logout'">로그아웃</button>
 	</div>
 	<div class="section">
-	<h3>관리자 페이지</h3>
 		<ul>
 			<li><a href="/admin/user/list">회원관리</a></li>
 			<li><a href="/admin/planboard">일정공유</a></li>
-			<li><a href="#">여행후기</a></li>
+			<li><a href="/admin/reviewboard">여행후기</a></li>
 			<li><a href="/notice/admin">공지사항</a></li>
 			<li><a href="/admin/qna/list">Q & A</a></li>
 		</ul>

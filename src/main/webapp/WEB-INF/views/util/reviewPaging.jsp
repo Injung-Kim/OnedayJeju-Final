@@ -6,7 +6,7 @@
 
 /* 페이징 */
 .rvpage { text-align: center; }
-.rvpage > ul { list-style-type: none; line-height: 24px; padding-left: 100px; margin-top: 20px; margin-bottom:20px; width: 550px; height: 28px; }
+.rvpage > ul { list-style-type: none; line-height: 24px; padding-left: 175px; margin-top: 20px; margin-bottom:20px; width: 550px; height: 28px; }
 .rvpage > ul > li { float: left; margin-right: 5px; width: 20px; }
 .rvpage > ul > li > a { color: black; }
 .rvpage > ul > li > a:hover { color: #00BD9D; }

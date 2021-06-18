@@ -1,8 +1,7 @@
 package jeju.controller;
-
+import java.util.HashMap;
 import java.util.List;
-
-
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,10 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import jeju.dto.Review;
 import jeju.dto.RvComment;
+import jeju.dto.RvLike;
 import jeju.service.face.ReviewService;
 import jeju.util.RvPaging;
 
@@ -54,22 +56,24 @@ public class ReviewController {
 	}
 	
 	@RequestMapping(value="/view")
-	public String view(Review viewReview, Model model) {
+	public String view(Review viewReview, Model model, RvLike rvLike, HttpSession session) {
 		logger.info("review : {}",viewReview.toString());
 		
 		if(viewReview.getRvNo() < 1) {
 			return "redirect:/review/list";
 		}
 		
-		//상세 정보 전달
-		viewReview = reviewService.view(viewReview);
-		logger.debug("상세보기 : {}", viewReview.toString());
-		model.addAttribute("view", viewReview);
 		
 		//게시글 상세 정보 전달
 		viewReview = reviewService.view(viewReview);
 		logger.debug("상세보기 : {}", viewReview.toString());
 		model.addAttribute("view", viewReview);
+		
+		//추천 정보 전달
+		rvLike.setUserNo((int)session.getAttribute("uno"));
+		rvLike.setRvNo(viewReview.getRvNo());
+		model.addAttribute("recFlag", reviewService.isRvLike(rvLike));
+		model.addAttribute("recCnt", reviewService.getTotalCntRecommend(rvLike));
 		
 //		//댓글리스트 전달
 //		List<RvComment> commentList = reviewService.getCommentList(viewReview);
@@ -138,5 +142,26 @@ public class ReviewController {
 		
 		return "redirect:/review/list";
 	}
+	
+	@RequestMapping(value = "/commend")
+	public @ResponseBody HashMap<String, Object> recommend(RvLike rvlike, HttpSession session) {
+		
+		//추천 정보 토글
+		rvlike.setUserNo((int) session.getAttribute("uno"));
+		boolean isRvLike = reviewService.recommend(rvlike);
+		System.out.println("======================" + isRvLike);
+		
+		//추천 수 조회
+		int cnt = reviewService.getTotalCntRecommend(rvlike);
+		System.out.println("======================" + cnt);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		
+		map.put("result", isRvLike);
+		map.put("cnt", cnt);
+		
+		return map;
+	}
+	
 	
 }

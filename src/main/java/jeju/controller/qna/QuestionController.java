@@ -141,7 +141,7 @@ public class QuestionController {
 	public String updateQst(
 			@RequestParam(value="upload", required = false) List<MultipartFile> file
 			, HttpSession session
-			, Question_original question
+			, Question question
 			, int[] tagNo
 			) {
 		logger.info("수정하기 요청성공");

@@ -7,114 +7,60 @@
 
 <c:import url="/WEB-INF/views/layout/header.jsp" />
 
-
 <script type="text/javascript">
-  $(document).ready(function() { 
-//   	if(${isRecommend}) {
-// <!--  		$("#btnRecommend") -->
-// <!--  			.addClass("btn-warning") -->
-// // <!--  			.html('추천 취소'); -->
-// <!--  	} else { -->
-// <!--  		$("#btnRecommend") -->
-// <!--  			.addClass("btn-primary") -->
-// <!--  			.html('추천'); -->
-// <!--  	} -->
+  $(document).ready(function() {
+  	if(${recFlag}) {
+  		$("#btnRecommend")
+  			.addClass("btn-warning")
+  			.html('추천 취소');
+  	} else {
+  		$("#btnRecommend")
+  			.addClass("btn-primary")
+  			.html('추천');
+  	}
 
-// <!--  	$("#btnRecommend").click(function() { -->
+  	commentList();
+  	
+  }); <!-- $(document).ready end -->
+  
+  
+  
+  	function recommend() {
 
-// <!--  		$.ajax({ -->
-// <!--  			type: "get" -->
-// <!--  			, url: "/board/recommend" -->
-<%-- <%--  			, data: { "boardNo": '${view.boardNo }' }  --%>
-<%-- <!--  			, dataType: "json" --> --%>
-<%-- <!--  			, success: function( data ) { --> --%>
-<%-- <!--  					console.log("성공"); --> --%>
+  		$.ajax({
+  			type: "get"
+  			, url: "/review/commend"
+  			, data: { "rvNo": '${view.rvNo }' } 
+  			, dataType: "json"
+  			, success: function( data ) { 
+  					console.log("성공");
 
-<%-- <!--  				if( data.result ) { 추천 성공 --> --%>
-<%-- <!--  					$("#btnRecommend") --> --%>
-<%-- <!--  					.removeClass("btn-primary") --> --%>
-<%-- <!--  					.addClass("btn-warning") --> --%>
-<%-- <!--  					.html('추천 취소'); --> --%>
+  				if( data.result ) { //추천 성공 
+  					$("#btnRecommend")
+  					.removeClass("btn-primary")
+  					.addClass("btn-warning")
+  					.html('추천 취소');
 
-<%-- <!--  				} else { 추천 취소 성공 --> --%>
-<%-- <!--  					$("#btnRecommend") --> --%>
-<%-- <!--  					.removeClass("btn-warning") --> --%>
-<%-- <!--  					.addClass("btn-primary") --> --%>
-<%-- <!--  					.html('추천'); --> --%>
+  				} else { //추천 취소 성공 
+  					$("#btnRecommend")
+  					.removeClass("btn-warning")
+  					.addClass("btn-primary")
+  					.html('추천');
 
-<%-- <!--  				} --> --%>
+  				} 
+  				console.log(data.cnt);
+  				$("#RvCnt").html(data.cnt);
+  			} 
+  			, error: function() { 
+  				console.log("실패");
+  			} 
+  		});//<!-- ajax end -->
 
-<%-- <!--  				추천수 적용 --> --%>
-<%-- <!--  				$("#recommend").html(data.cnt); --> --%>
-<%-- <!--  			} --> --%>
-<%-- <!--  			, error: function() { --> --%>
-<%-- <!--  				console.log("실패"); --> --%>
-<%-- <!--  			} --> --%>
-<%-- <!--  		}); ajax end --> --%>
-
-<%-- <!--  	}); $("#btnRecommend").click() end --> --%>
-
-
-
-
-<%-- //  댓글 입력  --%>
-<%-- // $("#btnCommInsert").click(function() {   --%>
-	
-<%-- // 	console.log("입력됨"); --%>
-	
-<%-- // 	$form = $("<form>").attr({  action: "/comment/insert",  method: "post"  }).append( --%>
-<%-- // 	 $("<input>").attr({  type:"hidden",  name:"rvNo", value:"${view.rvNo }"  })  ).append(  $("<textarea>") --%>
-<%-- // 				.attr("name", "rvContent") --%>
-<%-- //  				.css("display", "none") --%>
-<%-- //  				.text($("#commentContent").val()) --%>
-<%-- //  		); --%>
-<%-- //  		$(document.body).append($form); --%>
-<%-- //  		$form.submit(); --%>
-		
-	 		
- 		
-<%-- //  	}); //<!-- $("#btnCommInsert").click()  end --> --%>
-	
-<%-- // 	/review/delete?No=${view.rvNo } --%>
- 	
-<%-- //  	$(".upbtn").click(function(){ --%>
-<%-- //  		if(confirm("수정하시겠습니까?")){ --%>
-<%-- //  			//예 클릭시 이벤트 --%>
-<%-- //  			location.href="/review/update?rvNo=${view.rvNo }"; --%>
- 			
-<%-- //  		}else{ --%>
-<%-- //  			//취소 클릭시 이벤트 --%>
-<%-- //  			return false; --%>
-<%-- //  		}  --%>
-<%-- //  	}); --%>
-
-	
- }); // <!-- $(document).ready end -->
+  	};// <!-- $("#btnRecommend").click() end -->
+ 
  
 	
 	
-//  function deleteComment(rvCmtNo) {
-//  	$.ajax({
-//  		type: "post"
-//  		, url: "/review/comment/delete"
-//  		, dataType: "json"
-//  		, data: {
-//  			rvCmtNo: rvCmtNo
-//  		}
-//  		, success: function(data){
-//  			if(data.success) {
-				
-//  				$("[data-commentno='"+rvCmtNo+"']").remove();
-		
-//  			} else {
-//  				alert("댓글 삭제 실패");
-//  			}
-//  		}
-//  		, error: function() {
-//  			console.log("error");
-//  		}
-//  	});
-//  };
 
 	
 </script>
@@ -198,7 +144,7 @@ article {
 			<td class="tdT infoId">작성자</td>
 					<td class="rightText">${view.userId }</td>
 		
-		<td class="info">추천수</td><td id="recommend">${cntRecommend }</td>
+		<td class="info">추천수</td><td id="RvLike"><div id="RvCnt">${recCnt }</div></td>
 			<td class="tdT infoWrite">작성일</td>
 					<td class="rightText"><fmt:formatDate value="${view.rvCreateDate }" pattern="yy-MM-dd" /></td>
 		
@@ -208,15 +154,13 @@ article {
 	</table>
 	<hr>
 
+		<button id="btnRecommend" class="btn pull-right" style="margin-bottom:10px;" onclick='recommend()'>추천</button>
 
 	<div class="conBox">
-				<!-- contentBox -->
+			<!-- contentBox -->
 		<div class="conV">${view.rvContent }</div>
-				<!-- ContentView -->
+			<!-- ContentView -->
 	</div>
-	<p class="gdBox">
-		<input type="button" value="추천" class="good" onclick="gd_func"/>
-	</p>
 </div>
 
 <!-- 버튼 영역 -->
@@ -265,7 +209,6 @@ article {
 <!-- 	<button onclick='location.href="/member/login";'>로그인</button> -->
 <!-- 	<button onclick='location.href="/member/join";'>회원가입</button> -->
 <%-- 	</c:if> --%>
-	
 <!-- 	로그인상태 -->
 	<c:if test="${login }">
 <!-- 	댓글 입력 -->
@@ -321,13 +264,6 @@ article {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/ko.min.js"></script>
 
 <script>
-
-$(document).ready(function(){
-
-	commentList();
-	
-	
-});
 
 
 function commentWrite() {

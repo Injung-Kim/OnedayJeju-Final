@@ -16,8 +16,10 @@ $('#qnaBtn').click(function(){
 	
 	//질문글 조회
 	$('.question').click(function(){
+		console.log($(this).nextAll())
 	$(this).attr("style","background : #8bd7d2;")
-	$(this).next().attr("style","background : #ddd;")
+	$(this).nextAll().attr("style","background : #ddd;")
+		
 		$.ajax({
 			type : "get"
 				, url : "/qna/mypage/question"
@@ -26,6 +28,7 @@ $('#qnaBtn').click(function(){
 				, success : function(res){
 					console.log("qna Ajax 성공")
 					$('.qna_board_content').html(res)
+					
 				}
 				, error : function(){
 					console.log("qna Ajax 실패")					

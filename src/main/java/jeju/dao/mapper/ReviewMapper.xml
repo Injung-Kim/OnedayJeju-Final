@@ -49,7 +49,7 @@
 	<select id="selectReviewByrvNo" parameterType="jeju.dto.Review" resultMap="Review">
 		SELECT
 			rv_no, rv_title, rv_content, user_id
-			, rv_hit
+			, rv_hit, rv_create_date
 		FROM Review
 		WHERE rv_no = #{rvNo}
 	</select>
@@ -74,4 +74,27 @@
 		DELETE review
 		WHERE rv_no = #{rvNo}
 	</delete>
+	
+	<select id="selectCntRecommend" parameterType="jeju.dto.RvLike" resultType="int">
+		SELECT count(*) FROM rv_like
+		WHERE user_no = #{userNo}
+		AND rv_no = #{rvNo}
+	</select>
+	
+	<insert id="insertRecommend" parameterType="jeju.dto.RvLike">
+		INSERT INTO rv_like
+		VALUES (#{userNo}, #{rvNo})
+	</insert>
+	
+	<delete id="deleteRecommend" parameterType="jeju.dto.RvLike">
+		DELETE rv_like
+		WHERE user_no = #{userNo}
+		AND rv_no = #{rvNo}
+	</delete>
+	
+	<select id="selectTotalCntRecommend" parameterType="jeju.dto.RvLike" resultType="int">
+		SELECT COUNT(*) FROM rv_like
+		WHERE rv_no = #{rvNo}
+	</select>
+	
 </mapper>
