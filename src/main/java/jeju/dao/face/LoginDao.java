@@ -74,6 +74,15 @@ public interface LoginDao {
 	public void updatePw(JejuUser userData);
 
 
+	/**
+	 * 메일인증여부 확인
+	 * 
+	 * @param auth - 메일인증여부 컬럼 값을 담은 객체
+	 * @return 1: 인증완료 0: 인증미완료
+	 */
+	public int selectMailAuth(JejuUser login);
+
+
 	
 	
 }

@@ -27,6 +27,17 @@ public class LoginServiceImpl implements LoginService{
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean mailAuth(JejuUser login) {
+
+		if (loginDao.selectMailAuth(login) == 1) {
+			
+			return true;
+		}
+		return false;
+	}
+
 
 
 	@Override
@@ -114,6 +125,8 @@ public class LoginServiceImpl implements LoginService{
 		
 		return result;
 	}
+
+
 
 
 
