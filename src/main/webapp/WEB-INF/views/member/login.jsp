@@ -11,6 +11,14 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	//회원가입 버튼 클릭 시
+	$("#joinBtn").click(function() {
+		console.log("#joinBtn clicked");
+		location.href = "/user/joinAgree";
+		
+	})
+	
+	//로그인 버튼 클릭 시 값이 없을 때 처리
 	$("#loginBtn").click(function() {
 		var userId = $("#userId").val()
 		var userPw = $("#userPw").val()
@@ -26,6 +34,7 @@ $(document).ready(function() {
 			return;
 		}
 	})
+	
 	
 
 	
@@ -130,6 +139,11 @@ function getCookie(cookieName) {
 	<c:if test="${msg eq 'failure'}">
 		<div style="color:red; margin: 20px;">
 			아이디 또는 비밀번호를 확인해주세요.
+		</div>
+	</c:if>
+	<c:if test="${msg eq 'mailfail'}">
+		<div style="color:red; margin: 20px;">
+			이메일 인증을 완료해주세요.
 		</div>
 	</c:if>
 	

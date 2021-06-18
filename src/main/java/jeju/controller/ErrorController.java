@@ -13,6 +13,11 @@ public class ErrorController {
 		return "error/serverError";
 	}
 	
+//	@GetMapping("/method-error")
+//	public String methodError() {
+//		return "error/methodError";
+//	}
+
 	@GetMapping("/no-resource")
 	public String noResource() {
 		return "error/noResource";
