@@ -8,7 +8,7 @@
 }
 .qstList{
 	box-sizing : border-box;
-	border : 1px solid #49c6e5;
+	border : 1px solid #8bd7d2;
 	border-radius : 15px;
 	padding : 10px 20px;
 	background: #fffbfa;

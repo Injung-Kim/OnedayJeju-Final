@@ -73,7 +73,7 @@
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources location="/qna/" mapping="/qna/**"/>
-
+	<resources mapping="/emp/**" location="/emp/" />
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<!-- JSP 기반의 ViewResolver -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -109,6 +109,10 @@
 	<beans:bean id="getImg" class="jeju.view.GetImageView" />
 	
 	<context:component-scan base-package="jeju.controller, jeju.service" />
+	
+	<context:component-scan base-package="jeju.controller, jeju.service, jeju.editor" />
+	
+
 	
 
 </beans:beans>

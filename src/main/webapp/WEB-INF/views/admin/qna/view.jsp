@@ -88,7 +88,14 @@ $(document).ready(function(){
 	<div id="content">
 		<div class="qstInfo">
 			<span id="qstCnt">조회수 ${QST_CNT}</span>
+			<c:choose>
+			<c:when test="${USER_STORED eq null}">
 			<img src="/resources/image/user.png" alt="profile" style="width: 45px; height : 45px;"/> 
+			</c:when>
+			<c:otherwise>
+			<img src="/resources/upload/${USER_STORED}" alt="profile" style="width: 45px; height : 45px;" class="img-circle"/> 			
+			</c:otherwise>
+			</c:choose>
 			<span style="line-height : 45px;">${USER_ID}</span>
 		</div>
 		<h4 style="font-weight : bold; font-size : 22px;">${TITLE}</h4>
@@ -128,7 +135,14 @@ $(document).ready(function(){
 		<p style="float:right;"><fmt:formatDate value="${answer.ansTime}" pattern="yyyy-MM-dd hh:mm:ss"/> </p>
 		</div>
 		<div id="ansInfo">
+		<c:choose>
+		<c:when test="${answer.userStored eq null}">
 		<img src="/resources/image/user.png" alt="profile" style="width: 62px; height : 62px;"/> 
+		</c:when>
+		<c:otherwise>
+		<img src="/resources/upload/${answer.userStored}" alt="profile" style="width: 62px; height : 62px;" class="img-circle"/> 		
+		</c:otherwise>
+		</c:choose>
 		<span id="userid">${answer.userId}님의 답변</span>
 		</div>
 		<hr id="divider">

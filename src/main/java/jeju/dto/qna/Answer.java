@@ -12,7 +12,7 @@ public class Answer {
 	private Date ansTime;
 	private int ansLike;
 	private String userId;
-	private String userOrigin;
+	private String userStored;
 	private String qstTitle;
 	
 	List<HashMap<String, Object>> filenames;
@@ -22,7 +22,7 @@ public class Answer {
 	@Override
 	public String toString() {
 		return "Answer [ansNo=" + ansNo + ", qstNo=" + qstNo + ", userNo=" + userNo + ", ansContent=" + ansContent
-				+ ", ansTime=" + ansTime + ", ansLike=" + ansLike + ", userId=" + userId + ", userOrigin=" + userOrigin
+				+ ", ansTime=" + ansTime + ", ansLike=" + ansLike + ", userId=" + userId + ", userStored=" + userStored
 				+ ", qstTitle=" + qstTitle + ", filenames=" + filenames + ", ansLikeCnt=" + ansLikeCnt
 				+ ", ansLikeCheck=" + ansLikeCheck + "]";
 	}
@@ -68,11 +68,11 @@ public class Answer {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getUserOrigin() {
-		return userOrigin;
+	public String getUserStored() {
+		return userStored;
 	}
-	public void setUserOrigin(String userOrigin) {
-		this.userOrigin = userOrigin;
+	public void setUserStored(String userStored) {
+		this.userStored = userStored;
 	}
 	public String getQstTitle() {
 		return qstTitle;
