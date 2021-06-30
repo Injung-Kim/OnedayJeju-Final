@@ -53,7 +53,7 @@
 
 - 공공 데이터 포털
 
-- JDBC
+- JDBC, Mybatis
 
 - MVC Model Ⅱ
 
