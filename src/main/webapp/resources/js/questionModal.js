@@ -21,7 +21,18 @@ $(document).ready(function(){
 		if(!$('#makeTag').is(':visible'))
 			$('#makeTag').show(1000)
 			$('.tagSubmit').show(1000)
+			$('#closeMakeTag').show()
 			$('#addTag').hide()
+	})
+	//태그 추가 폼 가리기
+	$('#closeMakeTag').click(function(){
+		if($('#makeTag').is(':visible'))
+			$('#makeTag').hide(1000)
+			$('.tagSubmit').hide(1000)
+			$(this).hide()
+			$('#addTag').show(1000)
+		console.log('클릭함')
+		console.log($('#makeTag').is(':visible'))
 	})
 	// 태그 폼 ajax
 	$('.tagSubmit').click(function(){

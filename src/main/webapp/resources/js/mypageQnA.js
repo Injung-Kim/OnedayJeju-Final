@@ -75,7 +75,23 @@ $('#qnaBtn').click(function(){
 	})//$('.liked').click end
 	})//$('#qnaBtn').click end	
 })//$(document).ready end
-
+function pagingSelect(pagingNumber){
+	$.ajax({
+		type : "get"
+			, url : "/qna/mypage/question"
+			, data : { 
+				curPage:pagingNumber
+			}
+			, dataType : "html"
+			, success : function(res){
+				console.log("qna Ajax 성공")
+				$('.qna_board_content').html(res)
+			}
+			, error : function(){
+				console.log("qna Ajax 실패")					
+			}
+		})//$.ajax() end	
+}
 
 
 

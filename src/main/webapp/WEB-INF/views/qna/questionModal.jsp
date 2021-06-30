@@ -27,6 +27,12 @@
 	border : none;
 	color : white;
 }
+#closeMakeTag{
+	border : none;
+	padding : 0px;
+	background: none;
+	vertical-align: top;
+}
 .tagForm{
 	float : left;
 }
@@ -76,11 +82,12 @@
      	 	<div class="thumbnail">
      	 	
      	 	</div>
-     	 	<div class="tag" style="text-align: right;">
+     	 	<div class="tag" style="text-align: right; height : 5%;">
      	 		<!-- 태그 작성 폼  -->
      	 		<form action="/qna/insert/tag" method="post" class="tagForm">
      	 		<input type="text" id="makeTag" name="tagName" placeholder="추가할 태그를 입력하세요" class="form-control" style="display:none;" required="required"/>
      	 		<button type="button" class="tagSubmit addTag" style="display:none;">태그 추가</button>     	 		
+     	 		<button type="button" id="closeMakeTag" style="display : none;">&times;</button>
      	 		</form>
      	 		<div class="tagbox" style="display : inline-block;">
      	 		</div>

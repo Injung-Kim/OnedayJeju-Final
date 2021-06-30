@@ -171,7 +171,7 @@ public class QuestionController {
 		//유저가 작성한 질문글 갯수 조회
 		paging.setTotalCount(qnaService.selectCntQustionByuno(question));
 		//페이지 생성
-		Paging listPaging = new Paging(paging.getTotalCount(), paging.getCurPage());
+		Paging listPaging = new Paging(paging.getTotalCount(), paging.getCurPage(), 5);
 				
 		//로그인한 유저가 작성한 질문글 리스트 불러오기
 		List<HashMap<String, Object>> list = qnaService.getQstListByUserno(listPaging, question);

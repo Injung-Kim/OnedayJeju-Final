@@ -28,6 +28,9 @@
 		line-height : 40px;
 		color : #ccc;
 	}
+	li{
+		cursor: pointer;
+	}
 </style>
 <div class="mypageQst">
 	<h3>작성한 질문글 목록</h3>
@@ -66,4 +69,5 @@
 		</tbody>
 	</table>
 	</div>
+	<c:import url="/WEB-INF/views/util/qnaPaging.jsp"></c:import>
 </div>

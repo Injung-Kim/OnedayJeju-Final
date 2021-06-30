@@ -92,9 +92,9 @@ $(document).ready(function(){
 })
 </script>
 <div class="listWrapper">
-	<form>
+	<form action="/qna/list" method="get">
 	<div class="searchTag">
-	<input type="text" id="inputTag" name="word" placeholder="태그를 검색하세요">
+	<input type="text" id="inputTag" name="word" placeholder="태그를 검색하세요" value="${param.word}">
 	<button><i class="fas fa-search" style="color : #fff;"></i></button>
 	</div>
 	</form>

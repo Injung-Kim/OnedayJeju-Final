@@ -30,7 +30,7 @@
 	}
 </style>
 <div class="mypageLiked">
-	<h3> 작성한 질문 목록</h3>
+	<h3> 나의 좋아요 목록</h3>
 	<div class="tableList">
 	<table class="table table-condensed table-striped" style="table-layout: fixed;">
 		<thead>
